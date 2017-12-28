@@ -23,5 +23,14 @@
     <ClInclude Include="tinySTL\type_traits.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="tinySTL\construct.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tinySTL\allocator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tinySTL\alloc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -114,6 +114,9 @@
     <ClCompile Include="try.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="tinySTL\alloc.h" />
+    <ClInclude Include="tinySTL\allocator.h" />
+    <ClInclude Include="tinySTL\construct.h" />
     <ClInclude Include="tinySTL\type_traits.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

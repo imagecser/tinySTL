@@ -17,6 +17,7 @@ struct _type_traits<type> { \
 
 	template<typename _T>
 	struct _type_traits {
+		typedef _false_type this_dummy_member_must_be_first;
 		typedef _false_type has_trival_default_constructor;
 		typedef _false_type has_trival_copy_constructor;
 		typedef _false_type has_trival_assignment_constructor;
@@ -40,8 +41,8 @@ struct _type_traits<type> { \
 	make_true_traits(, float)
 	make_true_traits(, double)
 	make_true_traits(, long double)
-	make_true_traits(class T, T*)
-	make_true_traits(class T, const T*)
+	make_true_traits(typename T, T*)
+	make_true_traits(typename T, const T*)
 	make_true_traits(, char*)
 	make_true_traits(, unsigned char*)
 	make_true_traits(, signed char*)

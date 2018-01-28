@@ -75,6 +75,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -111,13 +112,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="try.cpp" />
+    <ClCompile Include="tinySTL\main.cpp" />
+    <ClCompile Include="tinySTL\unittest\stringtest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tinySTL\alloc.h" />
     <ClInclude Include="tinySTL\allocator.h" />
     <ClInclude Include="tinySTL\construct.h" />
+    <ClInclude Include="tinySTL\string.h" />
     <ClInclude Include="tinySTL\type_traits.h" />
+    <ClInclude Include="tinySTL\unittest\rang.hpp" />
+    <ClInclude Include="tinySTL\unittest\stringtest.h" />
+    <ClInclude Include="tinySTL\unittest\testUtil.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

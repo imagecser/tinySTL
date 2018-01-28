@@ -3,7 +3,7 @@
 #include "type_traits.h"
 #include <new>
 
-namespace stl {
+namespace sz {
 	template<typename T1, typename T2>
 	inline void construct(T1* p, const T2& value) {
 		new (p) T1(value);

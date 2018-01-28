@@ -1,7 +1,7 @@
 #ifndef _TYPE_TRAITS_H_
 #define _TYPE_TRAITS_H_
 
-namespace stl {
+namespace sz {
 	struct _true_type {};
 	struct _false_type {};
 

@@ -15,7 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="try.cpp">
+    <ClCompile Include="tinySTL\main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tinySTL\unittest\stringtest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -30,6 +33,18 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="tinySTL\alloc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tinySTL\string.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tinySTL\unittest\stringtest.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tinySTL\unittest\testUtil.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tinySTL\unittest\rang.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,6 +5,9 @@
 #include "rang.hpp"
 namespace sz {
 	namespace test {
+		inline void unitpass(const char* str) {
+			std::cout << str << rang::fg::green << " ok\n" << rang::style::reset;
+		}
 		template<class T>
 		void printContainer(T& container, const char* name = "") {
 			std::cout << "Container: " << name << std::endl;
@@ -35,6 +38,9 @@ namespace sz {
 			return (first1 == last1 && first2 == last2);
 		}
 
+		/*void unitPass(const char* str) {
+			std::cout << str << rang::fg::green << " ok\n";
+		}*/
 	}
 }
 #endif

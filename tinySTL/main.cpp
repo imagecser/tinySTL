@@ -2,5 +2,6 @@
 
 int main() {
 	sz::stringTest::allTestcases();
+
 	return 0;
 }

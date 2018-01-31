@@ -59,6 +59,5 @@ namespace sz {
 		for(; first != last; ++first)
 			first->~T();
 	}
-
 }
 #endif // !_allocator_H_

@@ -3,12 +3,15 @@
 #include <cstring>
 #include <iostream>
 #include <type_traits>
+#include "allocator.h"
 namespace sz {
     class string {
         private:
 			char * _begin;
 			char * _end; 
 			char * _storage_end;
+
+			typedef sz::allocator<char> dataAlloc;
 			/*
 			void allocateCopy(Iterator first, Iterator last);
 			void checkCapacity(unsigned & count);
@@ -46,12 +49,18 @@ namespace sz {
 				string(const char *str, size_t n)
 				String(const char *str);
 				string(string&& str);
+				string(const string& str);
+				string(const string& str, size_t pos, size_t len = npos);
+				template<class InputIterator>
+				string(InputIterator first, InputIterator last);
+				string(size_t n, char ch);
 				iterator begin();
 				iterator end();
 				const_iterator begin() const;
 				const_iterator end() const;
 				size_t size() const;
 				size_t capacity() const;
+				value_type operator[](size_t n);
 			*/
 			friend std::ostream & operator << (std::ostream & out, const string & str) {
 				for (auto item : str)
@@ -60,17 +69,17 @@ namespace sz {
 			}
 			string() : _begin(NULL), _end(_begin), _storage_end(_end) {
 			}
-			string(string&& str) {
-				_begin = str._begin;
-				_end = str._end;
-				_storage_end = str._storage_end;
-				str._begin = str._end = str._storage_end = NULL;
-			}
 			string(const char *str, size_t n){
 				allocateCopy(str, str + n);
 			}
 			string(const char *str) {
 				allocateCopy(str, str + strlen(str));
+			}
+			string(string&& str) {
+				_begin = str._begin;
+				_end = str._end;
+				_storage_end = str._storage_end;
+				str._begin = str._end = str._storage_end = NULL;
 			}
 			string(const string& str) {
 				allocateCopy(str._begin, str._end);

@@ -51,8 +51,35 @@ namespace sz {
 			unitpass("string(size_t n, char ch)");
 		}
 
+		void operate() {
+			const char *ptr = "hello world";
+			stdstring stdstr(ptr);
+			szstring szstr(ptr);
+
+			stdstring s1 = stdstr;
+			szstring z1 = szstr;
+			assert(printEqual(s1, z1));
+			assert(containerEqual(s1, z1));
+			unitpass("string& operator= (const string& str)");
+
+			s1 = ptr;
+			z1 = ptr;
+			assert(printEqual(s1, z1));
+			assert(containerEqual(s1, z1));
+			unitpass("string& operator= (const char* str)");
+
+
+			s1 = 'c';
+			z1 = 'c';
+			assert(printEqual(s1, z1));
+			assert(containerEqual(s1, z1));
+			unitpass("string& operator= (char ch)");
+			
+		}
+
 		void allTestcases() {
 			construct();
+			operate();
 		}
 	}
 }

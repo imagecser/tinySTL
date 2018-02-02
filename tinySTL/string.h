@@ -45,7 +45,7 @@ namespace sz {
 			return ptr + n;
 		}
 		iterator unintializedCopy(iterator ptr, iterator start, iterator end) {
-			for (size_t i = 0; i < end - start; ++i)
+			for (size_t i = 0; i < (size_t)(end - start); ++i)
 				ptr[i] = *(start + i);
 			return ptr + (end - start);
 		}
@@ -132,7 +132,8 @@ namespace sz {
 			allocateFill(n, ch);
 		}
 		~string() {
-			dataAlloc.deallocate(_begin);
+			if (_begin != _storage_end)
+				dataAlloc.deallocate(_begin);
 		}
 		string& operator= (const string& str) {
 			if (this != &str) {
@@ -149,30 +150,29 @@ namespace sz {
 			return *this;
 		}
 		string& operator= (const char* str) {
-			dataAlloc.deallocate(_begin);
+			if(_begin != _storage_end)
+				dataAlloc.deallocate(_begin);
 			allocateCopy(str, str + strlen(str));
 			return *this;
 		}
 		string& operator= (char ch) {
-			dataAlloc.deallocate(_begin);
+			if(_begin != _storage_end)
+				dataAlloc.deallocate(_begin);
 			allocateFill(1, ch);
 			return *this;
 		}
 
 		void clear() {
 			dataAlloc.deallocate(_begin);
-			_begin = _storage_end = _end;
+			_end = _storage_end = _begin;
 		}
 		bool empty() {
 			return _begin == _end;
 		}
-		void resize(size_t n) {
-			resize(n, value_type());
-		}
-		void resize(size_t n, char ch) {
+		void resize(size_t n, const char ch = '\000') {
 			if (n < size()) {
+				dataAlloc.destroy(_begin + n, _storage_end);
 				_end = _storage_end = _begin + n;
-				dataAlloc.deallocate(_end);
 			}
 			else if (n > size() && n <= capacity()) {
 				_end = unintializedFill(_end, n - size(), ch);
@@ -182,7 +182,8 @@ namespace sz {
 				iterator pend = unintializedCopy(pstart, _begin, _end);
 				pend = unintializedFill(pend, n - size(), ch);
 				dataAlloc.deallocate(_begin);
-
+				_begin = pstart;
+				_storage_end = _end = pend;
 			}
 		}
 

@@ -9,6 +9,11 @@ namespace sz {
 		using stdstring = std::string;
 		using szstring = sz::string;
 		void construct();
+		void operate();
+		void func1();
+		void func2();
+		void insert();
+		void append();
 		void allTestcases();
 	}
 }

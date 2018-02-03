@@ -143,14 +143,60 @@ namespace sz {
 			s1.insert(0, s1, 1);
 			z1.insert(0, z1, 1);
 			unittest(s1, z1, "string& insert(size_t pos, const string& str, size_t subpos, size_t sublen = npos);", false);
-			s1.insert(1, s1, 4, 2);
-			z1.insert(1, z1, 4, 2);
+			s1.insert(13, s1, 4, 2);
+			z1.insert(13, z1, 4, 2);
 			unittest(s1, z1, "string& insert(size_t pos, const string& str, size_t subpos, size_t sublen = npos);");
 
 			s1.insert(1, 3, 'c');
 			z1.insert(1, 3, 'c');
 			unittest(s1, z1, "string& insert(size_t pos, size_t n, char ch);");
+		}
 
+		void append() {
+			const char* ptr = "hello world";
+			stdstring s1;
+			szstring z1;
+			s1.append(ptr, 2);
+			z1.append(ptr, 2);
+			unittest(s1, z1, "string& append(const char* str, size_t n);");
+
+			s1.append(ptr);
+			z1.append(ptr);
+			unittest(s1, z1, "string& append(const char* str);");
+
+			s1.append(s1);
+			z1.append(z1);
+			unittest(s1, z1, "string& append(const string& str);");
+
+			s1.append(s1, 3);
+			z1.append(z1, 3);
+			unittest(s1, z1, "string& append(const string& str, size_t subpos, size_t sublen = npos);", false);
+			s1.append(s1, 3, 3);
+			z1.append(z1, 3, 3);
+			unittest(s1, z1, "string& append(const string& str, size_t subpos, size_t sublen = npos);");
+
+			s1.append(10, 'c');
+			z1.append(10, 'c');
+			unittest(s1, z1, "string& append(size_t n, char c);");
+
+			s1.append(z1.begin(), z1.end());
+			z1.append(z1.begin(), z1.end());
+			unittest(s1, z1, "string& append(InputIterator first, InputIterator last);", false);
+			z1.append(s1.begin(), s1.end());
+			s1.append(s1.begin(), s1.end());
+			unittest(s1, z1, "string& append(InputIterator first, InputIterator last);");
+
+			s1 += ptr;
+			z1 += ptr;
+			unittest(s1, z1, "string& operator+= (const char* str);");
+
+			s1 += s1;
+			z1 += z1;
+			unittest(s1, z1, "string& operator+= (const string& str);");
+
+			s1 += 'c';
+			z1 += 'c';
+			unittest(s1, z1, "string& operator+= (char c);");
 		}
 
 		void allTestcases() {
@@ -159,6 +205,7 @@ namespace sz {
 			func1();
 			func2();
 			insert();
+			append();
 		}
 	}
 }

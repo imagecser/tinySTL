@@ -23,6 +23,7 @@ namespace sz {
 		void allocateCopy(Iterator first, Iterator last);
 		void allocateFill(size_t n, value_type ch);
 		iterator unintializedFill(iterator ptr, size_t n, value_type ch);
+		template<class InputIterator>
 		iterator unintializedCopy(iterator start, iterator end, iterator ptr);
 		size_type getNewCapacity(size_type n) const;
 		template<class InputIterator>
@@ -32,9 +33,12 @@ namespace sz {
 		template<class InputIterator>
 		void allocateCopy(InputIterator first, InputIterator last) {
 			//_begin = new value_type[last - first];
-			_begin = dataAlloc.allocate(last - first);
-			strncpy(_begin, first, last - first);
-			_storage_end = _end = _begin + (last - first);
+			size_type pcapacity = last - first;
+			_begin = dataAlloc.allocate(pcapacity);
+			//strncpy(_begin, (char *)first, last - first);
+			for (size_t i = 0; i < pcapacity; ++i)
+				*(_begin + i) = *(first + i);
+			_storage_end = _end = _begin + pcapacity;
 		}
 		void allocateFill(size_type n, value_type ch) {
 			_begin = dataAlloc.allocate(n);
@@ -47,7 +51,8 @@ namespace sz {
 				ptr[i] = ch;
 			return ptr + n;
 		}
-		iterator unintializedCopy(const_iterator start, const_iterator end, iterator ptr) {
+		template<class InputIterator>
+		iterator unintializedCopy(InputIterator start, InputIterator end, iterator ptr) {
 			for (size_t i = 0; i < (size_t)(end - start); ++i)
 				*(ptr + i) = *(start + i);
 			return ptr + (end - start);
@@ -116,6 +121,18 @@ namespace sz {
 			iterator insert(const_iterator ptr, char ch);
 			template <class InputIterator>
 			iterator insert(iterator ptr, InputIterator first, InputIterator last);
+
+			string& append(const string& str);
+			string& append(const string& str, size_t subpos, size_t sublen = npos);
+			string& append(const char* s);
+			string& append(const char* s, size_t n);
+			string& append(size_t n, char c);
+			template <class InputIterator>
+			string& append(InputIterator first, InputIterator last);
+
+			string& operator+= (const string& str);
+			string& operator+= (const char* str);
+			string& operator+= (char ch);
 		*/
 		friend std::ostream & operator << (std::ostream & out, const string & str) {
 			for (auto item : str)
@@ -323,6 +340,37 @@ namespace sz {
 				_storage_end = pbegin + pcapacity;
 				return res;
 			}
+		}
+
+		string& append(const string& str) {
+			return insert(size(), str);
+		}
+		string& append(const string& str, size_t subpos, size_t sublen = npos) {
+			return insert(size(), str, subpos, sublen);
+		}
+		string& append(const char* str) {
+			return insert(size(), str);
+		}
+		string& append(const char* str, size_t n) {
+			return insert(size(), str, n);
+		}
+		string& append(size_t n, char ch) {
+			return insert(size(), n, ch);
+		}
+		template <class InputIterator>
+		string& append(InputIterator first, InputIterator last) {
+			insert(_end, first, last);
+			return *this;
+		}
+
+		string& operator+= (const string& str) {
+			return append(str);
+		}
+		string& operator+= (const char* str) {
+			return append(str);
+		}
+		string& operator+= (char ch) {
+			return append(1, ch);
 		}
     }; 
 }

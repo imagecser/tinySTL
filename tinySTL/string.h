@@ -178,13 +178,27 @@ namespace sz {
 				_end = unintializedFill(_end, n - size(), ch);
 			}
 			else if (n > capacity()) {
-				iterator pstart = dataAlloc.allocate(n);
-				iterator pend = unintializedCopy(_begin, _end, pstart);
+				iterator pbegin = dataAlloc.allocate(n);
+				iterator pend = unintializedCopy(_begin, _end, pbegin);
 				pend = unintializedFill(pend, n - size(), ch);
 				dataAlloc.deallocate(_begin);
-				_begin = pstart;
+				_begin = pbegin;
 				_storage_end = _end = pend;
 			}
+		}
+		void reserve(size_t n) {
+			if (n <= capacity())
+				return;
+			iterator pbegin = dataAlloc.allocate(n);
+			iterator pend = unintializedCopy(_begin, _end, pbegin);
+			dataAlloc.deallocate(_begin);
+			_begin = pbegin;
+			_end = pend;
+			_storage_end = _begin + n;
+		}
+		void shrink_to_fit() {
+			dataAlloc.destroy(_end, _storage_end);
+			_storage_end = _end;
 		}
 
 		iterator begin() {
@@ -205,9 +219,26 @@ namespace sz {
 		size_t capacity() const {
 			return _storage_end - _begin;
 		}
-		value_type operator[](size_t n) {
-			return _begin[n];
+
+		char& operator[](size_t pos) {
+			return *(_begin + pos);
 		}
+		const char& operator[](size_t pos) const {
+			return *(_begin + pos);
+		}
+		char& back() {
+			return *(_end - 1);
+		}
+		const char& back() const {
+			return *(_end - 1);
+		}
+		char& front() {
+			return *_begin;
+		}
+		const char& front() const{
+			return *_begin;
+		}
+
     }; 
 }
 #endif

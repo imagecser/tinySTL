@@ -4,6 +4,7 @@
 #include <iostream>
 #include <type_traits>
 #include "allocator.h"
+
 namespace sz {
     class string {
 	public:
@@ -29,6 +30,8 @@ namespace sz {
 		template<class InputIterator>
 		void string_aux(InputIterator first, InputIterator last, std::false_type);
 		void moveData(string& str);
+		template<class T>
+		void swap(T src, T dest);
 		*/
 		template<class InputIterator>
 		void allocateCopy(InputIterator first, InputIterator last) {
@@ -70,6 +73,13 @@ namespace sz {
 			_end = str._end;
 			_storage_end = str._storage_end;
 			str._begin = str._end = str._storage_end = 0;
+		}
+
+		template<class T>
+		void swap(T src, T dest) {
+			T temp = src;
+			src = dest;
+			dest = temp;
 		}
 
 	public:
@@ -133,6 +143,23 @@ namespace sz {
 			string& operator+= (const string& str);
 			string& operator+= (const char* str);
 			string& operator+= (char ch);
+
+			void pop_back();
+			string& erase(size_t pos = 0, size_t len = npos);
+			iterator erase(iterator p);
+			iterator erase(iterator first, iterator last);
+
+			string& replace(size_t pos, size_t len, const string& str);
+			string& replace(iterator first, iterator last, const string& str);
+			string& replace(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen = npos);
+			string& replace(size_t pos, size_t len, const char* str);
+			string& replace(iterator first, iterator last, const char* str);
+			string& replace(size_t pos, size_t len, const char* str, size_t n);
+			string& replace(iterator first, iterator last, const char* str, size_t n);
+			string& replace(size_t pos, size_t len, size_t n, char ch);
+			string& replace(iterator first, iterator last, size_t n, char ch);
+			template <class InputIterator>
+			string& replace(iterator first, iterator last, InputIterator inputfirst, InputIterator inputlast);
 		*/
 		friend std::ostream & operator << (std::ostream & out, const string & str) {
 			for (auto item : str)
@@ -232,6 +259,14 @@ namespace sz {
 		void shrink_to_fit() {
 			dataAlloc.destroy(_end, _storage_end);
 			_storage_end = _end;
+		}
+		void swap(string& str) {
+			swap(_begin, str._begin);
+			swap(_end, str._end);
+			swap(_storage_end, str._storage_end);
+		}
+		size_t copy(char *str, size_t len, size_t pos = 0) {
+			unintializedCopy(_begin + pos, _begin + pos + len, str);
 		}
 
 		iterator begin() {
@@ -371,6 +406,61 @@ namespace sz {
 		}
 		string& operator+= (char ch) {
 			return append(1, ch);
+		}
+
+		void pop_back() {
+			erase(_end - 1);
+		}
+		string& erase(size_t pos = 0, size_t len = npos) {
+			erase(_begin + pos, len == npos ? _end : _begin + pos + len);
+			return *this;
+		}
+		iterator erase(iterator p) {
+			return erase(p, p + 1);
+		}
+		iterator erase(iterator first, iterator last) {
+			size_type lenMove = _end - last;
+			for (size_t i = 0; i < lenMove; ++i)
+				*(first + i) = *(last + i);
+			dataAlloc.destroy(first + lenMove, _end);
+			_end = first + lenMove;
+			return first;
+		}
+
+		string& replace(size_t pos, size_t len, const string& str) {
+			return replace(_begin + pos, _begin + pos + len, str.begin(), str.end());
+		}
+		string& replace(iterator first, iterator last, const string& str) {
+			return replace(first, last, str.begin(), str.end());
+		}
+		string& replace(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen = npos) {
+			return replace(_begin + pos, _begin + pos + len, str.begin() + subpos, sublen == npos ? str.end() : (str.begin() + subpos + sublen));
+		}
+		string& replace(size_t pos, size_t len, const char* str) {
+			return replace(_begin + pos, _begin + pos + len, str, str + strlen(str));
+		}
+		string& replace(iterator first, iterator last, const char* str) {
+			return replace(first, last, str, str + strlen(str));
+		}
+		string& replace(size_t pos, size_t len, const char* str, size_t n) {
+			return replace(_begin + pos, _begin + pos + len, str, str + n);
+		}
+		string& replace(iterator first, iterator last, const char* str, size_t n) {
+			return replace(first, last, str, str + n);
+		}
+		string& replace(size_t pos, size_t len, size_t n, char ch) {
+			return replace(_begin + pos, _begin + pos + len, n, ch);
+		}
+		string& replace(iterator first, iterator last, size_t n, char ch) {
+			erase(first, last);
+			insert(first, n, ch);
+			return *this;
+		}
+		template <class InputIterator>
+		string& replace(iterator first, iterator last, InputIterator inputfirst, InputIterator inputlast) {
+			erase(first, last);
+			insert(first, inputfirst, inputlast);
+			return *this;
 		}
     }; 
 }

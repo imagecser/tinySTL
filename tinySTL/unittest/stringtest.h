@@ -14,6 +14,7 @@ namespace sz {
 		void func2();
 		void insert();
 		void append();
+		void erase();
 		void allTestcases();
 	}
 }

@@ -199,6 +199,74 @@ namespace sz {
 			unittest(s1, z1, "string& operator+= (char c);");
 		}
 
+		void erase() {
+			const char* ptr = "hello world";
+			stdstring s1(ptr);
+			szstring z1(ptr);
+
+			s1.pop_back();
+			z1.pop_back();
+			unittest(s1, z1, "void pop_back();");
+
+			s1.erase();
+			z1.erase();
+			unittest(s1, z1, "string& erase(size_t pos = 0, size_t len = npos);", false);
+			s1 = ptr;
+			z1 = ptr;
+			s1.erase(1, 4);
+			z1.erase(1, 4);
+			unittest(s1, z1, "string& erase(size_t pos = 0, size_t len = npos);");
+
+			s1.erase(s1.begin());
+			z1.erase(z1.begin());
+			unittest(s1, z1, "iterator erase(iterator p);");
+		}
+
+		void replace() {
+			stdstring s1("zouxiaohang"), t1("I Love C++");
+			szstring s2("zouxiaohang"), t2("I Love C++");
+
+			s1.replace(0, 3, t1);
+			s2.replace(0, 3, t2);
+			unittest(s1, s2, "string& replace(size_t pos, size_t len, const string& str);");
+
+			s1.replace(s1.begin(), s1.begin() + s1.size() / 2, t1);
+			s2.replace(s2.begin(), s2.begin() + s2.size() / 2, t2);
+			unittest(s1, s2, "string& replace(iterator first, iterator last, const string& str);");
+
+			s1.replace(0, s1.size(), t1, 0, t1.size());
+			s2.replace(0, s2.size(), t2, 0, t2.size());
+			unittest(s1, s2, "string& replace(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen = npos);");
+
+			s1.replace(0, s1.size(), "123456789");
+			s2.replace(0, s2.size(), "123456789");
+			unittest(s1, s2, "string& replace(size_t pos, size_t len, const char* str);");
+
+			s1.replace(s1.begin(), s1.end(), "hubei");
+			s2.replace(s2.begin(), s2.end(), "hubei");
+			unittest(s1, s2, "string& replace(iterator first, iterator last, const char* str);");
+
+			s1.replace(0, s1.size(), "wuhan", 5);
+			s2.replace(0, s2.size(), "wuhan", 5);
+			unittest(s1, s2, "string& replace(size_t pos, size_t len, const char* str, size_t n);");
+
+			s1.replace(s1.begin(), s1.end(), "hongshanqu", 10);
+			s2.replace(s2.begin(), s2.end(), "hongshanqu", 10);
+			unittest(s1, s2, "string& replace(iterator first, iterator last, const char* str, size_t n);");
+
+			s1.replace(0, s1.size(), 10, 'Z');
+			s2.replace(0, s2.size(), 10, 'Z');
+			unittest(s1, s2, "string& replace(size_t pos, size_t len, size_t n, char ch);");
+
+			s1.replace(s1.begin(), s1.end(), 10, 'A');
+			s2.replace(s2.begin(), s2.end(), 10, 'A');
+			unittest(s1, s2, "string& replace(iterator first, iterator last, size_t n, char ch);");
+
+			s1.replace(s1.begin(), s1.end(), t1.begin(), t1.end());
+			s2.replace(s2.begin(), s2.end(), t2.begin(), t2.end());
+			unittest(s1, s2, "string& replace(iterator first, iterator last, InputIterator inputfirst, InputIterator inputlast);");
+		}
+
 		void allTestcases() {
 			construct();
 			operate();
@@ -206,6 +274,8 @@ namespace sz {
 			func2();
 			insert();
 			append();
+			erase();
+			replace();
 		}
 	}
 }

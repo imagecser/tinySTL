@@ -109,7 +109,7 @@ namespace sz {
 			szstring z1(ptr);
 			struct _pos {
 				bool operator()(stdstring s1, szstring z1) {
-					for (int i = 0; i < z1.size(); ++i) 
+					for (size_t i = 0; i < z1.size(); ++i) 
 						if (z1[i] != s1[i])
 							return false;
 					return true;
@@ -119,11 +119,46 @@ namespace sz {
 			unittest(s1, z1, "char& back(); char& front();", true, s1.front() == z1.front() && s1.back() == z1.back());
 		}
 
+		void insert() {
+			const char* ptr = "hello world";
+
+			stdstring s1;
+			szstring z1;
+			s1.push_back('?');
+			z1.push_back('?');
+			unittest(s1, z1, "void push_back(char ch);");
+
+			s1.insert(1, ptr);
+			z1.insert(1, ptr);
+			unittest(s1, z1, "string& insert(size_t pos, const char* str);");
+
+			s1.insert(0, ptr, 3);
+			z1.insert(0, ptr, 3);
+			unittest(s1, z1, "string& insert(size_t pos, const char* str, size_t n);");
+
+			s1.insert(1, s1);
+			z1.insert(1, z1);
+			unittest(s1, z1, "string& insert(size_t pos, const string& str);");
+			
+			s1.insert(0, s1, 1);
+			z1.insert(0, z1, 1);
+			unittest(s1, z1, "string& insert(size_t pos, const string& str, size_t subpos, size_t sublen = npos);", false);
+			s1.insert(1, s1, 4, 2);
+			z1.insert(1, z1, 4, 2);
+			unittest(s1, z1, "string& insert(size_t pos, const string& str, size_t subpos, size_t sublen = npos);");
+
+			s1.insert(1, 3, 'c');
+			z1.insert(1, 3, 'c');
+			unittest(s1, z1, "string& insert(size_t pos, size_t n, char ch);");
+
+		}
+
 		void allTestcases() {
 			construct();
 			operate();
 			func1();
 			func2();
+			insert();
 		}
 	}
 }

@@ -49,7 +49,7 @@ namespace sz {
 			for (size_t i = 0; i < n; ++i)
 				_begin[i] = ch;
 		}
-		iterator unintializedFill(iterator ptr, size_t n, value_type ch) {
+		/*iterator unintializedFill(iterator ptr, size_t n, value_type ch) {
 			for (size_t i = 0; i < n; ++i)
 				ptr[i] = ch;
 			return ptr + n;
@@ -59,7 +59,7 @@ namespace sz {
 			for (size_t i = 0; i < (size_t)(end - start); ++i)
 				*(ptr + i) = *(start + i);
 			return ptr + (end - start);
-		}
+		}*/
 		size_type getNewCapacity(size_type n) const{
 			size_type _old = _storage_end - _begin;
 			return _old + (_old > n ? _old : n);
@@ -235,12 +235,15 @@ namespace sz {
 				_end = _storage_end = _begin + n;
 			}
 			else if (n > size() && n <= capacity()) {
-				_end = unintializedFill(_end, n - size(), ch);
+				//_end = unintializedFill(_end, n - size(), ch);
+				_end = uninitialized_fill_n(_end, n - size(), ch);
 			}
 			else if (n > capacity()) {
 				iterator pbegin = dataAlloc.allocate(getNewCapacity(n - size()));
-				iterator pend = unintializedCopy(_begin, _end, pbegin);
-				pend = unintializedFill(pend, n - size(), ch);
+				//iterator pend = unintializedCopy(_begin, _end, pbegin);
+				//pend = unintializedFill(pend, n - size(), ch);
+				iterator pend = uninitialized_copy(_begin, _end, pbegin);
+				pend = uninitialized_fill_n(pend, n - size(), ch);
 				dataAlloc.deallocate(_begin);
 				_begin = pbegin;
 				_storage_end = _end = pend;
@@ -250,7 +253,8 @@ namespace sz {
 			if (n <= capacity())
 				return;
 			iterator pbegin = dataAlloc.allocate(n);
-			iterator pend = unintializedCopy(_begin, _end, pbegin);
+			//iterator pend = unintializedCopy(_begin, _end, pbegin);
+			iterator pend = uninitialized_copy(_begin, _end, pbegin);
 			dataAlloc.deallocate(_begin);
 			_begin = pbegin;
 			_end = pend;
@@ -265,8 +269,10 @@ namespace sz {
 			swap(_end, str._end);
 			swap(_storage_end, str._storage_end);
 		}
-		size_t copy(char *str, size_t len, size_t pos = 0) {
-			unintializedCopy(_begin + pos, _begin + pos + len, str);
+		size_t copy(char *str, size_t len, size_t pos = 0) const {
+			//unintializedCopy(_begin + pos, _begin + pos + len, str);
+			uninitialized_copy(_begin + pos, _begin + pos + len, str);
+			return len;
 		}
 
 		iterator begin() {
@@ -335,14 +341,18 @@ namespace sz {
 				for (iterator ite = _end - 1; ite >= ptr; --ite)
 					*(ite + n) = *ite;
 				_end += n;
-				return unintializedFill(ptr, n, ch);
+				//return unintializedFill(ptr, n, ch);
+				return uninitialized_fill_n(ptr, n, ch);
 			}
 			else {
 				size_type pcapacity = getNewCapacity(n);
 				iterator pbegin = dataAlloc.allocate(pcapacity);
-				iterator pend = unintializedCopy(_begin, ptr, pbegin);
-				iterator res = pend = unintializedFill(pend, n, ch);
-				pend = unintializedCopy(ptr, _end, pend);
+				//iterator pend = unintializedCopy(_begin, ptr, pbegin);
+				//iterator res = pend = unintializedFill(pend, n, ch);
+				//pend = unintializedCopy(ptr, _end, pend);
+				iterator pend = uninitialized_copy(_begin, ptr, pbegin);
+				iterator res = pend = uninitialized_fill_n(pend, n, ch);
+				pend = uninitialized_copy(ptr, _end, pend);
 				dataAlloc.deallocate(_begin);
 				_begin = pbegin;
 				_end = pend;
@@ -361,14 +371,18 @@ namespace sz {
 				for (iterator ite = _end - 1; ite >= ptr; --ite)
 					*(ite + offset) = *ite;
 				_end += offset;
-				return unintializedCopy(pstr.begin(), pstr.end(), ptr);
+				//return unintializedCopy(pstr.begin(), pstr.end(), ptr);
+				return uninitialized_copy(pstr.begin(), pstr.end(), ptr);
 			}
 			else {
 				size_type pcapacity = getNewCapacity(offset);
 				iterator pbegin = dataAlloc.allocate(pcapacity);
-				iterator pend = unintializedCopy(_begin, ptr, pbegin);
-				iterator res = pend = unintializedCopy(first, last, pend);
-				pend = unintializedCopy(ptr, _end, pend);
+				//iterator pend = unintializedCopy(_begin, ptr, pbegin);
+				//iterator res = pend = unintializedCopy(first, last, pend);
+				//pend = unintializedCopy(ptr, _end, pend);
+				iterator pend = uninitialized_copy(_begin, ptr, pbegin);
+				iterator res = pend = uninitialized_copy(first, last, pend);
+				pend = uninitialized_copy(ptr, _end, pend);
 				dataAlloc.deallocate(_begin);
 				_begin = pbegin;
 				_end = pend;

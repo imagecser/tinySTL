@@ -6,7 +6,10 @@
 namespace sz {
 	namespace test {
 		inline void unitpass(const char* str) {
-			std::cout << "[ " << rang::fg::green << "ok" << rang::style::reset << " ] " << str << std::endl;;
+			std::cout << "[ " << rang::fg::green << "pass" << rang::style::reset << " ] " << str << std::endl;
+		}
+		inline void unitfail(const char* str) {
+			std::cout << "[ " << rang::fg::red << "fail" << rang::style::reset << " ] " << str << std::endl;
 		}
 		template<class T>
 		void printContainer(T& container, const char* name = "") {

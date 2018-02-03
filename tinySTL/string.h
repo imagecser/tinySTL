@@ -44,7 +44,7 @@ namespace sz {
 				ptr[i] = ch;
 			return ptr + n;
 		}
-		iterator unintializedCopy(iterator ptr, iterator start, iterator end) {
+		iterator unintializedCopy(iterator start, iterator end, iterator ptr) {
 			for (size_t i = 0; i < (size_t)(end - start); ++i)
 				ptr[i] = *(start + i);
 			return ptr + (end - start);
@@ -163,8 +163,8 @@ namespace sz {
 		}
 
 		void clear() {
-			dataAlloc.deallocate(_begin);
-			_end = _storage_end = _begin;
+			dataAlloc.destroy(_begin, _end);
+			_end = _begin;
 		}
 		bool empty() {
 			return _begin == _end;
@@ -179,7 +179,7 @@ namespace sz {
 			}
 			else if (n > capacity()) {
 				iterator pstart = dataAlloc.allocate(n);
-				iterator pend = unintializedCopy(pstart, _begin, _end);
+				iterator pend = unintializedCopy(_begin, _end, pstart);
 				pend = unintializedFill(pend, n - size(), ch);
 				dataAlloc.deallocate(_begin);
 				_begin = pstart;

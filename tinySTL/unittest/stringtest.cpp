@@ -257,7 +257,6 @@ namespace sz {
 			s1.replace(0, s1.size(), 10, 'Z');
 			s2.replace(0, s2.size(), 10, 'Z');
 			unittest(s1, s2, "string& replace(size_t pos, size_t len, size_t n, char ch);");
-
 			s1.replace(s1.begin(), s1.end(), 10, 'A');
 			s2.replace(s2.begin(), s2.end(), 10, 'A');
 			unittest(s1, s2, "string& replace(iterator first, iterator last, size_t n, char ch);");

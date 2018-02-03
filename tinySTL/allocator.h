@@ -2,6 +2,7 @@
 #define _ALLOCATOR_H_
 #include <cassert>
 #include <new>
+#include "memory.h"
 
 namespace sz {
 	template<typename T>

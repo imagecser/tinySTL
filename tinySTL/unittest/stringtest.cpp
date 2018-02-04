@@ -4,13 +4,22 @@ namespace sz {
 		bool stringEqual(stdstring src, szstring dest) {
 			return sz::test::printEqual(src, dest) && sz::test::containerEqual(src, dest);
 		}
-		void unittest(stdstring src, szstring dest, const char * str, bool islast = true, bool condition = true) {
+		void unittest(stdstring src, szstring dest, const char *s, bool islast = true, bool condition = true) {
 			if (stringEqual(src, dest) && condition) {
 				if (islast)
-					sz::test::unitpass(str);
+					sz::test::unitpass(s);
 			}
 			else
-				sz::test::unitfail(str);
+				sz::test::unitfail(s);
+		}
+		template<class T, class K>
+		void unitassert(T src, K dest, const char* s, bool islast = true, bool condition = true) {
+			if (src == dest) {
+				if (islast)
+					sz::test::unitpass(s);
+			}
+			else
+				sz::test::unitfail(s);
 		}
 
 		void construct() {
@@ -21,7 +30,7 @@ namespace sz {
 
 			stdstring st2(ptr);
 			szstring sz2(ptr);
-			unittest(st2, sz2, "string(const char* str);");
+			unittest(st2, sz2, "string(const char* s);");
 
 			stdstring st3(st2);
 			szstring sz3(sz2);
@@ -55,7 +64,7 @@ namespace sz {
 
 			s1 = ptr;
 			z1 = ptr;
-			unittest(s1, z1, "string& operator= (const char* str);");
+			unittest(s1, z1, "string& operator= (const char* s);");
 
 
 			s1 = 'c';
@@ -130,11 +139,11 @@ namespace sz {
 
 			s1.insert(1, ptr);
 			z1.insert(1, ptr);
-			unittest(s1, z1, "string& insert(size_t pos, const char* str);");
+			unittest(s1, z1, "string& insert(size_t pos, const char* s);");
 
 			s1.insert(0, ptr, 3);
 			z1.insert(0, ptr, 3);
-			unittest(s1, z1, "string& insert(size_t pos, const char* str, size_t n);");
+			unittest(s1, z1, "string& insert(size_t pos, const char* s, size_t n);");
 
 			s1.insert(1, s1);
 			z1.insert(1, z1);
@@ -158,11 +167,11 @@ namespace sz {
 			szstring z1;
 			s1.append(ptr, 2);
 			z1.append(ptr, 2);
-			unittest(s1, z1, "string& append(const char* str, size_t n);");
+			unittest(s1, z1, "string& append(const char* s, size_t n);");
 
 			s1.append(ptr);
 			z1.append(ptr);
-			unittest(s1, z1, "string& append(const char* str);");
+			unittest(s1, z1, "string& append(const char* s);");
 
 			s1.append(s1);
 			z1.append(z1);
@@ -188,7 +197,7 @@ namespace sz {
 
 			s1 += ptr;
 			z1 += ptr;
-			unittest(s1, z1, "string& operator+= (const char* str);");
+			unittest(s1, z1, "string& operator+= (const char* s);");
 
 			s1 += s1;
 			z1 += z1;
@@ -240,19 +249,19 @@ namespace sz {
 
 			s1.replace(0, s1.size(), "123456789");
 			s2.replace(0, s2.size(), "123456789");
-			unittest(s1, s2, "string& replace(size_t pos, size_t len, const char* str);");
+			unittest(s1, s2, "string& replace(size_t pos, size_t len, const char* s);");
 
 			s1.replace(s1.begin(), s1.end(), "hubei");
 			s2.replace(s2.begin(), s2.end(), "hubei");
-			unittest(s1, s2, "string& replace(iterator first, iterator last, const char* str);");
+			unittest(s1, s2, "string& replace(iterator first, iterator last, const char* s);");
 
 			s1.replace(0, s1.size(), "wuhan", 5);
 			s2.replace(0, s2.size(), "wuhan", 5);
-			unittest(s1, s2, "string& replace(size_t pos, size_t len, const char* str, size_t n);");
+			unittest(s1, s2, "string& replace(size_t pos, size_t len, const char* s, size_t n);");
 
 			s1.replace(s1.begin(), s1.end(), "hongshanqu", 10);
 			s2.replace(s2.begin(), s2.end(), "hongshanqu", 10);
-			unittest(s1, s2, "string& replace(iterator first, iterator last, const char* str, size_t n);");
+			unittest(s1, s2, "string& replace(iterator first, iterator last, const char* s, size_t n);");
 
 			s1.replace(0, s1.size(), 10, 'Z');
 			s2.replace(0, s2.size(), 10, 'Z');
@@ -266,6 +275,26 @@ namespace sz {
 			unittest(s1, s2, "string& replace(iterator first, iterator last, InputIterator inputfirst, InputIterator inputlast);");
 		}
 
+		void find() {
+			szstring s1("There are two needles in this haystack with needles.");
+			szstring s2("needle");
+
+			unitassert(14, s1.find(s2), "size_t find(const string& str, size_t pos = 0) const;", false);
+			unitassert(44, s1.find("needles are small", 15, 6), "size_t find(const char* s, size_t pos, size_t n) const;");
+			unitassert(s1.npos, s1.find(szstring("sunzhi")), "size_t find(const string& str, size_t pos = 0) const;");
+			unitassert(30, s1.find("haystack"), "size_t find(const char* s, size_t pos = 0) const;");
+			unitassert(51, s1.find('.'), "size_t find(char c, size_t pos = 0) const;");
+
+			s1 = "The sixth sick sheik's sixth sheep's sick.";
+			s2 = "sixth";
+
+			unitassert(23, s1.rfind(s2), "size_t rfind(const string& str, size_t pos = npos) const;", false);
+			unitassert(23, s1.rfind(s2, 24), "size_t rfind(const string& str, size_t pos = npos) const;");
+			unitassert(s1.size() - 1, s1.rfind('.'), "size_t rfind(char c, size_t pos = npos) const;");
+			unitassert(0, s1.rfind("The"), "size_t rfind(const char* s, size_t pos = npos) const;");
+			unitassert(10, s1.rfind("sick111", 10, 4), "size_t rfind(const char* s, size_t pos, size_t n) const;");
+		}
+
 		void allTestcases() {
 			construct();
 			operate();
@@ -275,6 +304,7 @@ namespace sz {
 			append();
 			erase();
 			replace();
+			find();
 		}
 	}
 }

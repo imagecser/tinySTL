@@ -15,6 +15,7 @@ namespace sz {
 		void insert();
 		void append();
 		void erase();
+		void find();
 		void allTestcases();
 	}
 }

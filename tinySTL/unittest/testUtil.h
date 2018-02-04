@@ -5,11 +5,11 @@
 #include "rang.hpp"
 namespace sz {
 	namespace test {
-		inline void unitpass(const char* str) {
-			std::cout << "[ " << rang::fg::green << "pass" << rang::style::reset << " ] " << str << std::endl;
+		inline void unitpass(const char* s) {
+			std::cout << "[ " << rang::fg::green << "pass" << rang::style::reset << " ] " << s << std::endl;
 		}
-		inline void unitfail(const char* str) {
-			std::cout << "[ " << rang::fg::red << "fail" << rang::style::reset << " ] " << str << std::endl;
+		inline void unitfail(const char* s) {
+			std::cout << "[ " << rang::fg::red << "fail" << rang::style::reset << " ] " << s << std::endl;
 		}
 		template<class T>
 		void printContainer(T& container, const char* name = "") {
@@ -41,7 +41,7 @@ namespace sz {
 			return (first1 == last1 && first2 == last2);
 		}
 
-		/*void unitPass(const char* str) {
+		/*void unitPass(const char* s) {
 			std::cout << str << rang::fg::green << " ok\n";
 		}*/
 	}

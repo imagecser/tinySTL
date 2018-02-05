@@ -361,6 +361,15 @@ namespace sz {
 			unitassert(0, s1.compare(6, 5, "green4", 5), "int compare(size_t pos, size_t len, const char* s, size_t n) const;");
 		}
 
+		void reverse() {
+			szstring z1("hello world");
+			reverse_iterator_<char*> rite;
+			size_t i;
+			for (i = z1.size() - 1, rite = z1.rbegin(); i != -1; --i, ++rite)
+				assert(z1[i] == *rite);
+
+		}
+
 
 		void allTestcases() {
 			construct();
@@ -374,6 +383,7 @@ namespace sz {
 			find();
 			find_ch();
 			compare();
+			reverse();
 		}
 	}
 }

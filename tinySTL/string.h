@@ -8,14 +8,16 @@
 namespace sz {
 	class string {
 	public:
-		typedef char			value_type;
-		typedef char*			iterator;
-		typedef const char*		const_iterator;
-		typedef size_t			size_type;
-		typedef char&			reference;
-		typedef const char&		const_reference;
-		typedef ptrdiff_t		difference_type;
-
+		typedef char							value_type;
+		typedef char*							iterator;
+		typedef const char*						const_iterator;
+		typedef reverse_iterator_<char*>		reverse_iterator;
+		typedef reverse_iterator_<const char*>	const_reverse_iterator;
+		typedef size_t							size_type;
+		typedef char&							reference;
+		typedef const char&						const_reference;
+		typedef ptrdiff_t						difference_type;
+		
 		static const size_t npos = -1;
 
 	private:
@@ -417,6 +419,18 @@ namespace sz {
 		}
 		const_iterator cend() const {
 			return _end;
+		}
+		reverse_iterator rbegin() {
+			return reverse_iterator(_end);
+		}
+		reverse_iterator rend() {
+			return reverse_iterator(_begin);
+		}
+		const_reverse_iterator crbegin() {
+			return const_reverse_iterator(_end);
+		}
+		const_reverse_iterator crend() {
+			return const_reverse_iterator(_begin);
 		}
 		size_t size() const {
 			return _end - _begin;

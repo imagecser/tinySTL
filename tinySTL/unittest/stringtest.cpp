@@ -295,6 +295,37 @@ namespace sz {
 			unitassert(10, s1.rfind("sick111", 10, 4), "size_t rfind(const char* s, size_t pos, size_t n) const;");
 		}
 
+		void find_ch() {
+			const char* root_ptr = "hello world";
+			const char* child_ptr = "godboye";
+			stdstring d1 = root_ptr, d2 = child_ptr;
+			szstring z1 = root_ptr, z2 = child_ptr;
+
+			unitassert(d1.find_first_of(child_ptr), z1.find_first_of(child_ptr), "size_t find_first_of(const char* s, size_t pos = 0) const;", false);
+			unitassert(d1.find_first_of(child_ptr, 2), z1.find_first_of(child_ptr, 2), "size_t find_first_of(const char* s, size_t pos = 0) const;");
+			unitassert(d1.find_first_of(d2, 1), z1.find_first_of(z2, 1), "size_t find_first_of(const string& str, size_t pos = 0) const;");
+			unitassert(d1.find_first_of(child_ptr, 0, 1), z1.find_first_of(child_ptr, 0, 1), "size_t find_first_of(const char* s, size_t pos, size_t n) const;");
+			unitassert(d1.find_first_of('l', 3), z1.find_first_of('l', 3), "size_t find_first_of(char c, size_t pos = 0) const;");
+
+			unitassert(d1.find_first_not_of(child_ptr), z1.find_first_not_of(child_ptr), "size_t find_first_not_of(const char* s, size_t pos = 0) const;", false);
+			unitassert(d1.find_first_not_of(child_ptr, 2), z1.find_first_not_of(child_ptr, 2), "size_t find_first_not_of(const char* s, size_t pos = 0) const;");
+			unitassert(d1.find_first_not_of(d2, 1), z1.find_first_not_of(z2, 1), "size_t find_first_not_of(const string& str, size_t pos = 0) const;");
+			unitassert(d1.find_first_not_of(child_ptr, 0, 1), z1.find_first_not_of(child_ptr, 0, 1), "size_t find_first_not_of(const char* s, size_t pos, size_t n) const;");
+			unitassert(d1.find_first_not_of('l', 3), z1.find_first_not_of('l', 3), "size_t find_first_not_of(char c, size_t pos = 0) const;");
+
+			unitassert(d1.find_last_of(child_ptr), z1.find_last_of(child_ptr), "size_t find_last_of(const char* s, size_t pos = 0) const;", false);
+			unitassert(d1.find_last_of(child_ptr, 2), z1.find_last_of(child_ptr, 2), "size_t find_last_of(const char* s, size_t pos = 0) const;");
+			unitassert(d1.find_last_of(d2, 1), z1.find_last_of(z2, 1), "size_t find_last_of(const string& str, size_t pos = 0) const;");
+			unitassert(d1.find_last_of(child_ptr, 0, 1), z1.find_last_of(child_ptr, 0, 1), "size_t find_last_of(const char* s, size_t pos, size_t n) const;");
+			unitassert(d1.find_last_of('l', 3), z1.find_last_of('l', 3), "size_t find_last_of(char c, size_t pos = 0) const;");
+
+			unitassert(d1.find_last_not_of(child_ptr), z1.find_last_not_of(child_ptr), "size_t find_last_not_of(const char* s, size_t pos = 0) const;", false);
+			unitassert(d1.find_last_not_of(child_ptr, 2), z1.find_last_not_of(child_ptr, 2), "size_t find_last_not_of(const char* s, size_t pos = 0) const;");
+			unitassert(d1.find_last_not_of(d2, 1), z1.find_last_not_of(z2, 1), "size_t find_last_not_of(const string& str, size_t pos = 0) const;");
+			unitassert(d1.find_last_not_of(child_ptr, 0, 1), z1.find_last_not_of(child_ptr, 0, 1), "size_t find_last_not_of(const char* s, size_t pos, size_t n) const;");
+			unitassert(d1.find_last_not_of('l', 3), z1.find_last_not_of('l', 3), "size_t find_last_not_of(char c, size_t pos = 0) const;");
+		}
+
 		void allTestcases() {
 			construct();
 			operate();
@@ -305,6 +336,7 @@ namespace sz {
 			erase();
 			replace();
 			find();
+			find_ch();
 		}
 	}
 }

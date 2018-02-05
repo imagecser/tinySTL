@@ -6,7 +6,7 @@
 #include "allocator.h"
 
 namespace sz {
-    class string {
+	class string {
 	public:
 		static const size_t npos = -1;
 		typedef char value_type;
@@ -16,7 +16,7 @@ namespace sz {
 
 	private:
 		char * _begin;
-		char * _end; 
+		char * _end;
 		char * _storage_end;
 
 		sz::allocator<value_type> dataAlloc;
@@ -31,6 +31,7 @@ namespace sz {
 		void swap(T src, T dest);
 		size_t find_aux(const_iterator cite, size_t pos, size_t n) const;
 		size_t rfind_aux(const_iterator cite, size_t pos, size_t n) const;
+		bool isContained(char c, const_iterator first, const_iterator last) const;
 		size_t changeWhenNpos(size_t pos, size_t maxVal, size_t el) const;
 		*/
 		template<class InputIterator>
@@ -62,7 +63,7 @@ namespace sz {
 				*(ptr + i) = *(start + i);
 			return ptr + (end - start);
 		}*/
-		size_type getNewCapacity(size_type n) const{
+		size_type getNewCapacity(size_type n) const {
 			size_type _old = _storage_end - _begin;
 			return _old + (_old > n ? _old : n);
 		}
@@ -106,9 +107,16 @@ namespace sz {
 			}
 			return npos;
 		}
+		bool isContained(char c, const_iterator first, const_iterator last) const {
+			for (; first != last; ++first)
+				if (*first == c)
+					return true;
+			return false;
+		}
 		size_t changeWhenNpos(size_t pos, size_t maxVal, size_t el) const {
 			return pos == npos ? maxVal - el : pos;
 		}
+
 
 	public:
 		/*
@@ -151,7 +159,7 @@ namespace sz {
 			const char& back() const;
 			char& front();
 			const char& front() const;
-			
+
 			void push_back(char ch);
 			string& insert(size_t pos, const string& str);
 			string& insert(size_t pos, const string& str, size_t subpos, size_t sublen = npos);
@@ -225,7 +233,7 @@ namespace sz {
 		}
 		string() : _begin(NULL), _end(_begin), _storage_end(_end) {
 		}
-		string(const char *s, size_t n){
+		string(const char *s, size_t n) {
 			allocateCopy(s, s + n);
 		}
 		string(const char *s) {
@@ -268,13 +276,13 @@ namespace sz {
 			return *this;
 		}
 		string& operator= (const char* s) {
-			if(_begin != _storage_end)
+			if (_begin != _storage_end)
 				dataAlloc.deallocate(_begin);
 			allocateCopy(s, s + strlen(s));
 			return *this;
 		}
 		string& operator= (char c) {
-			if(_begin != _storage_end)
+			if (_begin != _storage_end)
 				dataAlloc.deallocate(_begin);
 			allocateFill(1, c);
 			return *this;
@@ -339,7 +347,7 @@ namespace sz {
 		iterator end() {
 			return _end;
 		}
-		const_iterator begin() const{
+		const_iterator begin() const {
 			return _begin;
 		}
 		const_iterator end() const {
@@ -376,7 +384,7 @@ namespace sz {
 		char& front() {
 			return *_begin;
 		}
-		const char& front() const{
+		const char& front() const {
 			return *_begin;
 		}
 
@@ -579,6 +587,81 @@ namespace sz {
 			pos = changeWhenNpos(pos, _end - _begin, 1);
 			for (size_t i = pos; i >= 0; --i)
 				if (*(_begin + i) == c)
+					return i;
+			return npos;
+		}
+
+		size_t find_first_of(const string& str, size_t pos = 0) const {
+			return find_first_of(str.cbegin(), pos, str.size());
+		}
+		size_t find_first_of(const char* s, size_t pos = 0) const {
+			return find_first_of(s, pos, strlen(s));
+		}
+		size_t find_first_of(const char* s, size_t pos, size_t n) const {
+			for (size_t i = pos; i != _end - _begin; ++i)
+				if (isContained(*(_begin + i), s, s + n))
+					return i;
+			return npos;
+		}
+		size_t find_first_of(char c, size_t pos = 0) const {
+			return find(c, pos);
+		}
+
+		size_t find_last_of(const string& str, size_t pos = npos) const {
+			return find_last_of(str.cbegin(), pos, str.size());
+		}
+		size_t find_last_of(const char* s, size_t pos = npos) const {
+			return find_last_of(s, pos, strlen(s));
+		}
+		size_t find_last_of(const char* s, size_t pos, size_t n) const {
+			pos = changeWhenNpos(pos, _end - _begin, 1);
+			for (size_t i = pos; i != -1; --i)
+				if (isContained(*(_begin + i), s, s + n))
+					return i;
+			return npos;
+		}
+		size_t find_last_of(char c, size_t pos = npos) const {
+			pos = changeWhenNpos(pos, _end - _begin, 1);
+			for (size_t i = pos; i != -1; --i)
+				if (*(_begin + i) == c)
+					return i;
+			return npos;
+		}
+		size_t find_first_not_of(const string& str, size_t pos = 0) const {
+			return find_first_not_of(str.begin(), pos, str.size());
+		}
+		size_t find_first_not_of(const char* s, size_t pos = 0) const {
+			return find_first_not_of(s, pos, strlen(s));
+		}
+		size_t find_first_not_of(const char* s, size_t pos, size_t n) const {
+			for (size_t i = pos; i != _end - _begin; ++i)
+				if (!isContained(*(_begin + i), s, s + n))
+					return i;
+			return npos;
+		}
+		size_t find_first_not_of(char c, size_t pos = 0) const {
+			for (size_t i = pos; i != _end - _begin; ++i)
+				if (*(_begin + i) != c)
+					return i;
+			return npos;
+		}
+		size_t find_last_not_of(const string& str, size_t pos = npos) const {
+			return find_last_not_of(str.begin(), pos, str.size());
+		}
+		size_t find_last_not_of(const char* s, size_t pos = npos) const {
+			return find_last_not_of(s, pos, strlen(s));
+		}
+		size_t find_last_not_of(const char* s, size_t pos, size_t n) const {
+			pos = changeWhenNpos(pos, _end - _begin, 1);
+			for (size_t i = pos; i != -1; --i)
+				if (!isContained(*(_begin + i), s, s + n))
+					return i;
+			return npos;
+		}
+		size_t find_last_not_of(char c, size_t pos = npos) const {
+			pos = changeWhenNpos(pos, _end - _begin, 1);
+			for (size_t i = pos; i != -1; --i)
+				if (*(_begin + i) != c)
 					return i;
 			return npos;
 		}

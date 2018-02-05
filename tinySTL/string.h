@@ -8,11 +8,15 @@
 namespace sz {
 	class string {
 	public:
+		typedef char			value_type;
+		typedef char*			iterator;
+		typedef const char*		const_iterator;
+		typedef size_t			size_type;
+		typedef char&			reference;
+		typedef const char&		const_reference;
+		typedef ptrdiff_t		difference_type;
+
 		static const size_t npos = -1;
-		typedef char value_type;
-		typedef char* iterator;
-		typedef const char* const_iterator;
-		typedef size_t size_type;
 
 	private:
 		char * _begin;
@@ -35,6 +39,7 @@ namespace sz {
 		bool isContained(char c, const_iterator first, const_iterator last) const;
 		size_t changeWhenNpos(size_t pos, size_t maxVal, size_t el) const;
 		*/
+
 		template<class InputIterator>
 		void allocateCopy(InputIterator first, InputIterator last) {
 			//_begin = new value_type[last - first];
@@ -64,6 +69,7 @@ namespace sz {
 				*(ptr + i) = *(start + i);
 			return ptr + (end - start);
 		}*/
+
 		size_type getNewCapacity(size_type n) const {
 			size_type _old = _storage_end - _begin;
 			return _old + (_old > n ? _old : n);
@@ -136,11 +142,10 @@ namespace sz {
 
 	public:
 		/*
-			friend std::ostream & operator << (std::ostream & out, const string & str);
 			string();
 			string(string&& str);
 			string(const char *s, size_t n)
-			String(const char *s);
+			string(const char *s);
 			string(string&& str);
 			string(const string& str);
 			string(const string& str, size_t pos, size_t len = npos);
@@ -251,12 +256,36 @@ namespace sz {
 			int compare(const char* s) const;
 			int compare(size_t pos, size_t len, const char* s) const;
 			int compare(size_t pos, size_t len, const char* s, size_t n) const;
+
+			friend std::ostream& operator<< (std::ostream& os, const string& str);
+			friend std::istream& operator<< (std::istream& is, string& str);
+			friend std::istream& getline(std::istream& is, string& str, char delim = '\n');
+			friend string operator+ (const string& lhs, const string& rhs);
+			friend string operator+ (const string& lhs, const char* rhs);
+			friend string operator+ (const char* lhs, const string& rhs);
+			friend string operator+ (const string& lhs, char rhs);
+			friend string operator+ (char lhs, const string& rhs);
+			friend bool operator== (const string& lhs, const string& rhs);
+			friend bool operator== (const char*   lhs, const string& rhs);
+			friend bool operator== (const string& lhs, const char*   rhs);
+			friend bool operator!= (const string& lhs, const string& rhs);
+			friend bool operator!= (const char*   lhs, const string& rhs);
+			friend bool operator!= (const string& lhs, const char*   rhs);
+			friend bool operator<  (const string& lhs, const string& rhs);
+			friend bool operator<  (const char*   lhs, const string& rhs);
+			friend bool operator<  (const string& lhs, const char*   rhs);
+			friend bool operator<= (const string& lhs, const string& rhs);
+			friend bool operator<= (const char*   lhs, const string& rhs);
+			friend bool operator<= (const string& lhs, const char*   rhs);
+			friend bool operator>  (const string& lhs, const string& rhs);
+			friend bool operator>  (const char*   lhs, const string& rhs);
+			friend bool operator>  (const string& lhs, const char*   rhs);
+			friend bool operator>= (const string& lhs, const string& rhs);
+			friend bool operator>= (const char*   lhs, const string& rhs);
+			friend bool operator>= (const string& lhs, const char*   rhs);
+			friend void swap(string& lhs, string& rhs);
 		*/
-		friend std::ostream & operator << (std::ostream & out, const string & str) {
-			for (auto item : str)
-				out << item;
-			return out;
-		}
+
 		string() : _begin(NULL), _end(_begin), _storage_end(_end) {
 		}
 		string(const char *s, size_t n) {
@@ -714,6 +743,115 @@ namespace sz {
 		}
 		int compare(size_t pos, size_t len, const char* s, size_t n) const {
 			return compare_aux(pos, len, s, s + n);
+		}
+
+		friend std::ostream& operator<< (std::ostream& os, const string& str) {
+			for (size_t i = 0; i != str.size(); ++i)
+				os << str[i];
+			return os;
+		}
+		friend std::istream& operator>> (std::istream& is, string& str) {
+			str.clear();
+			char ch;
+			for (; is.get(ch);)
+				if (!(isblank(ch) || ch == '\n'))
+					break;
+			is.putback(ch);
+			for (; is.get(ch);)
+				if (ch != -1 && !isblank(ch) && ch != '\n')
+					str.push_back(ch);
+				else
+					break;
+			return is;
+		}
+		friend std::istream& getline(std::istream& is, string& str, char delim = '\n') {
+			char ch;
+			str.clear();
+			for (; is.get(ch);)
+				if (ch == delim)
+					break;
+				else
+					str.push_back(ch);
+			return is;
+		}
+
+		friend string operator+ (const string& lhs, const string& rhs) {
+			string res(lhs);
+			return res += rhs;
+		}
+		friend string operator+ (const string& lhs, const char* rhs) {
+			string res(lhs);
+			return res += rhs;
+		}
+		friend string operator+ (const char* lhs, const string& rhs) {
+			string res(lhs);
+			return res += rhs;
+		}
+		friend string operator+ (const string& lhs, char rhs) {
+			string res(lhs);
+			return res += rhs;
+		}
+		friend string operator+ (char lhs, const string& rhs) {
+			string res(1, lhs);
+			return res += rhs;
+		}
+
+		friend bool operator== (const string& lhs, const string& rhs) {
+			return lhs.compare(rhs) == 0;
+		}
+		friend bool operator== (const char*   lhs, const string& rhs) {
+			return rhs.compare(lhs) == 0;
+		}
+		friend bool operator== (const string& lhs, const char*   rhs) {
+			return lhs.compare(rhs) == 0;
+		}
+		friend bool operator!= (const string& lhs, const string& rhs) {
+			return lhs.compare(rhs);
+		}
+		friend bool operator!= (const char*   lhs, const string& rhs) {
+			return rhs.compare(lhs);
+		}
+		friend bool operator!= (const string& lhs, const char*   rhs) {
+			return lhs.compare(rhs);
+		}
+		friend bool operator<  (const string& lhs, const string& rhs) {
+			return lhs.compare(rhs) == -1;
+		}
+		friend bool operator<  (const char*   lhs, const string& rhs) {
+			return rhs.compare(lhs) == 1;
+		}
+		friend bool operator<  (const string& lhs, const char*   rhs) {
+			return lhs.compare(rhs) == -1;
+		}
+		friend bool operator<= (const string& lhs, const string& rhs) {
+			return lhs.compare(rhs) != 1;
+		}
+		friend bool operator<= (const char*   lhs, const string& rhs) {
+			return rhs.compare(lhs) != -1;
+		}
+		friend bool operator<= (const string& lhs, const char*   rhs) {
+			return lhs.compare(rhs) != 1;
+		}
+		friend bool operator>  (const string& lhs, const string& rhs) {
+			return lhs.compare(rhs) == 1;
+		}
+		friend bool operator>  (const char*   lhs, const string& rhs) {
+			return rhs.compare(lhs) == -1;
+		}
+		friend bool operator>  (const string& lhs, const char*   rhs) {
+			return lhs.compare(rhs) == 1;
+		}
+		friend bool operator>= (const string& lhs, const string& rhs) {
+			return lhs.compare(rhs) != -1;
+		}
+		friend bool operator>= (const char*   lhs, const string& rhs) {
+			return rhs.compare(lhs) != 1;
+		}
+		friend bool operator>= (const string& lhs, const char*   rhs) {
+			return lhs.compare(rhs) != -1;
+		}
+		friend void swap(string& lhs, string& rhs) {
+			lhs.swap(rhs);
 		}
     }; 
 }

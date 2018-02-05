@@ -54,7 +54,7 @@ namespace sz {
 		}
 
 		void operate() {
-			const char *ptr = "hello world";
+			const char *ptr = "beta";
 			stdstring stdstr(ptr);
 			szstring szstr(ptr);
 
@@ -66,11 +66,33 @@ namespace sz {
 			z1 = ptr;
 			unittest(s1, z1, "string& operator= (const char* s);");
 
-
 			s1 = 'c';
 			z1 = 'c';
 			unittest(s1, z1, "string& operator= (char ch);");
-			
+
+			unittest(s1 + stdstr, z1 + szstr, "friend string operator+ (const string& lhs, const string& rhs);");
+			unittest(s1 + ptr, z1 + ptr, "friend string operator+ (const string& lhs, const char* rhs);");
+			unittest(ptr + s1, ptr + z1, "friend string operator+ (const char* lhs, const string& rhs);");
+			unittest(s1 + 'c', z1 + 'c', "friend string operator+ (const string& lhs, char rhs);");
+			unittest('c' + s1, 'c' + z1, "friend string operator+ (char lhs, const string& rhs);");
+
+
+			szstring z2("alpha"), z3 = ("beta");
+			unitassert(z2 == z3, false, "friend bool operator== (const string& lhs, const string& rhs);", false);
+			unitassert(ptr == z2, false, "friend bool operator== (const char*   lhs, const string& rhs);", false);
+			unitassert(z2 == ptr, false, "friend bool operator== (const string& lhs, const char*   rhs);", false);
+			unitassert(z3 == z3 || z3 <= z3 || z3 >= z3, true, "friend bool operator== (const string& lhs, const string& rhs);");
+			unitassert(ptr == z3 || ptr <= z3 || ptr >= z3, true, "friend bool operator== (const char*   lhs, const string& rhs);");
+			unitassert(z3 == ptr || z3 <= ptr || z3 >= ptr, true, "friend bool operator== (const string& lhs, const char*   rhs);");
+			unitassert(z2 != z3, true, "friend bool operator!= (const string& lhs, const string& rhs);");
+			unitassert(ptr != z2, true, "friend bool operator!= (const char*   lhs, const string& rhs);");
+			unitassert(z2 != ptr, true, "friend bool operator!= (const string& lhs, const char*   rhs);");
+			unitassert(z2 < z3 && z2 <= z3, true, "friend bool operator<  (const string& lhs, const string& rhs);");
+			unitassert(ptr < z2 || ptr <= z2, false, "friend bool operator<  (const char*   lhs, const string& rhs);");
+			unitassert(z2 < ptr && z2 <= ptr, true, "friend bool operator<  (const string& lhs, const char*   rhs);");
+			unitassert(z2 > z3 || z2 >= z3, false, "friend bool operator>  (const string& lhs, const string& rhs);");
+			unitassert(ptr > z2 && ptr >= z2, true, "friend bool operator>  (const char*   lhs, const string& rhs);");
+			unitassert(z2 > ptr || z2 >= ptr, false, "friend bool operator>  (const string& lhs, const char*   rhs);");
 		}
 
 		void func1() {
@@ -338,6 +360,7 @@ namespace sz {
 			unitassert(0, s1.compare(6, 5, "green"), "int compare(size_t pos, size_t len, const char* s) const;");
 			unitassert(0, s1.compare(6, 5, "green4", 5), "int compare(size_t pos, size_t len, const char* s, size_t n) const;");
 		}
+
 
 		void allTestcases() {
 			construct();

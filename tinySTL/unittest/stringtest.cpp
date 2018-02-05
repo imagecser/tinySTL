@@ -325,6 +325,19 @@ namespace sz {
 			unitassert(d1.find_last_not_of(child_ptr, 0, 1), z1.find_last_not_of(child_ptr, 0, 1), "size_t find_last_not_of(const char* s, size_t pos, size_t n) const;");
 			unitassert(d1.find_last_not_of('l', 3), z1.find_last_not_of('l', 3), "size_t find_last_not_of(char c, size_t pos = 0) const;");
 		}
+		
+		void compare() {
+			szstring s1("apple green");
+			szstring s2("green apple");
+			unitassert(-1, s1.compare("apple green "), "int compare(const char* s) const;", false);
+			unitassert(1, s1.compare("apple"), "int compare(const char* s) const;", false);
+			unitassert(0, s1.compare("apple green"), "int compare(const char* s) const;");
+			unitassert(-1, s1.compare(s2), "int compare(const string& str) const;");
+			unitassert(-1, s1.compare(6, 5, s2), "int compare(size_t pos, size_t len, const string& str) const;");
+			unitassert(0, s1.compare(0, 5, s2, 6), "int compare(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen = npos) const;");
+			unitassert(0, s1.compare(6, 5, "green"), "int compare(size_t pos, size_t len, const char* s) const;");
+			unitassert(0, s1.compare(6, 5, "green4", 5), "int compare(size_t pos, size_t len, const char* s, size_t n) const;");
+		}
 
 		void allTestcases() {
 			construct();
@@ -337,6 +350,7 @@ namespace sz {
 			replace();
 			find();
 			find_ch();
+			compare();
 		}
 	}
 }

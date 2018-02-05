@@ -31,6 +31,7 @@ namespace sz {
 		void swap(T src, T dest);
 		size_t find_aux(const_iterator cite, size_t pos, size_t n) const;
 		size_t rfind_aux(const_iterator cite, size_t pos, size_t n) const;
+		int compare_aux(size_t pos, size_t len, const_iterator cfirst, const_iterator clast) const;
 		bool isContained(char c, const_iterator first, const_iterator last) const;
 		size_t changeWhenNpos(size_t pos, size_t maxVal, size_t el) const;
 		*/
@@ -107,6 +108,21 @@ namespace sz {
 			}
 			return npos;
 		}
+		int compare_aux(size_t pos, size_t len, const_iterator cfirst, const_iterator clast) const {
+			size_t i;
+			for (i = pos; i != pos + len && cfirst != clast; ++i, ++cfirst) {
+				if (*(_begin + i) < *cfirst)
+					return -1;
+				else if (*(_begin + i) > *cfirst)
+					return 1;
+			}
+			if (i == pos + len && cfirst == clast)
+				return 0;
+			else if (i == pos + len)
+				return -1;
+			else
+				return 1;
+		}
 		bool isContained(char c, const_iterator first, const_iterator last) const {
 			for (; first != last; ++first)
 				if (*first == c)
@@ -143,6 +159,9 @@ namespace sz {
 			void resize(size_t n, const char ch = '\000');
 			void reserve(size_t n);
 			void shrink_to_fit();
+			void swap(string& str)
+			size_t copy(char *s, size_t len, size_t pos = 0) const
+			string substr(size_t pos = 0, size_t len = npos) const
 
 			iterator begin();
 			iterator end();
@@ -225,6 +244,13 @@ namespace sz {
 			size_t find_last_not_of(const char* s, size_t pos = npos) const;
 			size_t find_last_not_of(const char* s, size_t pos, size_t n) const;
 			size_t find_last_not_of(char c, size_t pos = npos) const;
+
+			int compare(const string& str) const;
+			int compare(size_t pos, size_t len, const string& str) const;
+			int compare(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen = npos) const;
+			int compare(const char* s) const;
+			int compare(size_t pos, size_t len, const char* s) const;
+			int compare(size_t pos, size_t len, const char* s, size_t n) const;
 		*/
 		friend std::ostream & operator << (std::ostream & out, const string & str) {
 			for (auto item : str)
@@ -339,6 +365,10 @@ namespace sz {
 			//unintializedCopy(_begin + pos, _begin + pos + len, str);
 			uninitialized_copy(_begin + pos, _begin + pos + len, s);
 			return len;
+		}
+		string substr(size_t pos = 0, size_t len = npos) const {
+			len = changeWhenNpos(len, _end - _begin, pos);
+			return string(_begin + pos, _begin + pos + len);
 		}
 
 		iterator begin() {
@@ -664,6 +694,26 @@ namespace sz {
 				if (*(_begin + i) != c)
 					return i;
 			return npos;
+		}
+
+		int compare(const string& str) const {
+			return compare_aux(0, size(), str.cbegin(), str.cend());
+		}
+		int compare(size_t pos, size_t len, const string& str) const {
+			return compare_aux(pos, len, str.cbegin(), str.cend());
+		}
+		int compare(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen = npos) const {
+			sublen = changeWhenNpos(sublen, str.size(), subpos);
+			return compare_aux(pos, len, str.cbegin() + subpos, str.cbegin() + subpos + sublen);
+		}
+		int compare(const char* s) const {
+			return compare_aux(0, size(), s, s + strlen(s));
+		}
+		int compare(size_t pos, size_t len, const char* s) const {
+			return compare_aux(pos, len, s, s + strlen(s));
+		}
+		int compare(size_t pos, size_t len, const char* s, size_t n) const {
+			return compare_aux(pos, len, s, s + n);
 		}
     }; 
 }

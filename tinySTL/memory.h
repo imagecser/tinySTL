@@ -8,13 +8,13 @@
 namespace sz {
 	template<class InputIterator, class ForwardIterator>
 	ForwardIterator _uninitialized_copy_aux(InputIterator first, InputIterator last, ForwardIterator ptr, _true_type) {
-		for (; first != last; ++first, ++ptr)
+		for (; first < last; ++first, ++ptr)
 			*ptr = *first;
 		return ptr;
 	}
 	template<class InputIterator, class ForwardIterator>
 	ForwardIterator _uninitialized_copy_aux(InputIterator first, InputIterator last, ForwardIterator ptr, _false_type) {
-		for (; first != last; ++first, ++ptr)
+		for (; first < last; ++first, ++ptr)
 			construct(ptr, *first);
 		return ptr;
 	}
@@ -31,7 +31,7 @@ namespace sz {
 	}
 	template<class ForwardIterator, class T>
 	void _uninitialized_fill_aux(ForwardIterator first, ForwardIterator last, const T& val, _false_type) {
-		for (; first != last; ++first)
+		for (; first < last; ++first)
 			construct(first, val);
 	}
 	template<class ForwardIterator, class T>

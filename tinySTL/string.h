@@ -46,17 +46,19 @@ namespace sz {
 		void allocateCopy(InputIterator first, InputIterator last) {
 			//_begin = new value_type[last - first];
 			size_type pcapacity = last - first;
-			_begin = dataAlloc.allocate(pcapacity);
+			_begin = dataAlloc.allocate(pcapacity + 1);
 			//strncpy(_begin, (char *)first, last - first);
 			uninitialized_copy(first, last, _begin);
 			//for (size_t i = 0; i < pcapacity; ++i)
 			//	*(_begin + i) = *(first + i);
 			_storage_end = _end = _begin + pcapacity;
+			*_end = 0;
 		}
 		void allocateFill(size_type n, value_type ch) {
-			_begin = dataAlloc.allocate(n);
+			_begin = dataAlloc.allocate(n + 1);
 			_storage_end = _end = _begin + n;
 			uninitialized_fill_n(_begin, n, ch);
+			*_end = 0;
 			//for (size_t i = 0; i < n; ++i)
 			//	_begin[i] = ch;
 		}
@@ -72,6 +74,11 @@ namespace sz {
 			return ptr + (end - start);
 		}*/
 
+		template<class ForwardIterator>
+		void fillNull(ForwardIterator first, ForwardIterator last) {
+			for (; first < last; ++first)
+				*first = 0;
+		}
 		size_type getNewCapacity(size_type n) const {
 			size_type _old = _storage_end - _begin;
 			return _old + (_old > n ? _old : n);
@@ -85,7 +92,7 @@ namespace sz {
 			_end = str._end;
 			_storage_end = str._storage_end;
 			str._begin = str._end = str._storage_end = 0;
-		}
+		}	
 		template<class T>
 		void swap(T src, T dest) {
 			T temp = src;
@@ -350,9 +357,12 @@ namespace sz {
 			allocateFill(1, c);
 			return *this;
 		}
-
+		const char* c_str() {
+			return _begin;
+		}
 		void clear() {
-			dataAlloc.destroy(_begin, _end);
+			//dataAlloc.destroy(_begin, _end);
+			fillNull(_begin, _end);
 			_end = _begin;
 		}
 		bool empty() {
@@ -360,15 +370,17 @@ namespace sz {
 		}
 		void resize(size_t n, const char c = '\000') {
 			if (n < size()) {
-				dataAlloc.destroy(_begin + n, _storage_end);
-				_end = _storage_end = _begin + n;
+				//dataAlloc.destroy(_begin + n, _storage_end);
+				fillNull(_begin + n, _storage_end);
+				_end = _begin + n;
 			}
 			else if (n > size() && n <= capacity()) {
 				//_end = unintializedFill(_end, n - size(), ch);
 				_end = uninitialized_fill_n(_end, n - size(), c);
+				*_end = 0;
 			}
 			else if (n > capacity()) {
-				iterator pbegin = dataAlloc.allocate(getNewCapacity(n - size()));
+				iterator pbegin = dataAlloc.allocate(getNewCapacity(n - size()) + 1);
 				//iterator pend = unintializedCopy(_begin, _end, pbegin);
 				//pend = unintializedFill(pend, n - size(), ch);
 				iterator pend = uninitialized_copy(_begin, _end, pbegin);
@@ -376,21 +388,23 @@ namespace sz {
 				dataAlloc.deallocate(_begin);
 				_begin = pbegin;
 				_storage_end = _end = pend;
+				*_end = 0;
 			}
 		}
 		void reserve(size_t n) {
 			if (n <= capacity())
 				return;
-			iterator pbegin = dataAlloc.allocate(n);
+			iterator pbegin = dataAlloc.allocate(n + 1);
 			//iterator pend = unintializedCopy(_begin, _end, pbegin);
 			iterator pend = uninitialized_copy(_begin, _end, pbegin);
 			dataAlloc.deallocate(_begin);
 			_begin = pbegin;
 			_end = pend;
+			*_end = 0;
 			_storage_end = _begin + n;
 		}
 		void shrink_to_fit() {
-			dataAlloc.destroy(_end, _storage_end);
+			//dataAlloc.destroy(_end + 1, _storage_end);
 			_storage_end = _end;
 		}
 		void swap(string& str) {
@@ -503,12 +517,13 @@ namespace sz {
 				for (iterator ite = _end - 1; ite >= ptr; --ite)
 					*(ite + n) = *ite;
 				_end += n;
+				*_end = 0;
 				//return unintializedFill(ptr, n, ch);
 				return uninitialized_fill_n(ptr, n, c);
 			}
 			else {
 				size_type pcapacity = getNewCapacity(n);
-				iterator pbegin = dataAlloc.allocate(pcapacity);
+				iterator pbegin = dataAlloc.allocate(pcapacity + 1);
 				//iterator pend = unintializedCopy(_begin, ptr, pbegin);
 				//iterator res = pend = unintializedFill(pend, n, ch);
 				//pend = unintializedCopy(ptr, _end, pend);
@@ -518,6 +533,7 @@ namespace sz {
 				dataAlloc.deallocate(_begin);
 				_begin = pbegin;
 				_end = pend;
+				*_end = 0;
 				_storage_end = _begin + pcapacity;
 				return res;
 			}
@@ -533,12 +549,13 @@ namespace sz {
 				for (iterator ite = _end - 1; ite >= ptr; --ite)
 					*(ite + offset) = *ite;
 				_end += offset;
+				*_end = 0;
 				//return unintializedCopy(pstr.begin(), pstr.end(), ptr);
 				return uninitialized_copy(pstr.begin(), pstr.end(), ptr);
 			}
 			else {
 				size_type pcapacity = getNewCapacity(offset);
-				iterator pbegin = dataAlloc.allocate(pcapacity);
+				iterator pbegin = dataAlloc.allocate(pcapacity + 1);
 				//iterator pend = unintializedCopy(_begin, ptr, pbegin);
 				//iterator res = pend = unintializedCopy(first, last, pend);
 				//pend = unintializedCopy(ptr, _end, pend);
@@ -548,6 +565,7 @@ namespace sz {
 				dataAlloc.deallocate(_begin);
 				_begin = pbegin;
 				_end = pend;
+				*_end = 0;
 				_storage_end = pbegin + pcapacity;
 				return res;
 			}
@@ -600,8 +618,10 @@ namespace sz {
 			size_type lenMove = _end - last;
 			for (size_t i = 0; i < lenMove; ++i)
 				*(first + i) = *(last + i);
-			dataAlloc.destroy(first + lenMove, _end);
+			//dataAlloc.destroy(first + lenMove, _end);
+			fillNull(first + lenMove, _end);
 			_end = first + lenMove;
+			*_end = 0;
 			return first;
 		}
 

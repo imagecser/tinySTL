@@ -100,12 +100,14 @@ namespace sz {
 			stdstring stdstr(ptr);
 			szstring szstr(ptr);
 
+			unittest(stdstr, szstr, "const char* c_str();", true, sz::test::printEqual(stdstr.c_str(), szstr.c_str()));
+
 			stdstring s1(stdstr);
 			szstring z1(szstr);
 			unittest(s1, z1, "bool empty(); void clear();", false, s1.empty() == z1.empty());
 			s1.clear();
 			z1.clear();
-			unittest(s1, z1, "bool empty(); void clear();", true, s1.empty() == z1.empty());
+			unittest(s1, z1, "bool empty(); void clear();", true, s1.empty() == z1.empty() && sz::test::printEqual(s1.c_str(), z1.c_str()));
 
 			s1 = ptr;
 			z1 = ptr;
@@ -148,6 +150,7 @@ namespace sz {
 			}pos;
 			unittest(s1, z1, "char& operator[](size_t pos);", true, pos(s1, z1));
 			unittest(s1, z1, "char& back(); char& front();", true, s1.front() == z1.front() && s1.back() == z1.back());
+
 		}
 
 		void insert() {

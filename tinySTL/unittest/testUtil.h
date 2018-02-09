@@ -24,7 +24,7 @@ namespace sz {
 		}
 
 		template<class T, class K>
-		bool printEqual(T& dest, K& src) {
+		bool printEqual(const T dest, const K src) {
 			std::stringstream ssd, sss;
 			ssd << dest;
 			sss << src;

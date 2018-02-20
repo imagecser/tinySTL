@@ -1,5 +1,5 @@
-#ifndef _ALGORITHM_H_
-#define _ALGORITHM_H_
+#ifndef _SZ_ALGORITHM_H_
+#define _SZ_ALGORITHM_H_
 
 namespace sz {
 	template<class ForwardIterator, class T>
@@ -16,4 +16,4 @@ namespace sz {
 	}
 }
 
-#endif // !_ALGORITHM_H_
+#endif // !_SZ_ALGORITHM_H_

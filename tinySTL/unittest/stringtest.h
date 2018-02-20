@@ -1,5 +1,5 @@
-#ifndef _STRING_TEST_H_
-#define _STRING_TEST_H_
+#ifndef _SZ_STRING_TEST_H_
+#define _SZ_STRING_TEST_H_
 #include "../string.h"
 #include "testUtil.h"
 #include <cassert>

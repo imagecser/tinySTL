@@ -1,5 +1,5 @@
-#ifndef _TYPE_TRAITS_H_
-#define _TYPE_TRAITS_H_
+#ifndef _SZ_TYPE_TRAITS_H_
+#define _SZ_TYPE_TRAITS_H_
 
 namespace sz {
 	struct _true_type {};
@@ -51,4 +51,4 @@ struct _type_traits<type> { \
 	make_true_traits(, const signed char*)
 }
 
-#endif // !_TYPE_TRAITS_H_
+#endif // !_SZ_TYPE_TRAITS_H_

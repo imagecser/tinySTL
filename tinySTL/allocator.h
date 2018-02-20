@@ -1,5 +1,5 @@
-#ifndef _ALLOCATOR_H_
-#define _ALLOCATOR_H_
+#ifndef _SZ_ALLOCATOR_H_
+#define _SZ_ALLOCATOR_H_
 #include <cassert>
 #include <new>
 #include "memory.h"
@@ -43,4 +43,4 @@ namespace sz {
 		}
 	};
 }
-#endif // !_allocator_H_
+#endif // !_SZ_allocator_H_

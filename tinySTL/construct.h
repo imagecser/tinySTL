@@ -1,5 +1,5 @@
-#ifndef _CONSTRUCT_H_
-#define _CONSTRUCT_H_
+#ifndef _SZ_CONSTRUCT_H_
+#define _SZ_CONSTRUCT_H_
 #include "type_traits.h"
 #include <new>
 

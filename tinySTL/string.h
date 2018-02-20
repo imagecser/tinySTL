@@ -1,5 +1,5 @@
-﻿#ifndef _STRING_H_
-#define _STRING_H_
+﻿#ifndef _SZ_STRING_H_
+#define _SZ_STRING_H_
 #include <cstring>
 #include <iostream>
 #include <type_traits>
@@ -901,4 +901,4 @@ namespace sz {
 		}
     }; 
 }
-#endif
+#endif !_SZ_STRING_H_

@@ -1,5 +1,5 @@
-#ifndef _ITERATOR_H_
-#define _ITERATOR_H_
+#ifndef _SZ_ITERATOR_H_
+#define _SZ_ITERATOR_H_
 
 namespace sz {
 
@@ -152,4 +152,4 @@ namespace sz {
 }
 
 
-#endif // !_ITERATOR_H_
+#endif // !_SZ_ITERATOR_H_

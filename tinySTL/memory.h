@@ -1,5 +1,5 @@
-#ifndef _MEMORY_H_
-#define _MEMORY_H_
+#ifndef _SZ_MEMORY_H_
+#define _SZ_MEMORY_H_
 #include "type_traits.h"
 #include "iterator.h"
 #include "construct.h"
@@ -57,4 +57,4 @@ namespace sz {
 	}
 }
 
-#endif // !_MEMORY_H_
+#endif // !_SZ_MEMORY_H_

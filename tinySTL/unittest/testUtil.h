@@ -1,5 +1,5 @@
-#ifndef _TEST_UTIL_H_
-#define _TEST_UTIL_H_
+#ifndef _SZ_TEST_UTIL_H_
+#define _SZ_TEST_UTIL_H_
 #include <iostream>
 #include <sstream>
 #include "rang.hpp"

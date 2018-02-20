@@ -1,5 +1,5 @@
-#ifndef _ALLOC_H_
-#define _ALLOC_H_
+#ifndef _SZ_ALLOC_H_
+#define _SZ_ALLOC_H_
 
 namespace sz {
 	class Alloc {
@@ -9,4 +9,4 @@ namespace sz {
 	};
 }
 
-#endif // !_ALLOC_H_
+#endif // !_SZ_ALLOC_H_

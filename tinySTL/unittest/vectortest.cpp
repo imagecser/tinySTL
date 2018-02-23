@@ -2,6 +2,7 @@
 
 namespace sz {
 	namespace vectorTest {
+		const char* ptr = "hello world";
 		template<class T>
 		void unittest(stdvec<T> src, szvec<T> dest, const char *s, bool islast = true, bool condition = true) {
 			if (sz::test::containerEqual(dest, src) && condition) {
@@ -40,7 +41,6 @@ namespace sz {
 		}
 
 		void func2() {
-			const char* ptr = "hello world";
 			stdvec<int> v1(ptr, ptr + 9);
 			szvec<int> v2(v1.begin(), v1.end());
 			for (size_t i = 0; i < 9; i++)
@@ -50,7 +50,6 @@ namespace sz {
 		}
 
 		void func3() {
-			const char* ptr = "hello world";
 			stdvec<int> d(ptr, ptr + 10);
 			szvec<int> z(ptr, ptr + 10);
 			d.reserve(40);
@@ -75,7 +74,6 @@ namespace sz {
 		}
 
 		void func4() {
-			const char* ptr = "hello world";
 			stdvec<int> d(ptr, ptr + 11);
 			szvec<int> z(ptr, ptr + 11);
 
@@ -102,7 +100,20 @@ namespace sz {
 			z.push_back(231);
 			d.push_back(231);
 			unittest(d, z, "void push_back(const_reference val);");
+
+			z.erase(z.begin() + 10, z.begin() + 15);
+			d.erase(d.begin() + 10, d.begin() + 15);
+			unittest(d, z, "iterator erase(iterator first, iterator last);");
+
+			z.erase(z.begin() + 20);
+			d.erase(d.begin() + 20);
+			unittest(d, z, "iterator erase(iterator pos);");
+
+			z.pop_back();
+			d.pop_back();
+			unittest(d, z, "void pop_back();");
 		}
+
 
 		void allTestcases(){
 			func1();

@@ -15,6 +15,7 @@ namespace sz {
 		typedef T&							reference;
 		typedef const T&					const_reference;
 		typedef ptrdiff_t					difference_type;
+		typedef allocator<T>				allocator_type;
 	private:
 		T* _begin;
 		T* _end;
@@ -254,6 +255,25 @@ namespace sz {
 		}
 		void push_back(const_reference val) {
 			insert(_end, val);
+		}
+
+		iterator erase(iterator first, iterator last) {
+			size_type _mov = _end - last;
+			for (size_type i = 0; i < _mov; ++i)
+				*(first + i) = *(last + i);
+			uninitialized_fill(first + _mov, _end, 0);
+			_end = first + _mov;
+			return first;
+		}
+		iterator erase(iterator pos) {
+			return erase(pos, pos + 1);
+		}
+		void pop_back() {
+			erase(_end - 1, _end);
+		}
+
+		allocator_type get_allocator() {
+			return dataAlloc;
 		}
 	};
 }

@@ -11,6 +11,10 @@ namespace sz {
 		using stdvec = std::vector<T>;
 		template<class T>
 		using szvec = sz::vector<T>;
+		void func1();
+		void func2();
+		void func3();
+		void func4();
 		void allTestcases();
 
 	}

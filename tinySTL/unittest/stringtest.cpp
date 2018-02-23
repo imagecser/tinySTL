@@ -1,6 +1,7 @@
 #include "stringtest.h"
 namespace sz {
 	namespace stringTest {
+		using sz::test::unitassert;
 		bool stringEqual(stdstring src, szstring dest) {
 			return sz::test::printEqual(src, dest) && sz::test::containerEqual(src, dest);
 		}
@@ -12,16 +13,6 @@ namespace sz {
 			else
 				sz::test::unitfail(s);
 		}
-		template<class T, class K>
-		void unitassert(T src, K dest, const char* s, bool islast = true, bool condition = true) {
-			if (src == dest) {
-				if (islast)
-					sz::test::unitpass(s);
-			}
-			else
-				sz::test::unitfail(s);
-		}
-
 		void construct() {
 			const char* ptr = "hello world";
 			stdstring st1;

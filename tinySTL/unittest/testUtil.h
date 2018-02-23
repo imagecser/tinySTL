@@ -40,6 +40,15 @@ namespace sz {
 					return false;
 			return (first1 == last1 && first2 == last2);
 		}
+		template<class T, class K>
+		void unitassert(T src, K dest, const char* s, bool islast = true, bool condition = true) {
+			if (src == dest) {
+				if (islast)
+					sz::test::unitpass(s);
+			}
+			else
+				sz::test::unitfail(s);
+		}
 
 		/*void unitPass(const char* s) {
 			std::cout << str << rang::fg::green << " ok\n";

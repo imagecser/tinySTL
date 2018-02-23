@@ -21,11 +21,11 @@ namespace sz {
 		static const size_t npos = -1;
 
 	private:
-		char * _begin;
-		char * _end;
-		char * _storage_end;
+		iterator _begin;
+		iterator _end;
+		iterator _storage_end;
 
-		sz::allocator<value_type> dataAlloc;
+		allocator<value_type> dataAlloc;
 		/*
 		void allocateCopy(Iterator first, Iterator last);
 		void allocateFill(size_t n, value_type ch);
@@ -93,12 +93,6 @@ namespace sz {
 			_storage_end = str._storage_end;
 			str._begin = str._end = str._storage_end = 0;
 		}	
-		template<class T>
-		void swap(T src, T dest) {
-			T temp = src;
-			src = dest;
-			dest = temp;
-		}
 
 		size_t find_aux(const_iterator cite, size_t pos, size_t n) const {
 			size_t i, j;
@@ -380,14 +374,16 @@ namespace sz {
 				*_end = 0;
 			}
 			else if (n > capacity()) {
-				iterator pbegin = dataAlloc.allocate(getNewCapacity(n - size()) + 1);
+				size_type pcapacity = getNewCapacity(n - size());
+				iterator pbegin = dataAlloc.allocate(pcapacity + 1);
+				_storage_end = pbegin + pcapacity;
 				//iterator pend = unintializedCopy(_begin, _end, pbegin);
 				//pend = unintializedFill(pend, n - size(), ch);
 				iterator pend = uninitialized_copy(_begin, _end, pbegin);
 				pend = uninitialized_fill_n(pend, n - size(), c);
 				dataAlloc.deallocate(_begin);
 				_begin = pbegin;
-				_storage_end = _end = pend;
+				_end = pend;
 				*_end = 0;
 			}
 		}
@@ -405,12 +401,19 @@ namespace sz {
 		}
 		void shrink_to_fit() {
 			//dataAlloc.destroy(_end + 1, _storage_end);
-			_storage_end = _end;
+			//_storage_end = _end;
+			if (_storage_end != _end) {
+				iterator pbegin = dataAlloc.allocate(size() + 1);
+				_storage_end = _end = uninitialized_copy(_begin, _end, pbegin);
+				*_end = 0;
+				dataAlloc.deallocate(_begin);
+				_begin = pbegin;
+			}
 		}
 		void swap(string& str) {
-			swap(_begin, str._begin);
-			swap(_end, str._end);
-			swap(_storage_end, str._storage_end);
+			sz::swap(_begin, str._begin);
+			sz::swap(_end, str._end);
+			sz::swap(_storage_end, str._storage_end);
 		}
 		size_t copy(char *s, size_t len, size_t pos = 0) const {
 			//unintializedCopy(_begin + pos, _begin + pos + len, str);

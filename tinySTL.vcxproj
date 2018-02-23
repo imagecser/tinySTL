@@ -120,6 +120,7 @@
   <ItemGroup>
     <ClCompile Include="tinySTL\main.cpp" />
     <ClCompile Include="tinySTL\unittest\stringtest.cpp" />
+    <ClCompile Include="tinySTL\unittest\vectortest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tinySTL\algorithm.h" />
@@ -133,6 +134,8 @@
     <ClInclude Include="tinySTL\unittest\rang.hpp" />
     <ClInclude Include="tinySTL\unittest\stringtest.h" />
     <ClInclude Include="tinySTL\unittest\testUtil.h" />
+    <ClInclude Include="tinySTL\unittest\vectortest.h" />
+    <ClInclude Include="tinySTL\vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

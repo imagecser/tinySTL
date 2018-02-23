@@ -62,8 +62,8 @@ namespace sz {
 				++_cur;
 		}
 	public:
-		reverse_iterator_(): _cur(0) {}
-		explicit reverse_iterator_(const Iterator& ite): _cur(ite - 1){}
+		reverse_iterator_() : _cur(0) {}
+		explicit reverse_iterator_(const Iterator& ite) : _cur(ite - 1) {}
 		template<class Iter>
 		reverse_iterator_(const reverse_iterator_<Iter>& rite) {
 			_cur = rite._cur;

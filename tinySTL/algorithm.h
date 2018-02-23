@@ -14,6 +14,12 @@ namespace sz {
 			*first = val;
 		return first;
 	}
+	template<class T>
+	void swap(T& a, T& b) {
+		T temp = a;
+		a = b;
+		b = temp;
+	}
 }
 
 #endif // !_SZ_ALGORITHM_H_

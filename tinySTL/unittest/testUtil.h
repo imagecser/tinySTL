@@ -2,6 +2,7 @@
 #define _SZ_TEST_UTIL_H_
 #include <iostream>
 #include <sstream>
+#include <cassert>
 #include "rang.hpp"
 namespace sz {
 	namespace test {

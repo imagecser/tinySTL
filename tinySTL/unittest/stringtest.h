@@ -2,7 +2,6 @@
 #define _SZ_STRING_TEST_H_
 #include "../string.h"
 #include "testUtil.h"
-#include <cassert>
 #include <string>
 namespace sz {
 	namespace stringTest {

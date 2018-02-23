@@ -27,6 +27,9 @@
     <ClCompile Include="tinySTL\unittest\vectortest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="tinySTL\unittest\listtest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tinySTL\type_traits.h">
@@ -66,6 +69,12 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="tinySTL\unittest\vectortest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="tinySTL\list.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="tinySTL\unittest\listtest.h">
       <Filter>Test</Filter>
     </ClInclude>
   </ItemGroup>

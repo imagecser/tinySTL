@@ -2,7 +2,6 @@
 #define _SZ_VECTOR_TEST_H_
 #include "../vector.h"
 #include "testUtil.h"
-#include <cassert>
 #include <vector>
 namespace sz {
 	namespace vectorTest {

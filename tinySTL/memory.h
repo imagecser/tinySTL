@@ -20,11 +20,8 @@ namespace sz {
 	}
 	template<class InputIterator, class ForwardIterator>
 	ForwardIterator uninitialized_copy(InputIterator first, InputIterator last, ForwardIterator ptr) {
-		//typedef _type_traits<iterator_traits<InputIterator>::value_type>::is_POD_type is_POD_type;
-		//return _uninitialized_copy_aux(first, last, ptr, is_POD_type());
-		for (; first < last; ++first, ++ptr)
-			*ptr = *first;
-		return ptr;
+		typedef _type_traits<iterator_traits<InputIterator>::value_type>::is_POD_type is_POD_type;
+		return _uninitialized_copy_aux(first, last, ptr, is_POD_type());
 	}
 
 
@@ -40,7 +37,7 @@ namespace sz {
 	template<class ForwardIterator, class T>
 	void uninitialized_fill(ForwardIterator first, ForwardIterator last, const T& val) {
 		typedef _type_traits<iterator_traits<ForwardIterator>::value_type>::is_POD_type is_POD_type;
-		_uninitialized_copy_aux(first, last, val, is_POD_type());
+		_uninitialized_fill_aux(first, last, val, is_POD_type());
 	}
 
 	template<class ForwardIterator, class Size, class T>

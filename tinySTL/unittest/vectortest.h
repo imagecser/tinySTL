@@ -6,6 +6,7 @@
 #include <vector>
 namespace sz {
 	namespace vectorTest {
+		using sz::test::unitassert;
 		template<class T>
 		using stdvec = std::vector<T>;
 		template<class T>

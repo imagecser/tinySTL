@@ -378,6 +378,7 @@ namespace sz {
 			find_ch();
 			compare();
 			reverse();
+			std::cout << std::endl;
 		}
 	}
 }

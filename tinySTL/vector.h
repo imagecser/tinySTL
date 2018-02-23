@@ -49,6 +49,46 @@ namespace sz {
 		void vector_aux(Integer n, const_reference val, std::true_type) {
 			allocateFilln(n, val);
 		}
+		template<class InputIterator>
+		iterator insert_aux(iterator pos, InputIterator first, InputIterator last, std::false_type) {
+			size_type _mov = _end - pos, offset = last - first;
+			if (offset < (size_type)(_storage_end - _end)) {
+				for (size_type i = _mov; i != -1; --i)
+					*(pos + i + offset) = *(pos + i);
+				_end += offset;
+				return uninitialized_copy(first, last, pos);
+			}
+			else {
+				size_type pcapacity = getNewCapacity(offset);
+				iterator pbegin = dataAlloc.allocate(pcapacity);
+				iterator pend = uninitialized_copy(_begin, pos, pbegin);
+				iterator res = uninitialized_copy(first, last, pend);
+				_end = uninitialized_copy(pos, _end, res);
+				dataAlloc.deallocate(_begin);
+				_begin = pbegin;
+				_storage_end = pbegin + pcapacity;
+				return res;
+			}
+		}
+		iterator insert_aux(iterator pos, const size_type& n, const_reference val, std::true_type) {
+			if (n < (size_type)(_storage_end - _end)) {
+				for (iterator ite = _end - 1; ite >= pos; --ite)
+					*(ite + n) = *ite;
+				_end += n;
+				return uninitialized_fill_n(pos, n, val);
+			}
+			else {
+				size_type pcapacity = getNewCapacity(n);
+				iterator pbegin = dataAlloc.allocate(pcapacity);
+				iterator pend = uninitialized_copy(_begin, pos, pbegin);
+				iterator res = uninitialized_fill_n(pend, n, val);
+				_end = uninitialized_copy(pos, _end, res);
+				dataAlloc.deallocate(_begin);
+				_begin = pbegin;
+				_storage_end = _begin + pcapacity;
+				return res;
+			}
+		}
 
 	public:
 		vector() : _begin(0), _end(0), _storage_end(0) {}
@@ -72,11 +112,17 @@ namespace sz {
 			dataAlloc.deallocate(_begin);
 		}
 		vector& operator=(const vector& vec) {
-			allocateCopy(vec.begin(), vec.end());
+			if (this != &vec) {
+				dataAlloc.deallocate(_begin);
+				allocateCopy(vec.begin(), vec.end());
+			}
 			return *this;
 		}
 		vector& operator=(vector&& vec) {
-			moveData(vec);
+			if (this != &vec) {
+				dataAlloc.deallocate(_begin);
+				moveData(vec);
+			}
 			return *this;
 		}
 		
@@ -128,7 +174,7 @@ namespace sz {
 		}
 		void resize(size_type n, value_type val = value_type()) {
 			if (n < size()) {
-				uninitialized_fill(_begin + n, _end, value_type());
+				uninitialized_fill(_begin + n, _end, val);
 				_end = _begin + n;
 			}
 			else if (n > size() && n <= capacity()) {
@@ -157,9 +203,9 @@ namespace sz {
 		}
 		void shrink_to_fit() {
 			if (_storage_end != _end) {
-				iterator pbegin = dataAlloc.allocate(n);
+				iterator pbegin = dataAlloc.allocate(size());
 				_storage_end = _end = uninitialized_copy(_begin, _end, pbegin);
-				dataAlloc.deallocate(pbegin);
+				dataAlloc.deallocate(_begin);
 				_begin = pbegin;
 			}
 		}
@@ -198,24 +244,16 @@ namespace sz {
 		
 		template<class InputIterator>
 		iterator insert(iterator pos, InputIterator first, InputIterator last) {
-			size_type _mov = _end - pos, offset = last - first;
-			if (offset < _storage_end - _end) {
-				for (size_type i = _mov; i != -1; --i)
-					*(pos + i + offset) = *(pos + i);
-				_end += offset;
-				return uninitialized_copy(first, last, pos);
-			}
-			else {
-				size_type pcapacity = getNewCapacity(offset);
-				iterator pbegin = dataAlloc.allocate(pcapacity);
-				_end = uninitialized_copy(_begin, pos, pbegin);
-				iterator res = uninitialized_copy(first, last, _end);
-				_end = uninitialized_copy(ptr, _end, res);
-				dataAlloc.deallocate(_begin);
-				_begin = pbegin;
-				_storage_end = pbegin + pcapacity;
-				return res;
-			}
+			return insert_aux(pos, first, last, typename std::is_integral<InputIterator>::type());
+		}
+		iterator insert(iterator pos, const size_type& n, const_reference val) {
+			return insert_aux(pos, n, val, std::false_type());
+		}
+		iterator insert(iterator pos, const_reference val) {
+			return insert(pos, 1, val);
+		}
+		void push_back(const_reference val) {
+			insert(_end, val);
 		}
 	};
 }

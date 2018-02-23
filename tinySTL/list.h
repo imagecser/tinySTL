@@ -27,6 +27,38 @@ namespace sz {
 		_list_iterator() {}
 		_list_iterator(const iterator& ite) : _node(ite._node) {}
 
+		reference operator*() {
+			return _node->data;
+		}
+		pointer operator->() {
+			return &(operator*());
+		}
+
+		bool operator==(const self& src) const {
+			return _node == src._node;
+		}
+		bool operator!=(const self& src) const {
+			return _node != src._node;
+		}
+
+		self& operator++() {
+			_node = _node->next;
+			return *this;
+		}
+		self& operator++(int) {
+			self _temp = *this;
+			++*this;
+			return _temp;
+		}
+		self& operator--() {
+			_node = _node->prev;
+			return *this;
+		}
+		self& operator--(int) {
+			self _temp = *this;
+			--*this;
+			return _temp;
+		}
 	};
 
 	template<class T>

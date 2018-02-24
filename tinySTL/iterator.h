@@ -63,14 +63,20 @@ namespace sz {
 		}
 	public:
 		reverse_iterator_() : _cur(0) {}
-		explicit reverse_iterator_(const Iterator& ite) : _cur(ite - 1) {}
+		explicit reverse_iterator_(const Iterator& ite) {
+			Iterator _tmp = ite;
+			_tmp--;
+			_cur = _tmp;
+		}
 		template<class Iter>
 		reverse_iterator_(const reverse_iterator_<Iter>& rite) {
 			_cur = rite._cur;
 		}
 
 		Iterator base() {
-			return _cur + 1;
+			Iterator _tmp = _cur;
+			_tmp++;
+			return _tmp;
 		}
 		reference operator*() {
 			return *_cur;
@@ -88,6 +94,11 @@ namespace sz {
 			--_cur;
 			return *this;
 		}
+		reverse_iterator_& operator--(int) {
+			reverse_iterator_ _trite = *this;
+			--(*this);
+			return _trite;
+		}
 		reverse_iterator_& operator--() {
 			++_cur;
 			return *this;
@@ -95,11 +106,6 @@ namespace sz {
 		reverse_iterator_& operator++(int) {
 			reverse_iterator_ _trite = *this;
 			++(*this);
-			return _trite;
-		}
-		reverse_iterator_& operator--(int) {
-			reverse_iterator_ _trite = *this;
-			--(*this);
 			return _trite;
 		}
 		reference operator[](difference_type n) {
@@ -124,22 +130,22 @@ namespace sz {
 			return res;
 		}
 
-		friend constexpr bool operator == (const reverse_iterator_<Iterator>& lhs, const reverse_iterator_<Iterator>& rhs) {
+		friend bool operator == (const reverse_iterator_<Iterator>& lhs, const reverse_iterator_<Iterator>& rhs) {
 			return lhs._cur == rhs._cur;
 		}
-		friend constexpr bool operator != (const reverse_iterator_<Iterator>& lhs, const reverse_iterator_<Iterator>& rhs) {
+		friend bool operator != (const reverse_iterator_<Iterator>& lhs, const reverse_iterator_<Iterator>& rhs) {
 			return lhs._cur == rhs._cur;
 		}
-		friend constexpr bool operator < (const reverse_iterator_<Iterator>& lhs, const reverse_iterator_<Iterator>& rhs) {
+		friend bool operator < (const reverse_iterator_<Iterator>& lhs, const reverse_iterator_<Iterator>& rhs) {
 			return lhs._cur < rhs._cur;
 		}
-		friend constexpr bool operator <= (const reverse_iterator_<Iterator>& lhs, const reverse_iterator_<Iterator>& rhs) {
+		friend bool operator <= (const reverse_iterator_<Iterator>& lhs, const reverse_iterator_<Iterator>& rhs) {
 			return lhs._cur <= rhs._cur;
 		}
-		friend constexpr bool operator > (const reverse_iterator_<Iterator>& lhs, const reverse_iterator_<Iterator>& rhs) {
+		friend bool operator > (const reverse_iterator_<Iterator>& lhs, const reverse_iterator_<Iterator>& rhs) {
 			return lhs._cur > rhs._cur;
 		}
-		friend constexpr bool operator >= (const reverse_iterator_<Iterator>& lhs, const reverse_iterator_<Iterator>& rhs) {
+		friend bool operator >= (const reverse_iterator_<Iterator>& lhs, const reverse_iterator_<Iterator>& rhs) {
 			return lhs._cur >= rhs._cur;
 		}
 		friend reverse_iterator_<Iterator> operator + (typename reverse_iterator_<Iterator>::difference_type n, const reverse_iterator_<Iterator>& rite) {

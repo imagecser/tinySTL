@@ -16,7 +16,8 @@ namespace sz {
 		void printContainer(T& container, const char* name = "") {
 			std::cout << "Container: " << name << std::endl;
 			for (auto val : container)
-				std::cout << val << std::endl;
+				std::cout << val << " ";
+			std::cout << std::endl;
 		}
 		template<class T>
 		void printItem(T& container, const char* name = "") {

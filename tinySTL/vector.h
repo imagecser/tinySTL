@@ -21,7 +21,7 @@ namespace sz {
 		T* _end;
 		T* _storage_end;
 
-		allocator<T> dataAlloc;
+		Alloc dataAlloc;
 		template<class InputIterator>
 		void allocateCopy(InputIterator first, InputIterator last) {
 			size_type pcapacity = last - first;
@@ -248,7 +248,7 @@ namespace sz {
 			return insert_aux(pos, first, last, typename std::is_integral<InputIterator>::type());
 		}
 		iterator insert(iterator pos, const size_type& n, const_reference val) {
-			return insert_aux(pos, n, val, std::false_type());
+			return insert_aux(pos, n, val, std::true_type());
 		}
 		iterator insert(iterator pos, const_reference val) {
 			return insert(pos, 1, val);

@@ -62,6 +62,7 @@ namespace sz {
 
 	template<class T, class Alloc = allocator<_list_node<T>>>
 	class list {
+	public:
 		typedef T									value_type;
 		typedef T&									reference;
 		typedef const T&							const_reference;
@@ -75,7 +76,7 @@ namespace sz {
 		typedef ptrdiff_t							difference_type;
 	private:
 		link_type _end;
-		allocator<_list_node<T>> dataAlloc;
+		Alloc dataAlloc;
 
 		link_type _get_node() {
 			return dataAlloc.allocate();
@@ -102,16 +103,16 @@ namespace sz {
 			_node->prev = pnode;
 			return pnode;
 		}
-		link_type _insert_aux(link_type _pos, size_type n, const_reference val, std::true_type) {
+		link_type _insert_aux(link_type pos, size_type n, const_reference val, std::true_type) {
 			for (size_type i = 0; i < n; ++i)
-				_insert_node(_pos, val);
-			return _pos;
+				_insert_node(pos, val);
+			return pos;
 		}
 		template<class InputIterator>
-		link_type _insert_aux(link_type _pos, InputIterator first, InputIterator last, std::false_type) {
+		link_type _insert_aux(link_type pos, InputIterator first, InputIterator last, std::false_type) {
 			for (; first != last; ++first)
-				_insert_node(_pos, *first);
-			return _pos;
+				_insert_node(pos, *first);
+			return pos;
 		}
 
 		link_type _erase_node(link_type _node) {
@@ -133,27 +134,54 @@ namespace sz {
 			_end->next = _end;
 			_end->prev = _end;
 		}
-		void list_aux(size_type n, const_reference val, std::true_type) {
+		void _list_aux(size_type n, const_reference val, std::true_type) {
 			for (size_type i = 0; i < n; ++i)
 				_insert_node(_end, val);
 		}
 		template<class InputIterator>
-		void list_aux(InputIterator first, InputIterator last, std::false_type) {
+		void _list_aux(InputIterator first, InputIterator last, std::false_type) {
 			for (; first != last; ++first)
 				_insert_node(_end, *first);
 		}
+
+		void _transfer(iterator pos, iterator first, iterator last) {
+			if (pos != last) {
+				last._node->prev->next = pos._node;
+				first._node->prev->next = last._node;
+				pos._node->prev->next = first._node;
+				link_type tmp = pos._node->prev;
+				pos._node->prev = last._node->prev;
+				last._node->prev = first._node->prev;
+				first._node->prev = tmp;
+			}
+		}
+
+		//potential refactoring based on <functional>
+		template<class _Base>
+		struct _Less {
+			bool operator()(const _Base& x, const _Base& y) {
+				return x < y;
+			}
+		};
+		template<class _Base>
+		struct _Equal {
+			bool operator()(const _Base& x, const _Base& y) {
+				return x == y;
+			}
+		};
+
 	public:
 		list() {
 			_empty_initial();
 		}
 		explicit list(size_type n, const_reference val = value_type()) {
 			_empty_initial();
-			list_aux(n, val, std::true_type());
+			_list_aux(n, val, std::true_type());
 		}
 		template<class InputIterator>
 		list(InputIterator first, InputIterator last) {
 			_empty_initial();
-			list_aux(first, last, std::is_integral<InputIterator>::type());
+			_list_aux(first, last, std::is_integral<InputIterator>::type());
 		}
 		list(const list& src) {
 			//list(src.begin(), src.end());
@@ -210,7 +238,7 @@ namespace sz {
 		const_reverse_iterator rend() const {
 			return const_reverse_iterator(_end->next);
 		}
-		
+
 		reference front() {
 			return _end->next->data;
 		}
@@ -233,24 +261,144 @@ namespace sz {
 			_erase_aux(_end->next, _end);
 		}
 
-		iterator insert(iterator _pos, const_reference val) {
-			return _insert_node(_pos._node, val);
+		iterator insert(iterator pos, const_reference val) {
+			return _insert_node(pos._node, val);
 		}
-		iterator insert(iterator _pos, size_type n, const_reference val) {
-			return _insert_aux(_pos._node, n, val, std::true_type());
+		iterator insert(iterator pos, size_type n, const_reference val) {
+			return _insert_aux(pos._node, n, val, std::true_type());
 		}
 		template<class InputIterator>
-		iterator insert(iterator _pos, InputIterator first, InputIterator last) {
-			return _insert_aux(_pos._node, first, last, std::is_integral<InputIterator>::type());
+		iterator insert(iterator pos, InputIterator first, InputIterator last) {
+			return _insert_aux(pos._node, first, last, std::is_integral<InputIterator>::type());
 		}
 
-		iterator erase(iterator _pos) {
-			return _erase_node(_pos._node);
+		iterator erase(iterator pos) {
+			return _erase_node(pos._node);
 		}
 		iterator erase(iterator first, iterator last) {
 			return _erase_aux(first, last);
 		}
 
+		void splice(iterator pos, list& other) {
+			if (!other.empty())
+				_transfer(pos, other.begin(), other.end());
+		}
+		void splice(iterator pos, list&, iterator it) {
+			iterator j = it;
+			if (pos == it || pos == ++j)
+				return;
+			_transfer(pos, it, j);
+		}
+		void splice(iterator pos, list&, iterator first, iterator last) {
+			if (first != last)
+				_transfer(pos, first, last);
+		}
+
+		void remove(const_reference val) { // potential refactoring based on function remove_if
+			const T _val = val;
+			for (iterator first = _end->next; first != _end; ) {
+				if (_val == *first)
+					first = erase(first);
+				else
+					++first;
+			}
+		}
+		template<class Predicate>
+		void remove_if(Predicate pred) {
+			for (iterator first = _end->next; first != _end;) {
+				if (pred(*first))
+					first = erase(first);
+				else
+					++first;
+			}
+		}
+
+		void unique() {
+			unique(_Equal<T>());
+		}
+		template<class BinaryPredicate>
+		void unique(BinaryPredicate pred) {
+			for (iterator first = _end->next, next = first._node->next; first != _end;) {
+				if (pred(*first, *next))
+					next = erase(next);
+				else {
+					first = next;
+					next = first._node->next;
+				}
+			}
+		}
+		void merge(list& other) {
+			merge(other, _Less<T>());
+		}
+		template<class Compare>
+		void merge(list& other, Compare comp) {
+			iterator _first = begin(), _last = end(), next;
+			iterator first = other.begin(), last = other.end();
+			while (_first != _last && first != last)
+				if (comp(*first, *_first)) {
+					next = first;
+					_transfer(_first, first, ++next);
+					first = next;
+				}
+				else
+					++_first;
+			if (first != last)
+				_transfer(_last, first, last);
+		}
+
+		void sort() {
+			sort(_Less<T>());
+		}
+		template<class Compare>
+		void sort(Compare comp) {
+			if (_end->next == _end || _end->next->next == _end)
+				return;
+
+			list<T, Alloc> carry, counter[64];
+			int fill = 0;
+			while (!empty()) {
+				carry.splice(carry.begin(), *this, begin());
+				int i = 0;
+				while (i < fill && !counter[i].empty()) {
+					counter[i].merge(carry);
+					carry.swap(counter[i++]);
+				}
+				carry.swap(counter[i]);
+				if (i == fill)
+					++fill;
+			}
+			for (int i = 1; i < fill; ++i)
+				counter[i].merge(counter[i - 1]);
+			swap(counter[fill - 1]);
+		}
+
+		void reverse() {
+			if (_end->next == _end || _end->next->next == _end)
+				return;
+
+			for (iterator first = _end->next->next, old; first != end(); ) {
+				old = first;
+				++first;
+				_transfer(begin(), old, first);
+			}
+		}
+
+		friend void swap(list<T>& x, list<T>& y) {
+			x.swap(y);
+		}
+		friend bool operator== (const list<T>& lhs, const list<T>& rhs) {
+			auto lit = lhs._end->next, rit = rhs._end->next;
+			for (; lit != lhs._end && rit != rhs._end; lit = lit->next, rit = rit->next)
+				if (lit->data != rit->data)
+					break;
+			if (lit == lhs._end && rit == rhs._end)
+				return true;
+			else
+				return false;
+		}
+		friend bool operator!= (const list<T>& lhs, const list<T>& rhs) {
+			return !(lhs == rhs);
+		}
 	};
 }
 #endif // !_SZ_LIST_H_

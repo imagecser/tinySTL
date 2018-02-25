@@ -120,6 +120,7 @@ namespace sz {
 			func2();
 			func3();
 			func4();
+			std::cout << std::endl;
 		}
 	}
 }

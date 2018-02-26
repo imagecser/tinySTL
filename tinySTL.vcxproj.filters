@@ -30,6 +30,9 @@
     <ClCompile Include="tinySTL\unittest\listtest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="tinySTL\unittest\algorithmtest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tinySTL\type_traits.h">
@@ -79,6 +82,9 @@
     </ClInclude>
     <ClInclude Include="tinySTL\functional.h">
       <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="tinySTL\unittest\algorithmtest.h">
+      <Filter>Test</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

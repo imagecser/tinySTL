@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <cassert>
+#include <cctype>
 #include "rang.hpp"
 namespace sz {
 	namespace test {

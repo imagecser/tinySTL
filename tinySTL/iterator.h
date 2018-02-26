@@ -1,6 +1,6 @@
 #ifndef _SZ_ITERATOR_H_
 #define _SZ_ITERATOR_H_
-
+#include <cassert>
 namespace sz {
 
 	typedef int ptrdiff_t;
@@ -155,6 +155,66 @@ namespace sz {
 			return lhs._cur - rhs._cur;
 		}
 	};
+
+	/*operations*/
+
+	template<class InputIterator, class Distance>
+	void _advance_aux(InputIterator& it, Distance n, input_iterator_tag) {
+		assert(n >= 0);
+		while (n--)
+			++it;
+	}
+	template<class BidirectionIterator, class Distance>
+	void _advance_aux(BidirectionIterator& it, Distance n, bidirectional_iterator_tag) {
+		if (n < 0)
+			while (n++)
+				--it;
+		else
+			while (n--)
+				++it;
+	}
+	template<class RandomIterator, class Distance>
+	void _advance_aux(RandomIterator& it, Distance n, random_access_iterator_tag) {
+		if (n < 0)
+			it -= (-n);
+		else
+			it += n;
+	}
+	template<class InputIterator, class Distance>
+	void advance(InputIterator& it, Distance n) {
+		sz::_advance_aux(it, n, typename iterator_traits<InputIterator>::iterator_category());
+	}
+
+	template<class InputIterator>
+	typename iterator_traits<InputIterator>::difference_type 
+		_distance_aux(InputIterator first, InputIterator last, input_iterator_tag) {
+		typename iterator_traits<InputIterator>::difference_type ret = 0;
+		for (; first != last; ++first)
+			++ret;
+		return ret;
+	}
+	template<class RandomIterator>
+	typename iterator_traits<RandomIterator>::difference_type
+		_distance_aux(RandomIterator first, RandomIterator last, random_access_iterator_tag) {
+		return last - first;
+	}
+	template<class InputIterator>
+	typename iterator_traits<InputIterator>::difference_type
+		distance(InputIterator first, InputIterator last) {
+		return sz::_distance_aux(first, last, typename iterator_traits<InputIterator>::iterator_category());
+	}
+
+	template<class ForwardIterator>
+	ForwardIterator next(ForwardIterator it, typename iterator_traits<ForwardIterator>::difference_type n = 1) {
+		sz::advance(it, n);
+		return it;
+	}
+
+	template<class BidrectionalIterator>
+	BidrectionalIterator prev(BidrectionalIterator it, typename iterator_traits<BidrectionalIterator>::difference_type n = 1) {
+		sz::advance(it, -n);
+		return it;
+	}
 }
 
 

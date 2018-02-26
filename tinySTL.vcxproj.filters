@@ -77,5 +77,8 @@
     <ClInclude Include="tinySTL\unittest\listtest.h">
       <Filter>Test</Filter>
     </ClInclude>
+    <ClInclude Include="tinySTL\functional.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 #ifndef _SZ_LIST_H_
 #define _SZ_LIST_H_
 #include "allocator.h"
+#include "functional.h"
 #include <type_traits>
 namespace sz {
 	template<class T>
@@ -156,20 +157,6 @@ namespace sz {
 			}
 		}
 
-		//potential refactoring based on <functional>
-		template<class _Base>
-		struct _Less {
-			bool operator()(const _Base& x, const _Base& y) {
-				return x < y;
-			}
-		};
-		template<class _Base>
-		struct _Equal {
-			bool operator()(const _Base& x, const _Base& y) {
-				return x == y;
-			}
-		};
-
 	public:
 		list() {
 			_empty_initial();
@@ -314,7 +301,7 @@ namespace sz {
 		}
 
 		void unique() {
-			unique(_Equal<T>());
+			unique(equal_to<T>());
 		}
 		template<class BinaryPredicate>
 		void unique(BinaryPredicate pred) {
@@ -328,7 +315,7 @@ namespace sz {
 			}
 		}
 		void merge(list& other) {
-			merge(other, _Less<T>());
+			merge(other, less<T>());
 		}
 		template<class Compare>
 		void merge(list& other, Compare comp) {
@@ -347,7 +334,7 @@ namespace sz {
 		}
 
 		void sort() {
-			sort(_Less<T>());
+			sort(less<T>());
 		}
 		template<class Compare>
 		void sort(Compare comp) {
@@ -360,7 +347,7 @@ namespace sz {
 				carry.splice(carry.begin(), *this, begin());
 				int i = 0;
 				while (i < fill && !counter[i].empty()) {
-					counter[i].merge(carry);
+					counter[i].merge(carry, comp);
 					carry.swap(counter[i++]);
 				}
 				carry.swap(counter[i]);
@@ -368,7 +355,7 @@ namespace sz {
 					++fill;
 			}
 			for (int i = 1; i < fill; ++i)
-				counter[i].merge(counter[i - 1]);
+				counter[i].merge(counter[i - 1], comp);
 			swap(counter[fill - 1]);
 		}
 

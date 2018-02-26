@@ -130,6 +130,7 @@
     <ClInclude Include="tinySTL\alloc.h" />
     <ClInclude Include="tinySTL\allocator.h" />
     <ClInclude Include="tinySTL\construct.h" />
+    <ClInclude Include="tinySTL\functional.h" />
     <ClInclude Include="tinySTL\iterator.h" />
     <ClInclude Include="tinySTL\list.h" />
     <ClInclude Include="tinySTL\memory.h" />

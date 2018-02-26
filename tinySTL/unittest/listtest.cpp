@@ -96,9 +96,6 @@ namespace sz {
 		bool isn3(int i) {
 			return i == 3;
 		}
-		bool less(int a, int b) {
-			return a < b;
-		}
 		void func4() {
 			stdlist<int> d1(ptr, ptr + 5), d2(ptr + 7, ptr + 10);
 			szlist<int> z1(ptr, ptr + 5), z2(ptr + 7, ptr + 10);
@@ -150,8 +147,8 @@ namespace sz {
 				d1.push_back(i);
 				z1.push_back(i);
 			}
-			d1.unique(less);
-			z1.unique(less);
+			d1.unique(less<int>());
+			z1.unique(less<int>());
 			unittest(d1, z1, "void unique(BinaryPredicate pred);");
 		}
 
@@ -165,8 +162,8 @@ namespace sz {
 			unittest(d, z, "void merge(list& other);", false);
 			unittest(d1, z1, "void merge(list& other);");
 
-			d.merge(d2, less);
-			z.merge(z2, less);
+			d.merge(d2, less<int>());
+			z.merge(z2, less<int>());
 			unittest(d, z, "void merge(list& other, Compare comp);", false);
 			unittest(d2, z2, "void merge(list& other, Compare comp);");
 
@@ -180,8 +177,8 @@ namespace sz {
 			z3.reverse();
 			unittest(d3, z3, "void reverse();");
 
-			d3.sort();
-			z3.sort();
+			d3.sort(greater<int>());
+			z3.sort(greater<int>());
 			unittest(d3, z3, "void sort();");
 
 			unitassert(true, z3 == z3, "friend bool operator== (const list<T>& lhs, const list<T>& rhs);", false);

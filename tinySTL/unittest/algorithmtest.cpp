@@ -61,7 +61,7 @@ namespace sz {
 			std::vector<int> v;
 			for (int i = 1; i<10; i++) v.push_back(i * 10);
 			int needle1[] = { 40, 50, 60, 70 };
-			auto it = sz::search(v.begin(), v.end(), needle1, needle1 + 4);
+			auto it = sz::search(v.begin(), v.end(), needle1, _SZ end(needle1));
 			unitassert(it, v.begin() + 3, "constexpr ForwardIterator1 search(ForwardIterator1 first, ForwardIterator1 last, ...);");
 			
 			int needle2[] = { 20, 30, 50 };
@@ -72,13 +72,35 @@ namespace sz {
 			unitassert(true, sz::search_n(ve.begin(), ve.end(), 4, 0) == ve.end(), "constexpr ForwardIterator search_n(ForwardIterator first, ForwardIterator last, Size n, const T& val);", false);
 			unitassert(true, sz::search_n(ve.begin(), ve.end(), 3, 0) != ve.end(), "constexpr ForwardIterator search_n(ForwardIterator first, ForwardIterator last, Size n, const T& val);");
 
+		}
 
+		void func4() {
+			std::vector<int> v1 = { 9, 6, 3, 6, 4, 10 }, v2(6);
+			std::vector<int> v3 = { 9, 6, 6, 10 }, v4(4);
+			std::vector<int> v5 = { 9, 6, 3, 6 }, v6(4);
+			sz::copy(v1.begin(), v1.end(), v2.begin());
+			unitassert(v1, v2, "constexpr OutputIterator copy(InputIterator first, InputIterator last, OutputIterator d_first);");
+			sz::copy_if(v1.begin(), v1.end(), v4.begin(), [](int i) {return i > 5; });
+			unitassert(v3, v4, "constexpr OutputIterator copy_if(..., UnaryPredicate pred);");
+			sz::copy_n(v1.begin(), 4, v6.begin());
+			unitassert(v5, v6, "constexpr OutputIterator copy_n(InputIterator first, Size n, OutputIterator result);");
+			v2.clear();
+			v2.resize(6, 0);
+			sz::copy_backward(v1.begin(), v1.end(), v2.end());
+			unitassert(v1, v2, "constexpr BidirectionalIterator2 copy_backward(BidirectionalIterator1 first, BidirectionalIterator1 last, BidirectionalIterator2 d_last);");
+		}
+
+		void func5() {
+			int a[5] = { 1, 2, 3, 4, 5 };
+			auto it = std::end(a);
 		}
 
 		void allTestcases() {
 			func1();
 			func2();
 			func3();
+			func4();
+			func5();
 		}
 	}
 }

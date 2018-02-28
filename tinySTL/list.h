@@ -41,12 +41,12 @@ namespace sz {
 			return _node != src._node;
 		}
 
-		_list_iterator& operator++(int) {
+		_list_iterator operator++(int) {
 			_list_iterator _temp = *this;
 			++*this;
 			return _temp;
 		}
-		_list_iterator& operator--(int) {
+		_list_iterator operator--(int) {
 			_list_iterator _temp = *this;
 			--*this;
 			return _temp;

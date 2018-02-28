@@ -3,52 +3,44 @@
 #include <type_traits>
 #include "iterator.h"
 #include "functional.h"
+#include "type_traits.h"
 namespace sz {
+
+#ifndef _DEFINE_NAMESPACE
+#define _SZ ::sz::
+#endif // !_DEFINE_NAMESPACE
+
+
 	/*Non-modifying sequence operations*/
 
-	/*
-	template<class InputIterator, class UnaryFunction>
-	UnaryFunction _for_each_aux(InputIterator first, InputIterator last, UnaryFunction f, std::false_type) {
-		for (; first != last; ++first)
-			f(*first);
-		return f;
-	}
-	template<class InputIterator, class Size, class UnaryFunction>
-	InputIterator _for_each_aux(InputIterator first, Size n, UnaryFunction f, std::true_type) {
-		for (Size i = 0; i != n; ++first, (void)++i)
-			f(*first);
-		return first;
-	}
-	*/
+	/*for_each*/
 
 	template<class InputIterator, class UnaryFunction>
 	UnaryFunction for_each(InputIterator first, InputIterator last, UnaryFunction f) {
 		for (; first != last; ++first)
 			f(*first);
 		return f;
-		//return _for_each_aux(first, last, f, std::is_integral<last>::type());
 	}
 	template<class InputIterator, class Size, class UnaryFunction>
 	InputIterator for_each_n(InputIterator first, Size n, UnaryFunction f) {
 		for (Size i = 0; i != n; ++first, (void)++i)
 			f(*first);
 		return first;
-		//return _for_each_aux(first, n, f, std::is_integral<Size>::type());
 	}
 
 	template<class InputIterator, class T>
-	constexpr typename sz::iterator_traits<InputIterator>::difference_type 
+	constexpr typename _SZ iterator_traits<InputIterator>::difference_type 
 		count(InputIterator first, InputIterator last, const T& val) {
-		typename sz::iterator_traits<InputIterator>::difference_type ret = 0;
+		typename _SZ iterator_traits<InputIterator>::difference_type ret = 0;
 		for (; first != last; ++first)
 			if (*first == val)
 				ret++;
 		return ret;
 	}
 	template<class InputIterator, class UnaryPredicate>
-	constexpr typename sz::iterator_traits<InputIterator>::difference_type
+	constexpr typename _SZ iterator_traits<InputIterator>::difference_type
 		count_if(InputIterator first, InputIterator last, UnaryPredicate p) {
-		typename sz::iterator_traits<InputIterator>::difference_type ret = 0;
+		typename _SZ iterator_traits<InputIterator>::difference_type ret = 0;
 		for (; first != last; ++first)
 			if (p(*first))
 				ret++;
@@ -56,6 +48,8 @@ namespace sz {
 	}
 
 	//mismatch function
+
+	/*find*/
 
 	template<class InputIterator, class T>
 	constexpr InputIterator find(InputIterator first, InputIterator last, const T& val) {
@@ -81,15 +75,15 @@ namespace sz {
 
 	template<class ForwardIterator1, class ForwardIterator2>
 	constexpr ForwardIterator1 find_end(ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 s_first, ForwardIterator2 s_last) {
-		return sz::find_end(first, last, s_first, s_last, sz::equal_to<typename sz::iterator_traits<ForwardIterator1>::value_type>());
+		return _SZ find_end(first, last, s_first, s_last, _SZ equal_to<typename _SZ iterator_traits<ForwardIterator1>::value_type>());
 	}
 	template<class ForwardIterator1, class ForwardIterator2, class BinaryPredicate>
-	constexpr ForwardIterator1 find_end(ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 s_first, ForwardIterator2 s_last, BinaryPredicate p = sz::equal_to<typename sz::iterator_traits<ForwardIterator1>::value_type>()) {
+	constexpr ForwardIterator1 find_end(ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 s_first, ForwardIterator2 s_last, BinaryPredicate p = _SZ equal_to<typename _SZ iterator_traits<ForwardIterator1>::value_type>()) {
 		if (s_first == s_last)
 			return last;
 		ForwardIterator1 res = last;
 		while (true) {
-			ForwardIterator1 new_res = sz::search(first, last, s_first, s_last, p);
+			ForwardIterator1 new_res = _SZ search(first, last, s_first, s_last, p);
 			if (new_res == last)
 				return res;
 			else {
@@ -103,7 +97,7 @@ namespace sz {
 
 	template<class InputIterator, class ForwardIterator>
 	constexpr InputIterator find_first_of(InputIterator first, InputIterator last, ForwardIterator s_first, ForwardIterator s_last) {
-		return sz::find_first_of(first, last, s_first, s_last, sz::equal_to<typename sz::iterator_traits<InputIterator>::value_type>());
+		return _SZ find_first_of(first, last, s_first, s_last, _SZ equal_to<typename _SZ iterator_traits<InputIterator>::value_type>());
 	}
 	template<class InputIterator, class ForwardIterator, class BinaryPredicate>
 	constexpr InputIterator find_first_of(InputIterator first, InputIterator last, ForwardIterator s_first, ForwardIterator s_last, BinaryPredicate p) { //potential refactoring based on KMP
@@ -116,7 +110,7 @@ namespace sz {
 
 	template<class ForwardIterator>
 	constexpr ForwardIterator adjacent_find(ForwardIterator first, ForwardIterator last) {
-		return sz::adjacent_find(first, last, sz::equal_to<typename sz::iterator_traits<ForwardIterator>::value_type>());
+		return _SZ adjacent_find(first, last, _SZ equal_to<typename _SZ iterator_traits<ForwardIterator>::value_type>());
 	}
 	template<class ForwardIterator, class BinaryPredicate>
 	constexpr ForwardIterator adjacent_find(ForwardIterator first, ForwardIterator last, BinaryPredicate p) {
@@ -130,9 +124,11 @@ namespace sz {
 		return last;
 	}
 
+	/*search*/
+
 	template<class ForwardIterator1, class ForwardIterator2>
 	constexpr ForwardIterator1 search(ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 s_first, ForwardIterator2 s_last) {
-		return sz::search(first, last, s_first, s_last, equal_to<typename sz::iterator_traits<ForwardIterator1>::value_type>());
+		return _SZ search(first, last, s_first, s_last, equal_to<typename _SZ iterator_traits<ForwardIterator1>::value_type>());
 	}
 	template<class ForwardIterator1, class ForwardIterator2, class BinaryPredicate>
 	constexpr ForwardIterator1 search(ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 s_first, ForwardIterator2 s_last, BinaryPredicate p) {
@@ -155,7 +151,7 @@ namespace sz {
 
 	template<class ForwardIterator, class Size, class T>
 	constexpr ForwardIterator search_n(ForwardIterator first, ForwardIterator last, Size n, const T& val) {
-		return sz::search_n(first, last, n, val, sz::equal_to<typename sz::iterator_traits<ForwardIterator>::value_type>());
+		return _SZ search_n(first, last, n, val, _SZ equal_to<typename _SZ iterator_traits<ForwardIterator>::value_type>());
 	}
 	template<class ForwardIterator, class Size, class T, class BinaryPredicate>
 	constexpr ForwardIterator search_n(ForwardIterator first, ForwardIterator last, Size n, const T& val, BinaryPredicate p) {
@@ -178,9 +174,54 @@ namespace sz {
 		return last;
 	}
 
-
 	/*Modifying sequence operations*/
 
+	/*copy*/
+
+	template<class InputIterator, class OutputIterator>
+	constexpr OutputIterator copy(InputIterator first, InputIterator last, OutputIterator d_first) {
+		return _SZ copy_if(first, last, d_first, _SZ logical_true_1op<typename _SZ iterator_traits<InputIterator>::value_type>());
+	}
+	template<class InputIterator, class OutputIterator, class UnaryPredicate>
+	constexpr OutputIterator copy_if(InputIterator first, InputIterator last, OutputIterator d_first, UnaryPredicate pred) {
+		for (; first != last; ++first)
+			if (pred(*first))
+				*d_first++ = *first;
+		return d_first;
+	}
+	template<class InputIterator, class Size, class OutputIterator>
+	constexpr OutputIterator copy_n(InputIterator first, Size n, OutputIterator result) {
+		if (n > 0) {
+			*result++ = *first;
+			for (Size i = 1; i < n; ++i)
+				*result++ = *++first;
+		}
+		return result;
+	}
+	template<class BidirectionalIterator1, class BidirectionalIterator2>
+	constexpr BidirectionalIterator2 copy_backward(BidirectionalIterator1 first, BidirectionalIterator1 last, BidirectionalIterator2 d_last) {
+		while (first != last)
+			*(--d_last) = *(--last);
+		return d_last;
+	}
+
+	/*move*/
+
+	template<class T>
+	constexpr typename _SZ remove_reference_t<T>&& move(T&& param) noexcept {
+		using returnType = _SZ remove_reference_t<T>&&;
+		return static_cast<returnType>(param);
+	}
+
+	template<class InputIterator, class OutputIterator>
+	OutputIterator move(InputIterator first, InputIterator last, OutputIterator d_first) {
+		while (first != last)
+			*d_first++ = _SZ move(*first++);
+		return d_first;
+	}
+
+	/*fill*/
+    
 	template<class ForwardIterator, class T>
 	void fill(ForwardIterator first, ForwardIterator last, const T& val) {
 		for (; first != last; ++first)
@@ -192,6 +233,7 @@ namespace sz {
 			*first = val;
 		return first;
 	}
+
 	template<class T>
 	void swap(T& a, T& b) {
 		T temp = a;

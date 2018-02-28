@@ -49,6 +49,26 @@ namespace sz {
 	_func_calc_2op(bit_or, | );
 	_func_calc_2op(bit_xor, ^);
 	_func_calc_1op(bit_not, ~);
+
+	template<class T = void> 
+	struct logical_true_2op {
+		
+		typedef bool	result_type; 
+		typedef T		first_argument_type; 
+		typedef T		second_argument_type; 
+		constexpr result_type operator()(const first_argument_type& lhs, const second_argument_type& rhs) const {
+			return true;
+		} 
+	};
+	template<class T = void> 
+	struct logical_true_1op {
+		typedef bool	result_type; 
+		typedef T		argument_type; 
+		constexpr result_type operator()(const argument_type& arg) const {
+			return true;
+		} 
+	};
+
 }
 
 #endif // !_SZ_FUNCTIONAL_H_

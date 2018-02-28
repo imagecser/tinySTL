@@ -5,7 +5,9 @@ namespace sz {
 	struct _true_type {};
 	struct _false_type {};
 
-#define make_true_traits(temp, type) \
+	/*_type_traits*/
+
+#define _make_true_traits(temp, type) \
 template<temp> \
 struct _type_traits<type> { \
 	typedef _true_type has_trival_default_constructor; \
@@ -25,30 +27,43 @@ struct _type_traits<type> { \
 		typedef _false_type is_POD_type;
 	};
 
-	make_true_traits(, bool)
-	make_true_traits(, char)
-	make_true_traits(, unsigned char)
-	make_true_traits(, signed char)
-	make_true_traits(, wchar_t)
-	make_true_traits(, short)
-	make_true_traits(, unsigned short)
-	make_true_traits(, int)
-	make_true_traits(, unsigned int)
-	make_true_traits(, long)
-	make_true_traits(, unsigned long)
-	make_true_traits(, long long)
-	make_true_traits(, unsigned long long)
-	make_true_traits(, float)
-	make_true_traits(, double)
-	make_true_traits(, long double)
-	make_true_traits(typename T, T*)
-	make_true_traits(typename T, const T*)
-	make_true_traits(, char*)
-	make_true_traits(, unsigned char*)
-	make_true_traits(, signed char*)
-	make_true_traits(, const char*)
-	make_true_traits(, const unsigned char*)
-	make_true_traits(, const signed char*)
+	_make_true_traits(, bool);
+	_make_true_traits(, char);
+	_make_true_traits(, unsigned char);
+	_make_true_traits(, signed char);
+	_make_true_traits(, wchar_t);
+	_make_true_traits(, short);
+	_make_true_traits(, unsigned short);
+	_make_true_traits(, int);
+	_make_true_traits(, unsigned int);
+	_make_true_traits(, long);
+	_make_true_traits(, unsigned long);
+	_make_true_traits(, long long);
+	_make_true_traits(, unsigned long long);
+	_make_true_traits(, float);
+	_make_true_traits(, double);
+	_make_true_traits(, long double);
+	_make_true_traits(typename T, T*);
+	_make_true_traits(typename T, const T*);
+	_make_true_traits(, char*);
+	_make_true_traits(, unsigned char*);
+	_make_true_traits(, signed char*);
+	_make_true_traits(, const char*);
+	_make_true_traits(, const unsigned char*);
+	_make_true_traits(, const signed char*);
+
+	/*remove_reference*/
+
+#define _make_remove_reference(arg) template<class T> \
+	struct arg \
+	{typedef T type;}
+
+	_make_remove_reference(remove_reference);
+	_make_remove_reference(remove_reference<T&>);
+	_make_remove_reference(remove_reference<T&&>);
+
+	template<class T>
+	using remove_reference_t = typename remove_reference<T>::type;
 }
 
 #endif // !_SZ_TYPE_TRAITS_H_

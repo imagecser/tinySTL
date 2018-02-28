@@ -214,25 +214,83 @@ namespace sz {
 	}
 
 	template<class InputIterator, class OutputIterator>
-	OutputIterator move(InputIterator first, InputIterator last, OutputIterator d_first) {
+	constexpr OutputIterator move(InputIterator first, InputIterator last, OutputIterator d_first) {
 		while (first != last)
 			*d_first++ = _SZ move(*first++);
 		return d_first;
+	}
+	template<class BidirectionalIterator1, class BidirectionalIterator2>
+	constexpr BidirectionalIterator2 move_backward(BidirectionalIterator1 first, BidirectionalIterator1 last, BidirectionalIterator2 d_last) {
+		while (first != last)
+			*(--d_last) = _SZ move(*(--last));
+		return d_last;
 	}
 
 	/*fill*/
     
 	template<class ForwardIterator, class T>
-	void fill(ForwardIterator first, ForwardIterator last, const T& val) {
+	constexpr void fill(ForwardIterator first, ForwardIterator last, const T& val) {
 		for (; first != last; ++first)
 			*first = val;
 	}
 	template<class OutputIterator, class Size, class T>
-	OutputIterator fill_n(OutputIterator first, Size n, const T& val) {
+	constexpr OutputIterator fill_n(OutputIterator first, Size n, const T& val) {
 		for (; n > 0; ++first, --n)
 			*first = val;
 		return first;
 	}
+
+	/*transform*/
+
+	template<class InputIterator, class OutputIterator, class UnaryOperation>
+	constexpr OutputIterator transform(InputIterator first, InputIterator last, OutputIterator d_first, UnaryOperation unary_op) {
+		while (first != last)
+			*d_first++ = unary_op(*first++);
+		return d_first;
+	}
+	template<class InputIterator1, class InputIterator2, class OutputIterator, class BinaryOperation>
+	constexpr OutputIterator transform(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, OutputIterator d_first, BinaryOperation binary_op) {
+		while (first1 != last1)
+			*d_first++ = binary_op(*first1++, *first2++);
+		return d_first;
+	}
+
+	/*generate*/
+
+	template<class ForwardIterator, class Generator>
+	constexpr void generate(ForwardIterator first, ForwardIterator last, Generator g) {
+		while (first != last)
+			*first++ = g();
+	}
+	template<class OutputIterator, class Generator, class Size>
+	constexpr OutputIterator generate_n(OutputIterator first, Size n, Generator g) {
+		while (n--)
+			*first++ = g();
+		return first;
+	}
+
+	/*remove*/
+
+	template<class ForwardIterator, class T>
+	constexpr ForwardIterator remove(ForwardIterator first, ForwardIterator last, const T& val) {
+		first = _SZ find(first, last, val);
+		if (first != last)
+			for (ForwardIterator it = first; ++it != last;)
+				if (!(*it == val))
+					*first++ = _SZ move(*it);
+		return first;
+	}
+	template<class ForwardIterator, class UnaryPredicate>
+	constexpr ForwardIterator remove_if(ForwardIterator first, ForwardIterator last, UnaryPredicate p) {
+		first = _SZ find_if(first, last, p);
+		if (first != last)
+			for (ForwardIterator it = first; ++it != last;)
+				if (!p(*it))
+					*first++ = _SZ move(*it);
+		return first;
+	}
+
+	/*swap*/
 
 	template<class T>
 	void swap(T& a, T& b) {

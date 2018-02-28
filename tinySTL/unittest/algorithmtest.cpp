@@ -1,5 +1,6 @@
 #include "algorithmtest.h"
 #include <vector>
+#include <string>
 namespace sz {
 	namespace algorithmTest {
 		void func1() {
@@ -87,12 +88,31 @@ namespace sz {
 			v2.clear();
 			v2.resize(6, 0);
 			sz::copy_backward(v1.begin(), v1.end(), v2.end());
-			unitassert(v1, v2, "constexpr BidirectionalIterator2 copy_backward(BidirectionalIterator1 first, BidirectionalIterator1 last, BidirectionalIterator2 d_last);");
+			unitassert(v1, v2, "constexpr BidirectionalIterator2 copy_backward(BidirectionalIterator1 first, ...);");
 		}
 
 		void func5() {
-			int a[5] = { 1, 2, 3, 4, 5 };
-			auto it = std::end(a);
+			std::string s1("hello"), s2(5, 0), s3("ifmmp"), s4("aaaaa");
+			sz::transform(sz::begin(s1), sz::end(s1), sz::begin(s2), [](unsigned char c) {return c + 1; });
+			unitassert(s2, s3, "OutputIterator transform(..., UnaryOperation unary_op);");
+			sz::transform(sz::begin(s2), sz::end(s2), sz::begin(s3), sz::begin(s1), [](unsigned char lhs, unsigned char rhs) { return lhs == rhs ? 'a' : 'b'; });
+			unitassert(containerEqual(s1, s4), true, "OutputIterator transform(..., BinaryOperation binary_op);");
+
+			std::vector<int> v1(5), v2 = { 2, 3, 4, 5, 6 }, v3 = { 10, 9, 8, 7, 6 };
+			sz::generate(v1.begin(), v1.end(), [n = 2]() mutable{ return n++; });
+			unitassert(containerEqual(v1, v2), true, "constexpr void generate(ForwardIterator first, ForwardIterator last, Generator g);");
+
+			sz::generate_n(v1.begin(), 5, [n = 10]() mutable {return n--; });
+			unitassert(containerEqual(v1, v3), true, "constexpr OutputIterator generate_n(OutputIterator first, Size n, Generator g);");
+		}
+
+		void func6() {
+			std::string s1("h e llo , worl d"), s2("hello,world"), s3("h\tello\t \t ,\twor ld");
+			s1.erase(sz::remove(s1.begin(), s1.end(), ' '), s1.end());
+			unitassert(containerEqual(s1, s2), true, "constexpr ForwardIterator remove(ForwardIterator first, ForwardIterator last, const T& val);");
+
+			s3.erase(sz::remove_if(s3.begin(), s3.end(), [](unsigned char c) {return c == ' ' || c == '\t'; }), s3.end());
+			unitassert(containerEqual(s3, s2), true, "constexpr ForwardIterator remove_if(ForwardIterator first, ForwardIterator last, UnaryPredicate p);");
 		}
 
 		void allTestcases() {
@@ -101,6 +121,7 @@ namespace sz {
 			func3();
 			func4();
 			func5();
+			func6();
 		}
 	}
 }

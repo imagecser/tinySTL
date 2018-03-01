@@ -122,6 +122,7 @@
   <ItemGroup>
     <ClCompile Include="tinySTL\main.cpp" />
     <ClCompile Include="tinySTL\unittest\algorithmtest.cpp" />
+    <ClCompile Include="tinySTL\unittest\initializer_listtest.cpp" />
     <ClCompile Include="tinySTL\unittest\listtest.cpp" />
     <ClCompile Include="tinySTL\unittest\stringtest.cpp" />
     <ClCompile Include="tinySTL\unittest\vectortest.cpp" />
@@ -132,12 +133,14 @@
     <ClInclude Include="tinySTL\allocator.h" />
     <ClInclude Include="tinySTL\construct.h" />
     <ClInclude Include="tinySTL\functional.h" />
+    <ClInclude Include="tinySTL\initializer_list.h" />
     <ClInclude Include="tinySTL\iterator.h" />
     <ClInclude Include="tinySTL\list.h" />
     <ClInclude Include="tinySTL\memory.h" />
     <ClInclude Include="tinySTL\string.h" />
     <ClInclude Include="tinySTL\type_traits.h" />
     <ClInclude Include="tinySTL\unittest\algorithmtest.h" />
+    <ClInclude Include="tinySTL\unittest\initializer_listtest.h" />
     <ClInclude Include="tinySTL\unittest\listtest.h" />
     <ClInclude Include="tinySTL\unittest\rang.hpp" />
     <ClInclude Include="tinySTL\unittest\stringtest.h" />

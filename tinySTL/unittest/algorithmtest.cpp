@@ -1,6 +1,4 @@
 #include "algorithmtest.h"
-#include <vector>
-#include <string>
 namespace sz {
 	namespace algorithmTest {
 		void func1() {
@@ -107,12 +105,73 @@ namespace sz {
 		}
 
 		void func6() {
-			std::string s1("h e llo , worl d"), s2("hello,world"), s3("h\tello\t \t ,\twor ld");
+			std::string s1("h e llo , worl d"), s2("hello,world"), s3("h\tello\t \t ,\twor ld"), s5(11, 0), s6(11, 0), s7("heqqo,worqd"), s10("hell.,w?rld"), s8(11, 0), s9(11, 0);
+			sz::remove_copy(s1.begin(), s1.end(), s5.begin(), ' ');
+			unitassert(containerEqual(s2, s5), true, "constexpr OutputIterator remove_copy(InputIterator first, ..., OutputIterator d_first, const T& val);");
+
+			sz::remove_copy_if(s3.begin(), s3.end(), s6.begin(), [](unsigned char c) {return c == ' ' || c == '\t'; });
+			unitassert(containerEqual(s2, s6), true, "constexpr OutputIterator remove_copy_if(..., UnaryPredicate p);");
+
 			s1.erase(sz::remove(s1.begin(), s1.end(), ' '), s1.end());
 			unitassert(containerEqual(s1, s2), true, "constexpr ForwardIterator remove(ForwardIterator first, ForwardIterator last, const T& val);");
 
 			s3.erase(sz::remove_if(s3.begin(), s3.end(), [](unsigned char c) {return c == ' ' || c == '\t'; }), s3.end());
 			unitassert(containerEqual(s3, s2), true, "constexpr ForwardIterator remove_if(ForwardIterator first, ForwardIterator last, UnaryPredicate p);");
+
+			sz::replace_copy(s7.begin(), s7.end(), s8.begin(), 'q', 'l');
+			unitassert(containerEqual(s8, s2), true, "constexpr OutputIterator replace_copy(..., OutputIterator d_first, const T& old_value, const T& new_value);");
+
+			sz::replace_copy_if(s10.begin(), s10.end(), s9.begin(), [](unsigned char c) {return c == '.' || c == '?'; }, 'o');
+			unitassert(containerEqual(s9, s2), true, "constexpr OutputIterator replace_copy_if(..., UnaryPredicate p, const T& new_value);");
+
+			sz::replace(s7.begin(), s7.end(), 'q', 'l');
+			unitassert(containerEqual(s7, s2), true, "constexpr void replace(ForwardIterator first, ForwardIterator last, const T& old_value, const T& new_value)");
+
+			sz::replace_if(s10.begin(), s10.end(), [](unsigned char c) {return c == '.' || c == '?'; }, 'o');
+			unitassert(containerEqual(s10, s2), true, "constexpr void replace_if(ForwardIterator first, ForwardIterator last, UnaryPredicate p, const T& new_value);");
+		}
+
+		void func7() {
+			std::string s1("hello, world"), s2("world, hello");
+			std::string d1("world, world"), d2("hello, hello");
+			sz::swap_ranges(s1.begin(), s1.begin() + 5, s2.begin());
+			unitassert(containerEqual(s1, d1), true, "ForwardIterator2 swap_ranges(ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterator2 first2);", false);
+			unitassert(containerEqual(s2, d2), true, "ForwardIterator2 swap_ranges(ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterator2 first2);");
+
+			char ca[13] = "hello, world", cb[13] = "world, hello";
+			char cc[13] = "world, hello", cd[13] = "hello, world";
+			sz::swap(ca, cb);
+			unitassert(containerEqual(ca, cc), true, "void swap(T(&a)[n], T(&b)[n]);", false);
+			unitassert(containerEqual(cb, cd), true, "void swap(T(&a)[n], T(&b)[n]);");
+		}
+
+		void func8() {
+			std::string s1("hello, world"), s2(12, 0);
+			std::string d1("dlrow ,olleh");
+			sz::reverse_copy(s1.begin(), s1.end(), s2.begin());
+			unitassert(s2, d1, "constexpr OutputIterator reverse_copy(..., OutputIterator d_first);");
+
+			sz::reverse(s1.begin(), s1.end());
+			unitassert(s1, d1, "void reverse(BidirectionalIterator first, BidirectionalIterator last);");
+		}
+
+		void func9() {
+			std::string s1("0123456789"), s2(10, 0);
+			std::string d1("6789012345");
+			sz::rotate_copy(s1.begin(), s1.begin() + 6, s1.end(), s2.begin());
+			unitassert(containerEqual(s2, d1), true, "OutputIterator rotate_copy(..., InputIterator last, OutputIterator d_first);");
+
+			sz::rotate(s1.begin(), s1.begin() + 6, s1.end());
+			unitassert(containerEqual(s1, d1), true, "ForwardIterator rotate(ForwardIterator first, ForwardIterator n_first, ForwardIterator last);");
+
+			std::vector<int> v{ 1,2,3,1,2,3,3,4,5,4,5,6,7 }, v1(7);
+			std::vector<int> d2{ 1, 2, 3, 4, 5, 6, 7 };
+			std::sort(v.begin(), v.end());
+			sz::unique_copy(v.begin(), v.end(), v1.begin());
+			unitassert(containerEqual(v1, d2), true, "constexpr OutputIterator unique_copy(InputIterator first, InputIterator last, OutputIterator d_first);");
+
+			v.erase(sz::unique(v.begin(), v.end()), v.end());
+			unitassert(containerEqual(v, d2), true, "constexpr ForwardIterator unique(ForwardIterator first, ForwardIterator last);");
 		}
 
 		void allTestcases() {
@@ -122,6 +181,9 @@ namespace sz {
 			func4();
 			func5();
 			func6();
+			func7();
+			func8();
+			func9();
 		}
 	}
 }

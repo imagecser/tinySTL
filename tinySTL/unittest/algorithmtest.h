@@ -2,6 +2,8 @@
 #define _SZ_ALGORITHM_TEST_H_
 #include "../algorithm.h"
 #include "testUtil.h"
+#include <vector>
+#include <string>
 namespace sz {
 	namespace algorithmTest {
 		using sz::test::unitassert;

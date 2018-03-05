@@ -33,9 +33,6 @@
     <ClCompile Include="tinySTL\unittest\algorithmtest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
-    <ClCompile Include="tinySTL\unittest\initializer_listtest.cpp">
-      <Filter>Test</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tinySTL\type_traits.h">
@@ -87,12 +84,6 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="tinySTL\unittest\algorithmtest.h">
-      <Filter>Test</Filter>
-    </ClInclude>
-    <ClInclude Include="tinySTL\initializer_list.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="tinySTL\unittest\initializer_listtest.h">
       <Filter>Test</Filter>
     </ClInclude>
   </ItemGroup>

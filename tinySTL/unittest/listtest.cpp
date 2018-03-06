@@ -33,6 +33,10 @@ namespace sz {
 			stdlist<int> d4(d3.begin(), d3.end());
 			szlist<int> z4(z3.begin(), z3.end());
 			unittest(d2, z2, "list(InputIterator first, InputIterator last);");
+
+			stdlist<int> d5 = { 1, 2, 3, 4, 5 };
+			szlist<int> z5 = { 1, 2, 3, 4, 5 };
+			unittest(d5, z5, "list(std::initializer_list<value_type> ilist);");
 		}
 
 		void func2() {

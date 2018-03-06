@@ -38,6 +38,10 @@ namespace sz {
 			v1 = v5;
 			v2 = v6;
 			unittest(v1, v2, "vector& operator=(const vector& vec);");
+
+			stdvec<int> v11 = { 1, 2, 3, 4 };
+			szvec<int> v12 = { 1, 2, 3, 4 };
+			unittest(v11, v12, "vector(std::initializer_list<value_type> ilist);");
 		}
 
 		void func2() {

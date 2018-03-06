@@ -2,6 +2,7 @@
 #define _SZ_LIST_H_
 #include "allocator.h"
 #include "functional.h"
+#include <initializer_list>
 #include <type_traits>
 namespace sz {
 	template<class T>
@@ -175,6 +176,10 @@ namespace sz {
 			_empty_initial();
 			for (link_type _tmp = src._end->next; _tmp != src._end; _tmp = _tmp->next)
 				_insert_node(_end, _tmp->data);
+		}
+		list(std::initializer_list<value_type> ilist) {
+			_empty_initial();
+			_list_aux(ilist.begin(), ilist.end(), std::false_type());
 		}
 		list& operator=(const list& src) {
 			if (this != &src) {

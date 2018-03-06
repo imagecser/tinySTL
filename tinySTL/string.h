@@ -3,6 +3,7 @@
 #include <cstring>
 #include <iostream>
 #include <type_traits>
+#include <initializer_list>
 #include "allocator.h"
 
 namespace sz {
@@ -320,6 +321,9 @@ namespace sz {
 		}
 		string(size_t n, char c) {
 			allocateFill(n, c);
+		}
+		string(std::initializer_list<char> ilist) {
+			allocateCopy(ilist.begin(), ilist.end());
 		}
 		~string() {
 			if (_begin != _storage_end)

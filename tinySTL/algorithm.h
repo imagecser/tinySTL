@@ -6,9 +6,11 @@
 #include "iterator.h"
 #include "functional.h"
 #include "type_traits.h"
+#include "utility.h"
 namespace sz {
 
 #ifndef _DEFINE_NAMESPACE
+#define _DEFINE_NAMESPACE
 #define _SZ ::sz::
 #endif // !_DEFINE_NAMESPACE
 
@@ -210,12 +212,6 @@ namespace sz {
 
 	/*move*/
 
-	template<class T>
-	constexpr typename _SZ remove_reference_t<T>&& move(T&& param) noexcept {
-		using returnType = _SZ remove_reference_t<T>&&;
-		return static_cast<returnType>(param);
-	}
-
 	template<class InputIterator, class OutputIterator>
 	constexpr OutputIterator move(InputIterator first, InputIterator last, OutputIterator d_first) {
 		while (first != last)
@@ -334,16 +330,6 @@ namespace sz {
 
 	/*swap*/
 
-	template<class T>
-	void swap(T& a, T& b) {
-		T temp = a;
-		a = b;
-		b = temp;
-	}
-	template<class T, size_t n>
-	void swap(T(&a)[n], T(&b)[n]) {
-		_SZ swap_ranges(a, a + n, b);
-	}
 	template<class ForwardIterator1, class ForwardIterator2>
 	ForwardIterator2 swap_ranges(ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterator2 first2) {
 		while (first1 != last1)
@@ -454,6 +440,34 @@ namespace sz {
 		}
 		return d_first;
 	}
+
+	/*Partitioning operations*/
+
+	template<class InputIterator, class UnaryPredicate>
+	constexpr bool is_partitioned(InputIterator first, InputIterator last, UnaryPredicate p) {
+		for (; first != last; ++first)
+			if (!p(*first))
+				break;
+		for (; first != last; ++first)
+			if (p(*first))
+				return false;
+		return true;
+	}
+
+	template<class ForwardIterator, class UnaryPredicate>
+	ForwardIterator partition(ForwardIterator first, ForwardIterator last, UnaryPredicate p) {
+		first = _SZ find_if_not(first, last, p);
+		if (first == last)
+			return first;
+		for (ForwardIterator it = next(first); it != last; ++it)
+			if (p(*it)) {
+				_SZ iter_swap(it, first);
+				++first;
+			}
+		return first;
+	}
+
+
 }
 
 #endif // !_SZ_ALGORITHM_H_

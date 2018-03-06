@@ -2,6 +2,7 @@
 #define _SZ_VECTOR_H_
 #include "allocator.h"
 #include <type_traits>
+#include <initializer_list>
 namespace sz {
 	template<class T, class Alloc = allocator<T>>
 	class vector {
@@ -108,6 +109,9 @@ namespace sz {
 		}
 		vector(vector&& vec) {
 			moveData(vec);	
+		}
+		vector(std::initializer_list<value_type> ilist) {
+			allocateCopy(ilist.begin(), ilist.end());
 		}
 		~vector() {
 			dataAlloc.deallocate(_begin);

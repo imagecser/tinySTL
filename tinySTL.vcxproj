@@ -143,6 +143,7 @@
     <ClInclude Include="tinySTL\unittest\stringtest.h" />
     <ClInclude Include="tinySTL\unittest\testUtil.h" />
     <ClInclude Include="tinySTL\unittest\vectortest.h" />
+    <ClInclude Include="tinySTL\utility.h" />
     <ClInclude Include="tinySTL\vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

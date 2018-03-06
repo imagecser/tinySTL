@@ -42,6 +42,10 @@ namespace sz {
 			stdstring st7(5, 'a');
 			szstring sz7(5, 'a');
 			unittest(st7, sz7, "string(size_t n, char ch);");
+
+			stdstring st8 = { '1', '2', '3' };
+			szstring sz8 = { '1', '2', '3' };
+			unittest(st8, sz8, "string(std::initializer_list<char> il);");
 		}
 
 		void operate() {

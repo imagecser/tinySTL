@@ -29,7 +29,7 @@ namespace sz {
 	/*move*/
 
 	template<class T>
-	constexpr typename _SZ remove_reference_t<T>&& move(T&& param) noexcept {
+	typename _SZ remove_reference_t<T>&& move(T&& param) noexcept {
 		using returnType = _SZ remove_reference_t<T>&&;
 		return static_cast<returnType>(param);
 	}
@@ -62,27 +62,27 @@ namespace sz {
 	/*pair operator*/
 
 	template<class _T1, class _T2>
-	constexpr bool operator==(const _SZ pair<_T1, _T2>& _left, const _SZ pair<_T1, _T2>& _right) {
+	bool operator==(const _SZ pair<_T1, _T2>& _left, const _SZ pair<_T1, _T2>& _right) {
 		return _left.first == _right.first && _left.second == _right.second;
 	}
 	template<class _T1, class _T2>
-	constexpr bool operator!=(const _SZ pair<_T1, _T2>& _left, const _SZ pair<_T1, _T2>& _right) {
+	bool operator!=(const _SZ pair<_T1, _T2>& _left, const _SZ pair<_T1, _T2>& _right) {
 		return !(_left == _right);
 	}
 	template<class _T1, class _T2>
-	constexpr bool operator<(const _SZ pair<_T1, _T2>& _left, const _SZ pair<_T1, _T2>& _right) {
+	bool operator<(const _SZ pair<_T1, _T2>& _left, const _SZ pair<_T1, _T2>& _right) {
 		return _left.first < _right.first || (!(_right.first < _left.first) && _left.second < _right.second);
 	}
 	template<class _T1, class _T2>
-	constexpr bool operator>(const _SZ pair<_T1, _T2>& _left, const _SZ pair<_T1, _T2>& _right) {
+	bool operator>(const _SZ pair<_T1, _T2>& _left, const _SZ pair<_T1, _T2>& _right) {
 		return _right < _left;
 	}
 	template<class _T1, class _T2>
-	constexpr bool operator<=(const _SZ pair<_T1, _T2>& _left, const _SZ pair<_T1, _T2>& _right) {
+	bool operator<=(const _SZ pair<_T1, _T2>& _left, const _SZ pair<_T1, _T2>& _right) {
 		return !(_left > _right);
 	}
 	template<class _T1, class _T2>
-	constexpr bool operator>=(const _SZ pair<_T1, _T2>& _left, const _SZ pair<_T1, _T2>& _right) {
+	bool operator>=(const _SZ pair<_T1, _T2>& _left, const _SZ pair<_T1, _T2>& _right) {
 		return !(_left < _right);
 	}
 

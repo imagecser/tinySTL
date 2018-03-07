@@ -7,7 +7,7 @@ namespace sz {
 		typedef _type	result_type; \
 		typedef T		first_argument_type; \
 		typedef T		second_argument_type; \
-		constexpr result_type operator()(const first_argument_type& lhs, const second_argument_type& rhs) const { \
+		result_type operator()(const first_argument_type& lhs, const second_argument_type& rhs) const { \
 			return lhs calc rhs; \
 		} \
 	};
@@ -16,7 +16,7 @@ namespace sz {
 	struct name { \
 		typedef _type	result_type; \
 		typedef T		argument_type; \
-		constexpr result_type operator()(const argument_type& arg) const { \
+		result_type operator()(const argument_type& arg) const { \
 			return calc rhs; \
 		} \
 	};
@@ -56,7 +56,7 @@ namespace sz {
 		typedef bool	result_type; 
 		typedef T		first_argument_type; 
 		typedef T		second_argument_type; 
-		constexpr result_type operator()(const first_argument_type& lhs, const second_argument_type& rhs) const {
+		result_type operator()(const first_argument_type& lhs, const second_argument_type& rhs) const {
 			return true;
 		} 
 	};
@@ -64,7 +64,7 @@ namespace sz {
 	struct logical_true_1op {
 		typedef bool	result_type; 
 		typedef T		argument_type; 
-		constexpr result_type operator()(const argument_type& arg) const {
+		result_type operator()(const argument_type& arg) const {
 			return true;
 		} 
 	};

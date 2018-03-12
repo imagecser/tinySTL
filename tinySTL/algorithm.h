@@ -15,475 +15,467 @@ namespace sz {
 #endif // !_DEFINE_NAMESPACE
 
 
-	/*Non-modifying sequence operations*/
+    /*Non-modifying sequence operations*/
 
-	/*for_each*/
+    /*for_each*/
 
-	template<class InputIterator, class UnaryFunction>
-	UnaryFunction for_each(InputIterator first, InputIterator last, UnaryFunction f) {
-		for (; first != last; ++first)
-			f(*first);
-		return f;
-	}
-	template<class InputIterator, class Size, class UnaryFunction>
-	InputIterator for_each_n(InputIterator first, Size n, UnaryFunction f) {
-		for (Size i = 0; i != n; ++first, (void)++i)
-			f(*first);
-		return first;
-	}
+    template<class InIt, class UnFn>
+    UnFn for_each(InIt first, InIt last, UnFn f) {
+        for (; first != last; ++first)
+            f(*first);
+        return f;
+    }
+    template<class InIt, class Size, class UnFn>
+    InIt for_each_n(InIt first, Size n, UnFn f) {
+        for (Size i = 0; i != n; ++first, (void)++i)
+            f(*first);
+        return first;
+    }
 
-	template<class InputIterator, class T>
-	typename _SZ iterator_traits<InputIterator>::difference_type
-		count(InputIterator first, InputIterator last, const T& val) {
-		typedef typename _SZ iterator_traits<InputIterator>::value_type value_type;
-		return _SZ count_if(first, last, [=](value_type _cur) {return _cur == val; });
-	}
-	template<class InputIterator, class UnaryPredicate>
-	typename _SZ iterator_traits<InputIterator>::difference_type
-		count_if(InputIterator first, InputIterator last, UnaryPredicate p) {
-		typename _SZ iterator_traits<InputIterator>::difference_type ret = 0;
-		for (; first != last; ++first)
-			if (p(*first))
-				ret++;
-		return ret;
-	}
+    template<class InIt, class T>
+    typename _SZ iterator_traits<InIt>::difference_type
+        count(InIt first, InIt last, const T& val) {
+        typedef typename _SZ iterator_traits<InIt>::value_type value_type;
+        return _SZ count_if(first, last, [=](value_type _cur) {return _cur == val; });
+    }
+    template<class InIt, class UnPr>
+    typename _SZ iterator_traits<InIt>::difference_type
+        count_if(InIt first, InIt last, UnPr p) {
+        typename _SZ iterator_traits<InIt>::difference_type ret = 0;
+        for (; first != last; ++first)
+            if (p(*first))
+                ret++;
+        return ret;
+    }
 
-	//mismatch function
+    //mismatch function
 
-	/*find*/
+    /*find*/
 
-	template<class InputIterator, class T>
-	InputIterator find(InputIterator first, InputIterator last, const T& val) {
-		typedef typename _SZ iterator_traits<InputIterator>::value_type value_type;
-		return _SZ find_if(first, last, [=](value_type _cur) {return _cur == val; });
-	}
-	template<class InputIterator, class UnaryPredicate>
-	InputIterator find_if(InputIterator first, InputIterator last, UnaryPredicate p) {
-		for (; first != last; ++first)
-			if (p(*first))
-				return first;
-		return last;
-	}
-	template<class InputIterator, class UnaryPredicate>
-	InputIterator find_if_not(InputIterator first, InputIterator last, UnaryPredicate p) {
-		for (; first != last; ++first)
-			if (!p(*first))
-				return first;
-		return last;
-	}
+    template<class InIt, class T>
+    InIt find(InIt first, InIt last, const T& val) {
+        typedef typename _SZ iterator_traits<InIt>::value_type value_type;
+        return _SZ find_if(first, last, [=](value_type _cur) {return _cur == val; });
+    }
+    template<class InIt, class UnPr>
+    InIt find_if(InIt first, InIt last, UnPr p) {
+        for (; first != last; ++first)
+            if (p(*first))
+                return first;
+        return last;
+    }
+    template<class InIt, class UnPr>
+    InIt find_if_not(InIt first, InIt last, UnPr p) {
+        for (; first != last; ++first)
+            if (!p(*first))
+                return first;
+        return last;
+    }
 
-	template<class ForwardIterator1, class ForwardIterator2>
-	ForwardIterator1 find_end(ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 s_first, ForwardIterator2 s_last) {
-		typedef typename _SZ iterator_traits<ForwardIterator1>::value_type value_type;
-		return _SZ find_end(first, last, s_first, s_last, _SZ equal_to<value_type>());
-	}
-	template<class ForwardIterator1, class ForwardIterator2, class BinaryPredicate>
-	ForwardIterator1 find_end(ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 s_first, ForwardIterator2 s_last, BinaryPredicate p) {
-		if (s_first == s_last)
-			return last;
-		ForwardIterator1 res = last;
-		while (true) {
-			ForwardIterator1 new_res = _SZ search(first, last, s_first, s_last, p);
-			if (new_res == last)
-				return res;
-			else {
-				res = new_res;
-				first = res;
-				++first;
-			}
-		}
-		return res;
-	}
+    template<class FwdIt1, class FwdIt2>
+    FwdIt1 find_end(FwdIt1 first, FwdIt1 last, FwdIt2 s_first, FwdIt2 s_last) {
+        return _SZ find_end(first, last, s_first, s_last, _SZ equal_to<>());
+    }
+    template<class FwdIt1, class FwdIt2, class BiPr>
+    FwdIt1 find_end(FwdIt1 first, FwdIt1 last, FwdIt2 s_first, FwdIt2 s_last, BiPr p) {
+        if (s_first == s_last)
+            return last;
+        FwdIt1 res = last;
+        while (true) {
+            FwdIt1 new_res = _SZ search(first, last, s_first, s_last, p);
+            if (new_res == last)
+                return res;
+            else {
+                res = new_res;
+                first = res;
+                ++first;
+            }
+        }
+        return res;
+    }
 
-	template<class InputIterator, class ForwardIterator>
-	InputIterator find_first_of(InputIterator first, InputIterator last, ForwardIterator s_first, ForwardIterator s_last) {
-		typedef typename _SZ iterator_traits<InputIterator>::value_type value_type;
-		return _SZ find_first_of(first, last, s_first, s_last, _SZ equal_to<value_type>());
-	}
-	template<class InputIterator, class ForwardIterator, class BinaryPredicate>
-	InputIterator find_first_of(InputIterator first, InputIterator last, ForwardIterator s_first, ForwardIterator s_last, BinaryPredicate p) { //potential refactoring based on KMP
-		for (; first != last; ++first)
-			for (ForwardIterator it = s_first; it != s_last; ++it)
-				if (p(*first, *it))
-					return first;
-		return last;
-	}
+    template<class InIt, class FwdIt>
+    InIt find_first_of(InIt first, InIt last, FwdIt s_first, FwdIt s_last) {
+        return _SZ find_first_of(first, last, s_first, s_last, _SZ equal_to<>());
+    }
+    template<class InIt, class FwdIt, class BiPr>
+    InIt find_first_of(InIt first, InIt last, FwdIt s_first, FwdIt s_last, BiPr p) { //potential refactoring based on KMP
+        for (; first != last; ++first)
+            for (FwdIt it = s_first; it != s_last; ++it)
+                if (p(*first, *it))
+                    return first;
+        return last;
+    }
 
-	template<class ForwardIterator>
-	ForwardIterator adjacent_find(ForwardIterator first, ForwardIterator last) {
-		typedef typename _SZ iterator_traits<ForwardIterator>::value_type value_type;
-		return _SZ adjacent_find(first, last, _SZ equal_to<value_type>());
-	}
-	template<class ForwardIterator, class BinaryPredicate>
-	ForwardIterator adjacent_find(ForwardIterator first, ForwardIterator last, BinaryPredicate p) {
-		if (first == last)
-			return last;
-		ForwardIterator next = first;
-		next++;
-		for (; next != last; ++first, ++next)
-			if (p(*first, *next))
-				return first;
-		return last;
-	}
+    template<class FwdIt>
+    FwdIt adjacent_find(FwdIt first, FwdIt last) {
+        return _SZ adjacent_find(first, last, _SZ equal_to<>());
+    }
+    template<class FwdIt, class BiPr>
+    FwdIt adjacent_find(FwdIt first, FwdIt last, BiPr p) {
+        if (first == last)
+            return last;
+        FwdIt next = first;
+        next++;
+        for (; next != last; ++first, ++next)
+            if (p(*first, *next))
+                return first;
+        return last;
+    }
 
-	/*search*/
+    /*search*/
 
-	template<class ForwardIterator1, class ForwardIterator2>
-	ForwardIterator1 search(ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 s_first, ForwardIterator2 s_last) {
-		typedef typename _SZ iterator_traits<ForwardIterator1>::value_type value_type;
-		return _SZ search(first, last, s_first, s_last, equal_to<value_type>());
-	}
-	template<class ForwardIterator1, class ForwardIterator2, class BinaryPredicate>
-	ForwardIterator1 search(ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 s_first, ForwardIterator2 s_last, BinaryPredicate p) {
-		for (;; ++first) {
-			ForwardIterator1 it = first;
-			for (ForwardIterator2 s_it = s_first; ; ++it, ++s_it) {
-				if (s_it == s_last)
-					return first;
-				else if (it == last)
-					return last;
-				else if (!p(*it, *s_it))
-					break;
-			}
-		}
-	}
-	template<class ForwardIterator, class Searcher>
-	ForwardIterator search(ForwardIterator first, ForwardIterator last, const Searcher& searcher) {
-		return searcher(first, last).first;
-	}
+    template<class FwdIt1, class FwdIt2>
+    FwdIt1 search(FwdIt1 first, FwdIt1 last, FwdIt2 s_first, FwdIt2 s_last) {
+        return _SZ search(first, last, s_first, s_last, equal_to<>());
+    }
+    template<class FwdIt1, class FwdIt2, class BiPr>
+    FwdIt1 search(FwdIt1 first, FwdIt1 last, FwdIt2 s_first, FwdIt2 s_last, BiPr p) {
+        for (;; ++first) {
+            FwdIt1 it = first;
+            for (FwdIt2 s_it = s_first; ; ++it, ++s_it) {
+                if (s_it == s_last)
+                    return first;
+                else if (it == last)
+                    return last;
+                else if (!p(*it, *s_it))
+                    break;
+            }
+        }
+    }
+    template<class FwdIt, class Searcher>
+    FwdIt search(FwdIt first, FwdIt last, const Searcher& searcher) {
+        return searcher(first, last).first;
+    }
 
-	template<class ForwardIterator, class Size, class T>
-	ForwardIterator search_n(ForwardIterator first, ForwardIterator last, Size n, const T& val) {
-		typedef typename _SZ iterator_traits<ForwardIterator>::value_type value_type;
-		return _SZ search_n(first, last, n, val, _SZ equal_to<value_type>());
-	}
-	template<class ForwardIterator, class Size, class T, class BinaryPredicate>
-	ForwardIterator search_n(ForwardIterator first, ForwardIterator last, Size n, const T& val, BinaryPredicate p) {
-		for (; first != last; ++first) {
-			if (!p(*first, val))
-				continue;
-			ForwardIterator candicate = first;
-			Size cur_count = 0;
-			while (true) {
-				++cur_count;
-				if (cur_count == n)
-					return candicate;
-				++first;
-				if (first == last)
-					return last;
-				if (!p(*first, val))
-					break;
-			}
-		}
-		return last;
-	}
+    template<class FwdIt, class Size, class T>
+    FwdIt search_n(FwdIt first, FwdIt last, Size n, const T& val) {
+        return _SZ search_n(first, last, n, val, _SZ equal_to<>());
+    }
+    template<class FwdIt, class Size, class T, class BiPr>
+    FwdIt search_n(FwdIt first, FwdIt last, Size n, const T& val, BiPr p) {
+        for (; first != last; ++first) {
+            if (!p(*first, val))
+                continue;
+            FwdIt candicate = first;
+            Size cur_count = 0;
+            while (true) {
+                ++cur_count;
+                if (cur_count == n)
+                    return candicate;
+                ++first;
+                if (first == last)
+                    return last;
+                if (!p(*first, val))
+                    break;
+            }
+        }
+        return last;
+    }
 
-	/*Modifying sequence operations*/
+    /*Modifying sequence operations*/
 
-	/*copy*/
+    /*copy*/
 
-	template<class InputIterator, class OutputIterator>
-	OutputIterator copy(InputIterator first, InputIterator last, OutputIterator d_first) {
-		typedef typename _SZ iterator_traits<InputIterator>::value_type value_type;
-		return _SZ copy_if(first, last, d_first, _SZ logical_true_1op<value_type>());
-	}
-	template<class InputIterator, class OutputIterator, class UnaryPredicate>
-	OutputIterator copy_if(InputIterator first, InputIterator last, OutputIterator d_first, UnaryPredicate pred) {
-		for (; first != last; ++first)
-			if (pred(*first))
-				*d_first++ = *first;
-		return d_first;
-	}
-	template<class InputIterator, class Size, class OutputIterator>
-	OutputIterator copy_n(InputIterator first, Size n, OutputIterator result) {
-		if (n > 0) {
-			*result++ = *first;
-			for (Size i = 1; i < n; ++i)
-				*result++ = *++first;
-		}
-		return result;
-	}
-	template<class BidirectionalIterator1, class BidirectionalIterator2>
-	BidirectionalIterator2 copy_backward(BidirectionalIterator1 first, BidirectionalIterator1 last, BidirectionalIterator2 d_last) {
-		while (first != last)
-			*(--d_last) = *(--last);
-		return d_last;
-	}
+    template<class InIt, class OutIt>
+    OutIt copy(InIt first, InIt last, OutIt d_first) {
+        return _SZ copy_if(first, last, d_first, _SZ logical_true_1op<>());
+    }
+    template<class InIt, class OutIt, class UnPr>
+    OutIt copy_if(InIt first, InIt last, OutIt d_first, UnPr pred) {
+        for (; first != last; ++first)
+            if (pred(*first))
+                *d_first++ = *first;
+        return d_first;
+    }
+    template<class InIt, class Size, class OutIt>
+    OutIt copy_n(InIt first, Size n, OutIt result) {
+        if (n > 0) {
+            *result++ = *first;
+            for (Size i = 1; i < n; ++i)
+                *result++ = *++first;
+        }
+        return result;
+    }
+    template<class BidIt1, class BidIt2>
+    BidIt2 copy_backward(BidIt1 first, BidIt1 last, BidIt2 d_last) {
+        while (first != last)
+            *(--d_last) = *(--last);
+        return d_last;
+    }
 
-	/*move*/
+    /*move*/
 
-	template<class InputIterator, class OutputIterator>
-	OutputIterator move(InputIterator first, InputIterator last, OutputIterator d_first) {
-		while (first != last)
-			*d_first++ = _SZ move(*first++);
-		return d_first;
-	}
-	template<class BidirectionalIterator1, class BidirectionalIterator2>
-	BidirectionalIterator2 move_backward(BidirectionalIterator1 first, BidirectionalIterator1 last, BidirectionalIterator2 d_last) {
-		while (first != last)
-			*(--d_last) = _SZ move(*(--last));
-		return d_last;
-	}
+    template<class InIt, class OutIt>
+    OutIt move(InIt first, InIt last, OutIt d_first) {
+        while (first != last)
+            *d_first++ = _SZ move(*first++);
+        return d_first;
+    }
+    template<class BidIt1, class BidIt2>
+    BidIt2 move_backward(BidIt1 first, BidIt1 last, BidIt2 d_last) {
+        while (first != last)
+            *(--d_last) = _SZ move(*(--last));
+        return d_last;
+    }
 
-	/*fill*/
+    /*fill*/
 
-	template<class ForwardIterator, class T>
-	void fill(ForwardIterator first, ForwardIterator last, const T& val) {
-		for (; first != last; ++first)
-			*first = val;
-	}
-	template<class OutputIterator, class Size, class T>
-	OutputIterator fill_n(OutputIterator first, Size n, const T& val) {
-		for (; n > 0; ++first, --n)
-			*first = val;
-		return first;
-	}
+    template<class FwdIt, class T>
+    void fill(FwdIt first, FwdIt last, const T& val) {
+        for (; first != last; ++first)
+            *first = val;
+    }
+    template<class OutIt, class Size, class T>
+    OutIt fill_n(OutIt first, Size n, const T& val) {
+        for (; n > 0; ++first, --n)
+            *first = val;
+        return first;
+    }
 
-	/*transform*/
+    /*transform*/
 
-	template<class InputIterator, class OutputIterator, class UnaryOperation>
-	OutputIterator transform(InputIterator first, InputIterator last, OutputIterator d_first, UnaryOperation unary_op) {
-		while (first != last)
-			*d_first++ = unary_op(*first++);
-		return d_first;
-	}
-	template<class InputIterator1, class InputIterator2, class OutputIterator, class BinaryOperation>
-	OutputIterator transform(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, OutputIterator d_first, BinaryOperation binary_op) {
-		while (first1 != last1)
-			*d_first++ = binary_op(*first1++, *first2++);
-		return d_first;
-	}
+    template<class InIt, class OutIt, class UnFn>
+    OutIt transform(InIt first, InIt last, OutIt d_first, UnFn unary_op) {
+        while (first != last)
+            *d_first++ = unary_op(*first++);
+        return d_first;
+    }
+    template<class InIt1, class InIt2, class OutIt, class BinaryOperation>
+    OutIt transform(InIt1 first1, InIt1 last1, InIt2 first2, OutIt d_first, BinaryOperation binary_op) {
+        while (first1 != last1)
+            *d_first++ = binary_op(*first1++, *first2++);
+        return d_first;
+    }
 
-	/*generate*/
+    /*generate*/
 
-	template<class ForwardIterator, class Generator>
-	void generate(ForwardIterator first, ForwardIterator last, Generator g) {
-		while (first != last)
-			*first++ = g();
-	}
-	template<class OutputIterator, class Generator, class Size>
-	OutputIterator generate_n(OutputIterator first, Size n, Generator g) {
-		while (n--)
-			*first++ = g();
-		return first;
-	}
+    template<class FwdIt, class Fn>
+    void generate(FwdIt first, FwdIt last, Fn g) {
+        while (first != last)
+            *first++ = g();
+    }
+    template<class OutIt, class Fn, class Size>
+    OutIt generate_n(OutIt first, Size n, Fn g) {
+        while (n--)
+            *first++ = g();
+        return first;
+    }
 
-	/*remove*/
+    /*remove*/
 
-	template<class ForwardIterator, class T>
-	ForwardIterator remove(ForwardIterator first, ForwardIterator last, const T& val) {
-		typedef typename _SZ iterator_traits<ForwardIterator>::value_type value_type;
-		return _SZ remove_if(first, last, [=](value_type _cur) {return _cur == val; });
-	}
-	template<class ForwardIterator, class UnaryPredicate>
-	ForwardIterator remove_if(ForwardIterator first, ForwardIterator last, UnaryPredicate p) {
-		first = _SZ find_if(first, last, p);
-		if (first != last)
-			for (ForwardIterator it = first; ++it != last;)
-				if (!p(*it))
-					*first++ = _SZ move(*it);
-		return first;
-	}
+    template<class FwdIt, class T>
+    FwdIt remove(FwdIt first, FwdIt last, const T& val) {
+        typedef typename _SZ iterator_traits<FwdIt>::value_type value_type;
+        return _SZ remove_if(first, last, [=](value_type _cur) {return _cur == val; });
+    }
+    template<class FwdIt, class UnPr>
+    FwdIt remove_if(FwdIt first, FwdIt last, UnPr p) {
+        first = _SZ find_if(first, last, p);
+        if (first != last)
+            for (FwdIt it = first; ++it != last;)
+                if (!p(*it))
+                    *first++ = _SZ move(*it);
+        return first;
+    }
 
-	/*remove_copy*/
+    /*remove_copy*/
 
-	template<class InputIterator, class OutputIterator, class T>
-	OutputIterator remove_copy(InputIterator first, InputIterator last, OutputIterator d_first, const T& val) {
-		typedef typename _SZ iterator_traits<InputIterator>::value_type value_type;
-		return _SZ remove_copy_if(first, last, d_first, [=](value_type _cur) {return _cur == val; });
-	}
-	template<class InputIterator, class OutputIterator, class UnaryPredicate>
-	OutputIterator remove_copy_if(InputIterator first, InputIterator last, OutputIterator d_first, UnaryPredicate p) {
-		for (; first != last; ++first)
-			if (!p(*first))
-				*d_first++ = *first;
-		return d_first;
-	}
+    template<class InIt, class OutIt, class T>
+    OutIt remove_copy(InIt first, InIt last, OutIt d_first, const T& val) {
+        typedef typename _SZ iterator_traits<InIt>::value_type value_type;
+        return _SZ remove_copy_if(first, last, d_first, [=](value_type _cur) {return _cur == val; });
+    }
+    template<class InIt, class OutIt, class UnPr>
+    OutIt remove_copy_if(InIt first, InIt last, OutIt d_first, UnPr p) {
+        for (; first != last; ++first)
+            if (!p(*first))
+                *d_first++ = *first;
+        return d_first;
+    }
 
-	/*replace*/
+    /*replace*/
 
-	template<class ForwardIterator, class T>
-	void replace(ForwardIterator first, ForwardIterator last, const T& old_value, const T& new_value) {
-		typedef typename _SZ iterator_traits<ForwardIterator>::value_type value_type;
-		_SZ replace_if(first, last, [=](value_type _cur) {return _cur == old_value; }, new_value);
-	}
-	template<class ForwardIterator, class UnaryPredicate, class T>
-	void replace_if(ForwardIterator first, ForwardIterator last, UnaryPredicate p, const T& new_value) {
-		for (; first != last; ++first)
-			if (p(*first))
-				*first = new_value;
-	}
+    template<class FwdIt, class T>
+    void replace(FwdIt first, FwdIt last, const T& old_value, const T& new_value) {
+        typedef typename _SZ iterator_traits<FwdIt>::value_type value_type;
+        _SZ replace_if(first, last, [=](value_type _cur) {return _cur == old_value; }, new_value);
+    }
+    template<class FwdIt, class UnPr, class T>
+    void replace_if(FwdIt first, FwdIt last, UnPr p, const T& new_value) {
+        for (; first != last; ++first)
+            if (p(*first))
+                *first = new_value;
+    }
 
-	/*replace_copy*/
+    /*replace_copy*/
 
-	template<class InputIterator, class OutputIterator, class T>
-	OutputIterator replace_copy(InputIterator first, InputIterator last, OutputIterator d_first, const T& old_value, const T& new_value) {
-		typedef typename _SZ iterator_traits<InputIterator>::value_type value_type;
-		return _SZ replace_copy_if(first, last, d_first, [=](value_type _cur) {return _cur == old_value; }, new_value);
-	}
-	template<class InputIterator, class OutputIterator, class UnaryPredicate, class T>
-	OutputIterator replace_copy_if(InputIterator first, InputIterator last, OutputIterator d_first, UnaryPredicate p, const T& new_value) {
-		for (; first != last; ++first)
-			*d_first++ = p(*first) ? new_value : *first;
-		return d_first;
-	}
+    template<class InIt, class OutIt, class T>
+    OutIt replace_copy(InIt first, InIt last, OutIt d_first, const T& old_value, const T& new_value) {
+        typedef typename _SZ iterator_traits<InIt>::value_type value_type;
+        return _SZ replace_copy_if(first, last, d_first, [=](value_type _cur) {return _cur == old_value; }, new_value);
+    }
+    template<class InIt, class OutIt, class UnPr, class T>
+    OutIt replace_copy_if(InIt first, InIt last, OutIt d_first, UnPr p, const T& new_value) {
+        for (; first != last; ++first)
+            *d_first++ = p(*first) ? new_value : *first;
+        return d_first;
+    }
 
-	/*swap*/
+    /*swap*/
 
-	template<class ForwardIterator1, class ForwardIterator2>
-	ForwardIterator2 swap_ranges(ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterator2 first2) {
-		while (first1 != last1)
-			_SZ iter_swap(first1++, first2++);
-		return first2;
-	}
-	template<class ForwardIterator1, class ForwardIterator2>
-	void iter_swap(ForwardIterator1 a, ForwardIterator2 b) {
-		_SZ swap(*a, *b);
-	}
+    template<class FwdIt1, class FwdIt2>
+    FwdIt2 swap_ranges(FwdIt1 first1, FwdIt1 last1, FwdIt2 first2) {
+        while (first1 != last1)
+            _SZ iter_swap(first1++, first2++);
+        return first2;
+    }
+    template<class FwdIt1, class FwdIt2>
+    void iter_swap(FwdIt1 a, FwdIt2 b) {
+        _SZ swap(*a, *b);
+    }
 
-	/*reverse*/
+    /*reverse*/
 
-	template<class BidirectionalIterator>
-	void reverse(BidirectionalIterator first, BidirectionalIterator last) {
-		while (first != last && first != --last)
-			_SZ iter_swap(first++, last);
-	}
-	template<class BidirectionalIterator, class OutputIterator>
-	OutputIterator reverse_copy(BidirectionalIterator first, BidirectionalIterator last, OutputIterator d_first) {
-		while (last != first)
-			*d_first++ = *--last;
-		return d_first;
-	}
+    template<class BidIt>
+    void reverse(BidIt first, BidIt last) {
+        while (first != last && first != --last)
+            _SZ iter_swap(first++, last);
+    }
+    template<class BidIt, class OutIt>
+    OutIt reverse_copy(BidIt first, BidIt last, OutIt d_first) {
+        while (last != first)
+            *d_first++ = *--last;
+        return d_first;
+    }
 
-	/*rotate*/
+    /*rotate*/
 
-	template<class ForwardIterator>
-	ForwardIterator rotate(ForwardIterator first, ForwardIterator n_first, ForwardIterator last) {
-		if (first == n_first) return last;
-		if (n_first == last) return first;
+    template<class FwdIt>
+    FwdIt rotate(FwdIt first, FwdIt n_first, FwdIt last) {
+        if (first == n_first) return last;
+        if (n_first == last) return first;
 
-		ForwardIterator next = n_first;
-		do {
-			_SZ iter_swap(first++, next++);
-			if (first == n_first)
-				n_first = next;
-		} while (next != last);
+        FwdIt next = n_first;
+        do {
+            _SZ iter_swap(first++, next++);
+            if (first == n_first)
+                n_first = next;
+        } while (next != last);
 
-		ForwardIterator ret = first;
-		for (next = n_first; next != last;) {
-			_SZ iter_swap(first++, next++);
-			if (first == n_first)
-				n_first = next;
-			else if (next == last)
-				next = n_first;
-		}
-		return ret;
-	}
-	template<class InputIterator, class OutputIterator>
-	OutputIterator rotate_copy(InputIterator first, InputIterator n_first, InputIterator last, OutputIterator d_first) {
-		d_first = _SZ copy(n_first, last, d_first);
-		return _SZ copy(first, n_first, d_first);
-	}
+        FwdIt ret = first;
+        for (next = n_first; next != last;) {
+            _SZ iter_swap(first++, next++);
+            if (first == n_first)
+                n_first = next;
+            else if (next == last)
+                next = n_first;
+        }
+        return ret;
+    }
+    template<class InIt, class OutIt>
+    OutIt rotate_copy(InIt first, InIt n_first, InIt last, OutIt d_first) {
+        d_first = _SZ copy(n_first, last, d_first);
+        return _SZ copy(first, n_first, d_first);
+    }
 
-	/*shuffle*/
+    /*shuffle*/
 
-	template<class RandomAccessIterator>
-	void random_shuffle(RandomAccessIterator first, RandomAccessIterator last) {
-		std::srand((unsigned)time(NULL));
-		typename _SZ iterator_traits<RandomAccessIterator>::difference_type i = n - 1, n = last - first;
-		for (; i > 0; --i)
-			_SZ swap(first[i], first[std::rand() % (i + 1)]);
-	}
-	template<class RandomAccessIterator, class RandomFunc>
-	void random_shuffle(RandomAccessIterator first, RandomAccessIterator last, RandomFunc&& r) {
-		typename _SZ iterator_traits<RandomAccessIterator>::difference_type i = n - 1, n = last - first;
-		for (; i > 0; --i)
-			_SZ swap(first[i], first[r(i + 1)]);
-	}
+    template<class RanIt>
+    void random_shuffle(RanIt first, RanIt last) {
+        std::srand((unsigned)time(NULL));
+        typename _SZ iterator_traits<RanIt>::difference_type i = n - 1, n = last - first;
+        for (; i > 0; --i)
+            _SZ swap(first[i], first[std::rand() % (i + 1)]);
+    }
+    template<class RanIt, class RandomFunc>
+    void random_shuffle(RanIt first, RanIt last, RandomFunc&& r) {
+        typename _SZ iterator_traits<RanIt>::difference_type i = n - 1, n = last - first;
+        for (; i > 0; --i)
+            _SZ swap(first[i], first[r(i + 1)]);
+    }
 
-	/*unique*/
+    /*unique*/
 
-	template<class ForwardIterator>
-	ForwardIterator unique(ForwardIterator first, ForwardIterator last) {
-		typedef typename _SZ iterator_traits<ForwardIterator>::value_type value_type;
-		return _SZ unique(first, last, [](value_type lhs, value_type rhs) {return lhs == rhs; });
-	}
-	template<class ForwardIterator, class BinaryPredicate>
-	ForwardIterator unique(ForwardIterator first, ForwardIterator last, BinaryPredicate p) {
-		if (first == last)
-			return last;
-		ForwardIterator res = first;
-		while (++first != last)
-			if (!p(*res, *first) && ++res != first)
-				*res = _SZ move(*first);
-		return ++res;
-	}
+    template<class FwdIt>
+    FwdIt unique(FwdIt first, FwdIt last) {
+        return _SZ unique(first, last, _SZ equal_to<>());
+    }
+    template<class FwdIt, class BiPr>
+    FwdIt unique(FwdIt first, FwdIt last, BiPr p) {
+        if (first == last)
+            return last;
+        FwdIt res = first;
+        while (++first != last)
+            if (!p(*res, *first) && ++res != first)
+                *res = _SZ move(*first);
+        return ++res;
+    }
 
-	template<class InputIterator, class OutputIterator>
-	OutputIterator unique_copy(InputIterator first, InputIterator last, OutputIterator d_first) {
-		typedef typename _SZ iterator_traits<InputIterator>::value_type value_type;
-		return _SZ unique_copy(first, last, d_first, equal_to<value_type>());
-	}
-	template<class InputIterator, class OutputIterator, class BinaryPredicate>
-	OutputIterator unique_copy(InputIterator first, InputIterator last, OutputIterator d_first, BinaryPredicate p) {
-		if (first == last)
-			return d_first;
-		InputIterator prev = first, cur = first;
-		for (; cur != last; ++cur) {
-			if (prev == cur)
-				*d_first++ = *prev;
-			else if (*prev == *cur);
-			else if(*prev != *cur) {
-				*d_first++ = *cur;
-				prev = cur;
-			}
-		}
-		return d_first;
-	}
+    template<class InIt, class OutIt>
+    OutIt unique_copy(InIt first, InIt last, OutIt d_first) {
+        return _SZ unique_copy(first, last, d_first, equal_to<>());
+    }
+    template<class InIt, class OutIt, class BiPr>
+    OutIt unique_copy(InIt first, InIt last, OutIt d_first, BiPr p) {
+        if (first == last)
+            return d_first;
+        InIt prev = first, cur = first;
+        for (; cur != last; ++cur) {
+            if (prev == cur)
+                *d_first++ = *prev;
+            else if (*prev == *cur);
+            else if(*prev != *cur) {
+                *d_first++ = *cur;
+                prev = cur;
+            }
+        }
+        return d_first;
+    }
 
-	/*Partitioning operations*/ //no testcases
+    /*Partitioning operations*/ //no testcases
 
-	template<class InputIterator, class UnaryPredicate>
-	bool is_partitioned(InputIterator first, InputIterator last, UnaryPredicate p) {
-		for (; first != last; ++first)
-			if (!p(*first))
-				break;
-		for (; first != last; ++first)
-			if (p(*first))
-				return false;
-		return true;
-	}
-	template<class ForwardIterator, class UnaryPredicate>
-	ForwardIterator partition(ForwardIterator first, ForwardIterator last, UnaryPredicate p) {
-		first = _SZ find_if_not(first, last, p);
-		if (first == last)
-			return first;
-		for (ForwardIterator it = _SZ next(first); it != last; ++it)
-			if (p(*it)) {
-				_SZ iter_swap(it, first);
-				++first;
-			}
-		return first;
-	}
-	template<class InputIterator, class OutputIterator1, class OutputIterator2, class UnaryPredicate>
-	_SZ pair<OutputIterator1, OutputIterator2>
-		partition_copy(InputIterator first, InputIterator last, 
-			OutputIterator1 d_first_true, OutputIterator2 d_first_false, UnaryPredicate p) {
-		for (; first != last; ++first) {
-			if (p(*first))
-				*d_first_true++ = *first;
-			else
-				*d_first_false++ = *first;
-		}
-		return _SZ pair<OutputIterator1, OutputIterator2>(d_first_true, d_first_false);
-	}
-	// stable partition to do 
+    template<class InIt, class UnPr>
+    bool is_partitioned(InIt first, InIt last, UnPr p) {
+        for (; first != last; ++first)
+            if (!p(*first))
+                break;
+        for (; first != last; ++first)
+            if (p(*first))
+                return false;
+        return true;
+    }
+    template<class FwdIt, class UnPr>
+    FwdIt partition(FwdIt first, FwdIt last, UnPr p) {
+        first = _SZ find_if_not(first, last, p);
+        if (first == last)
+            return first;
+        for (FwdIt it = _SZ next(first); it != last; ++it)
+            if (p(*it)) {
+                _SZ iter_swap(it, first);
+                ++first;
+            }
+        return first;
+    }
+    template<class InIt, class OutIt1, class OutIt2, class UnPr>
+    _SZ pair<OutIt1, OutIt2>
+        partition_copy(InIt first, InIt last, 
+            OutIt1 d_first_true, OutIt2 d_first_false, UnPr p) {
+        for (; first != last; ++first) {
+            if (p(*first))
+                *d_first_true++ = *first;
+            else
+                *d_first_false++ = *first;
+        }
+        return _SZ pair<OutIt1, OutIt2>(d_first_true, d_first_false);
+    }
+    // stable partition to do 
 
-	template<class ForwardIterator, class UnaryPredicate>
-	ForwardIterator partition_point(ForwardIterator first, ForwardIterator last, UnaryPredicate p) {
-		return _SZ find_if_not(first, last, p);
-	}
-	
+    template<class FwdIt, class UnPr>
+    FwdIt partition_point(FwdIt first, FwdIt last, UnPr p) {
+        return _SZ find_if_not(first, last, p);
+    }
+    
 }
 
 #endif // !_SZ_ALGORITHM_H_

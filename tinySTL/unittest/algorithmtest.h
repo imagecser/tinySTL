@@ -5,10 +5,10 @@
 #include <vector>
 #include <string>
 namespace sz {
-	namespace algorithmTest {
-		using sz::test::unitassert;
-		using sz::test::containerEqual;
-		void allTestcases();
-	}
+    namespace algorithmTest {
+        using sz::test::unitassert;
+        using sz::test::containerEqual;
+        void allTestcases();
+    }
 }
 #endif // !_SZ_ALGORITHM_H_

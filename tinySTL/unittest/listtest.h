@@ -4,14 +4,14 @@
 #include "testUtil.h"
 #include <list>
 namespace sz {
-	namespace listTest {
-		template<class T>
-		using stdlist = std::list<T>;
-		template<class T>
-		using szlist = sz::list<T>;
+    namespace listTest {
+        template<class T>
+        using stdlist = std::list<T>;
+        template<class T>
+        using szlist = sz::list<T>;
 
-		using sz::test::unitassert;
-		void allTestcases();
-	}
+        using sz::test::unitassert;
+        void allTestcases();
+    }
 }
 #endif // !_SZ_LIST_TEST_H_

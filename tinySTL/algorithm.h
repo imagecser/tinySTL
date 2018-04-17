@@ -467,7 +467,7 @@ namespace sz {
             else
                 *d_first_false++ = *first;
         }
-        return _SZ pair<OutIt1, OutIt2>(d_first_true, d_first_false);
+        return std::pair<OutIt1, OutIt2>(d_first_true, d_first_false);
     }
     // stable partition to do 
 
@@ -476,6 +476,231 @@ namespace sz {
         return _SZ find_if_not(first, last, p);
     }
     
+    /*bound*/
+
+    template<class FwdIt, class T>
+    FwdIt lower_bound(FwdIt first, FwdIt last, const T& val) {
+        return _SZ lower_bound(first, last, val, _SZ less<>());
+    }
+    template<class FwdIt, class T>
+    FwdIt upper_bound(FwdIt first, FwdIt last, const T& val) {
+        return _SZ upper_bound(first, last, val, _SZ less<>());
+    }
+
+#define _algorithm_make_bound_func(_name, _calc_line) \
+    template<class FwdIt, class T, class Compare> \
+    FwdIt _name(FwdIt first, FwdIt last, const T& val, Compare comp) { \
+        FwdIt it; \
+        typename _SZ iterator_traits<FwdIt>::difference_type count, step; \
+        count = _SZ distance(first, last); \
+        while (count > 0) { \
+            it = first; \
+            step = count >> 1; \
+            _SZ advance(it, step); \
+            if (_calc_line) { \
+                first = ++it; \
+                count -= step + 1; \
+            } else { \
+                count = step; \
+            } \
+        } \
+        return first; \
+    }
+
+    _algorithm_make_bound_func(lower_bound, (comp(*it, val)));
+    _algorithm_make_bound_func(upper_bound, (!comp(val, *it)));
+
+    template<class FwdIt, class T>
+    bool binary_search(FwdIt first, FwdIt last, const T& val) {
+        first = _SZ lower_bound(first, last, val);
+        return (first != last && !(val < *first));
+    }
+    template<class FwdIt, class T, class Compare>
+    bool binary_search(FwdIt first, FwdIt last, const T& val, Compare comp) {
+        first = _SZ lower_bound(first, last, val, comp);
+        return (first != last && !(comp(val, *first)));
+    }
+
+    template<class FwdIt, class T>
+    _SZ pair<FwdIt, FwdIt> 
+        equal_range(FwdIt first, FwdIt last, const T& val) {
+        return _SZ make_pair(_SZ lower_bound(first, last, val),
+            _SZ upper_bound(first, last, val));
+    }
+    template<class FwdIt, class T, class Compare>
+    _SZ pair<FwdIt, FwdIt> 
+        equal_range(FwdIt first, FwdIt last, const T& val, Compare comp) {
+        return _SZ make_pair(_SZ lower_bound(first, last, val, comp),
+            _SZ upper_bound(first, last, val, comp));
+    }
+
+    /*Set operations (on sorted ranges)*/
+
+    /*merge*/
+
+    template<class InIt1, class InIt2, class OutIt>
+    OutIt merge(InIt1 first1, InIt1 last1, InIt2 first2,
+        InIt2 last2, OutIt d_first) {
+        return _SZ merge(first1, last1, first2, last2, d_first, _SZ less<>());
+    }
+
+    template<class InIt1, class InIt2, class OutIt, class Compare>
+    OutIt merge(InIt1 first1, InIt1 last1, InIt2 first2,
+        InIt2 last2, OutIt d_first, Compare comp) {
+        for (; first1 != last1; ++d_first) {
+            if (first2 == last2)
+                return _SZ copy(first1, last1, d_first);
+            if (comp(*first2, *first1))
+                *d_first = *first2++;
+            else
+                *d_first = *first1++;
+        }
+        return _SZ copy(first2, last2, d_first);
+    }
+
+    template<class BidIt>
+    void inplace_merge(BidIt first, BidIt middle, BidIt last) {
+        return _SZ inplace_merge(first, middle, last, _SZ less<>());
+    }
+
+    template<class BidIt, class Compare>
+    void inplace_merge(BidIt first, BidIt middle, BidIt last, Compare comp) {
+        if (first != last) {
+            typedef typename _SZ iterator_traits<BidIt>::value_type T;
+            typename _SZ iterator_traits<BidIt>::difference_type
+                dist = _SZ distance(first, last);
+            if (dist != 1) {
+                T* tmp = new T[dist];
+                _SZ merge(first, middle, middle, last, tmp);
+                _SZ copy_n(tmp, dist, first);
+                delete[] tmp;
+            }
+        }
+    }
+
+    /*includes*/
+
+    template<class InIt1, class InIt2>
+    bool includes(InIt1 first1, InIt1 last1, InIt2 first2, InIt2 last2) {
+        return _SZ includes(first1, last1, first2, last2, _SZ less<>());
+    }
+
+    template<class InIt1, class InIt2, class Compare>
+    bool includes(InIt1 first1, InIt1 last1,
+        InIt2 first2, InIt2 last2, Compare comp) {
+        for (; first2 != last2; ++first1) {
+            if (first1 == last1 || comp(*first2, *first1))
+                return false;
+            if (!comp(*first1, *first2))
+                ++first2;
+        }
+        return true;
+    }
+
+    /*set_difference*/
+
+    template<class InIt1, class InIt2, class OutIt>
+    OutIt set_difference(InIt1 first1, InIt1 last1,
+        InIt2 first2, InIt2 last2, OutIt d_first) {
+        return _SZ set_difference(first1, last1,
+            first2, last2, d_first, _SZ less<>());
+    }
+
+    template<class InIt1, class InIt2, class OutIt, class Compare>
+    OutIt set_difference(InIt1 first1, InIt1 last1,
+        InIt2 first2, InIt2 last2, OutIt d_first, Compare comp) {
+        while (first1 != last1) {
+            if (first2 == last2) 
+                return _SZ copy(first1, last1, d_first);
+            if (comp(*first1, *first2)) {
+                *d_first++ = *first1++;
+            } else {
+                if (!comp(*first2, *first1))
+                    ++first1;
+                ++first2;
+            }
+        }
+        return d_first;
+    }
+
+    /*set_intersection*/
+
+    template<class InIt1, class InIt2, class OutIt>
+    OutIt set_intersection(InIt1 first1, InIt1 last1,
+        InIt2 first2, InIt2 last2, OutIt d_first) {
+        return _SZ set_intersection(first1, last1,
+            first2, last2, d_first, _SZ less<>());
+    }
+
+    template<class InIt1, class InIt2, class OutIt, class Compare>
+    OutIt set_intersection(InIt1 first1, InIt1 last1,
+        InIt2 first2, InIt2 last2, OutIt d_first, Compare comp) {
+        while (first1 != last1 && first2 != last2) {
+            if (comp(*first1, *first2)) {
+                ++first1;
+            } else {
+                if (!comp(*first2, *first1))
+                    *d_first++ = *first1++;
+                ++first2;
+            }
+        }
+        return d_first;
+    }
+
+    /*set_symmetric_difference*/
+
+    template<class InIt1, class InIt2, class OutIt>
+    OutIt set_symmetric_difference(InIt1 first1, InIt1 last1,
+        InIt2 first2, InIt2 last2, OutIt d_first) {
+        return _SZ set_symmetric_difference(first1, last1,
+            first2, last2, d_first, _SZ less<>());
+    }
+
+    template<class InIt1, class InIt2, class OutIt, class Compare>
+    OutIt set_symmetric_difference(InIt1 first1, InIt1 last1,
+        InIt2 first2, InIt2 last2, OutIt d_first, Compare comp) {
+        while (first1 != last1) {
+            if (first2 == last2)
+                return _SZ copy(first1, last1, d_first);
+            if (comp(*first1,*first2)) {
+                *d_first++ = *first1++;
+            } else {
+                if (comp(*first2, *first1))
+                    *d_first++ = *first2;
+                else
+                    ++first1;
+                ++first2;
+            }
+        }
+        return _SZ copy(first1, last1, d_first);
+    }
+
+    /*set union*/
+
+    template<class InIt1, class InIt2, class OutIt>
+    OutIt set_union(InIt1 first1, InIt1 last1,
+        InIt2 first2, InIt2 last2, OutIt d_first) {
+        return _SZ set_union(first1, last1,
+            first2, last2, d_first, _SZ less<>());
+    }
+
+    template<class InIt1, class InIt2, class OutIt, class Compare>
+    OutIt set_union(InIt1 first1, InIt1 last1, InIt2 first2,
+        InIt2 last2, OutIt d_first, Compare comp) {
+        while (first1 != last1) {
+            if (first2 == last2)
+                return _SZ copy(first1, last1, d_first);
+            if (comp(*first1, *first2)) {
+                *d_first++ = *first1++;
+            } else {
+                *d_first++ = *first2;
+                if (!comp(*first2, *first1))
+                    ++first1;
+                ++first2;
+            }
+        }
+        return _SZ copy(first2, last2, d_first);
+    }
 }
 
 #endif // !_SZ_ALGORITHM_H_

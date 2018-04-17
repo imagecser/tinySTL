@@ -9,15 +9,15 @@
 namespace sz {
     class string {
     public:
-        typedef char                            value_type;
-        typedef char*                            iterator;
-        typedef const char*                        const_iterator;
-        typedef reverse_iterator_<char*>        reverse_iterator;
-        typedef reverse_iterator_<const char*>    const_reverse_iterator;
-        typedef size_t                            size_type;
-        typedef char&                            reference;
-        typedef const char&                        const_reference;
-        typedef ptrdiff_t                        difference_type;
+        typedef char                                value_type;
+        typedef char*                               iterator;
+        typedef const char*                         const_iterator;
+        typedef reverse_iterator_<char*>            reverse_iterator;
+        typedef reverse_iterator_<const char*>      const_reverse_iterator;
+        typedef size_t                              size_type;
+        typedef char&                               reference;
+        typedef const char&                         const_reference;
+        typedef ptrdiff_t                           difference_type;
         
         static const size_t npos = -1;
 
@@ -27,21 +27,6 @@ namespace sz {
         iterator _storage_end;
 
         allocator<value_type> dataAlloc;
-        /*
-        void allocateCopy(Iterator first, Iterator last);
-        void allocateFill(size_t n, value_type ch);
-        size_type getNewCapacity(size_type n) const;
-        template<class InIt>
-        void string_aux(InIt first, InIt last, std::false_type);
-        void moveData(string& str);
-        template<class T>
-        void swap(T src, T dest);
-        size_t find_aux(const_iterator cite, size_t pos, size_t n) const;
-        size_t rfind_aux(const_iterator cite, size_t pos, size_t n) const;
-        int compare_aux(size_t pos, size_t len, const_iterator cfirst, const_iterator clast) const;
-        bool isContained(char c, const_iterator first, const_iterator last) const;
-        size_t changeWhenNpos(size_t pos, size_t maxVal, size_t el) const;
-        */
 
         template<class InIt>
         void allocateCopy(InIt first, InIt last) {
@@ -145,156 +130,6 @@ namespace sz {
 
 
     public:
-        /*
-            string();
-            string(string&& str);
-            string(const char *s, size_t n)
-            string(const char *s);
-            string(string&& str);
-            string(const string& str);
-            string(const string& str, size_t pos, size_t len = npos);
-            template<class InIt>
-            string(InIt first, InIt last);
-            string(size_t n, char c);
-            ~string();
-
-            string& operator= (const string& str);
-            string& operator= (string&& str);
-            string& operator= (const char* s);
-            string& operator= (char c);
-
-            void clear();
-            bool empty();
-            void resize(size_t n, const char ch = '\000');
-            void reserve(size_t n);
-            void shrink_to_fit();
-            void swap(string& str);
-            size_t copy(char *s, size_t len, size_t pos = 0) const
-            string substr(size_t pos = 0, size_t len = npos) const
-
-            iterator begin();
-            iterator end();
-            const_iterator begin() const;
-            const_iterator end() const;
-            const_iterator cbegin() const;
-            const_iterator cend() const;
-            reverse_iterator rbegin();
-            reverse_iterator rend();
-            const_reverse_iterator rbegin() const;
-            const_reverse_iterator rend() const;
-            const_reverse_iterator crbegin() const;
-            const_reverse_iterator crend() const;
-            size_t size() const;
-            size_t length() const;
-            size_t capacity() const;
-            char& operator[](size_t pos);
-            const char& operator[](size_t pos);
-            char& back();
-            const char& back() const;
-            char& front();
-            const char& front() const;
-
-            void push_back(char ch);
-            string& insert(size_t pos, const string& str);
-            string& insert(size_t pos, const string& str, size_t subpos, size_t sublen = npos);
-            string& insert(size_t pos, const char* s);
-            string& insert(size_t pos, const char* s, size_t n);
-            string& insert(size_t pos, size_t n, char c);
-            iterator insert(const_iterator ptr, size_t n, char c);
-            iterator insert(const_iterator ptr, char c);
-            template <class InIt>
-            iterator insert(iterator ptr, InIt first, InIt last);
-
-            string& append(const string& str);
-            string& append(const string& str, size_t subpos, size_t sublen = npos);
-            string& append(const char* s);
-            string& append(const char* s, size_t n);
-            string& append(size_t n, char c);
-            template <class InIt>
-            string& append(InIt first, InIt last);
-
-            string& operator+= (const string& str);
-            string& operator+= (const char* s);
-            string& operator+= (char c);
-
-            void pop_back();
-            string& erase(size_t pos = 0, size_t len = npos);
-            iterator erase(iterator p);
-            iterator erase(iterator first, iterator last);
-
-            string& replace(size_t pos, size_t len, const string& str);
-            string& replace(iterator first, iterator last, const string& str);
-            string& replace(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen = npos);
-            string& replace(size_t pos, size_t len, const char* s);
-            string& replace(iterator first, iterator last, const char* s);
-            string& replace(size_t pos, size_t len, const char* s, size_t n);
-            string& replace(iterator first, iterator last, const char* s, size_t n);
-            string& replace(size_t pos, size_t len, size_t n, char c);
-            string& replace(iterator first, iterator last, size_t n, char c);
-            template <class InIt>
-            string& replace(iterator first, iterator last, InIt inputfirst, InIt inputlast);
-
-            size_t find(const string& str, size_t pos = 0) const;
-            size_t find(const char* s, size_t pos = 0) const;
-            size_t find(const char* s, size_t pos, size_t n) const;
-            size_t find(char c, size_t pos = 0) const;
-            size_t rfind(const string& str, size_t pos = npos) const;
-            size_t rfind(const char* s, size_t pos = npos) const;
-            size_t rfind(const char* s, size_t pos, size_t n) const;
-            size_t rfind(char c, size_t pos = npos) const;
-
-            size_t find_first_of(const string& str, size_t pos = 0) const;
-            size_t find_first_of(const char* s, size_t pos = 0) const;
-            size_t find_first_of(const char* s, size_t pos, size_t n) const;
-            size_t find_first_of(char c, size_t pos = 0) const;
-            size_t find_last_of(const string& str, size_t pos = npos) const;
-            size_t find_last_of(const char* s, size_t pos = npos) const;
-            size_t find_last_of(const char* s, size_t pos, size_t n) const;
-            size_t find_last_of(char c, size_t pos = npos) const;
-            size_t find_first_not_of(const string& str, size_t pos = 0) const;
-            size_t find_first_not_of(const char* s, size_t pos = 0) const;
-            size_t find_first_not_of(const char* s, size_t pos, size_t n) const;
-            size_t find_first_not_of(char c, size_t pos = 0) const;
-            size_t find_last_not_of(const string& str, size_t pos = npos) const;
-            size_t find_last_not_of(const char* s, size_t pos = npos) const;
-            size_t find_last_not_of(const char* s, size_t pos, size_t n) const;
-            size_t find_last_not_of(char c, size_t pos = npos) const;
-
-            int compare(const string& str) const;
-            int compare(size_t pos, size_t len, const string& str) const;
-            int compare(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen = npos) const;
-            int compare(const char* s) const;
-            int compare(size_t pos, size_t len, const char* s) const;
-            int compare(size_t pos, size_t len, const char* s, size_t n) const;
-
-            friend std::ostream& operator<< (std::ostream& os, const string& str);
-            friend std::istream& operator<< (std::istream& is, string& str);
-            friend std::istream& getline(std::istream& is, string& str, char delim = '\n');
-            friend string operator+ (const string& lhs, const string& rhs);
-            friend string operator+ (const string& lhs, const char* rhs);
-            friend string operator+ (const char* lhs, const string& rhs);
-            friend string operator+ (const string& lhs, char rhs);
-            friend string operator+ (char lhs, const string& rhs);
-            friend bool operator== (const string& lhs, const string& rhs);
-            friend bool operator== (const char*   lhs, const string& rhs);
-            friend bool operator== (const string& lhs, const char*   rhs);
-            friend bool operator!= (const string& lhs, const string& rhs);
-            friend bool operator!= (const char*   lhs, const string& rhs);
-            friend bool operator!= (const string& lhs, const char*   rhs);
-            friend bool operator<  (const string& lhs, const string& rhs);
-            friend bool operator<  (const char*   lhs, const string& rhs);
-            friend bool operator<  (const string& lhs, const char*   rhs);
-            friend bool operator<= (const string& lhs, const string& rhs);
-            friend bool operator<= (const char*   lhs, const string& rhs);
-            friend bool operator<= (const string& lhs, const char*   rhs);
-            friend bool operator>  (const string& lhs, const string& rhs);
-            friend bool operator>  (const char*   lhs, const string& rhs);
-            friend bool operator>  (const string& lhs, const char*   rhs);
-            friend bool operator>= (const string& lhs, const string& rhs);
-            friend bool operator>= (const char*   lhs, const string& rhs);
-            friend bool operator>= (const string& lhs, const char*   rhs);
-            friend void swap(string& lhs, string& rhs);
-        */
 
         string() : _begin(NULL), _end(_begin), _storage_end(_end) {
         }

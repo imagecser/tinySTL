@@ -35,62 +35,12 @@ namespace sz {
     }
 
     /*pair*/
+    template<class T, class K>
+    using pair = std::pair<T, K>;
 
-    template<class T1, class T2>
-    struct pair {
-        typedef T1    first_type;
-        typedef T2    second_type;
-
-        first_type first;
-        second_type second;
-        pair() :first(first_type()), second(second_type()) { }
-        pair(const first_type& a, const second_type& b) : first(a), second(b) { }
-        template<class _T1, class _T2>
-        pair(const _SZ pair<_T1, _T2>& p) : first(p.first), second(p.second) { }
-
-        void swap(_SZ pair<T1, T2>& p) {
-            if (this != &p) {
-                _SZ swap(first, p.first);
-                _SZ swap(second, p.second);
-            }
-        }
-
-        template<class _T1, class _T2>
-        pair& operator=(const _SZ pair<_T1, _T2>& p) : first(p.first), second(p.second) { }
-    };
-
-    /*pair operator*/
-
-    template<class _T1, class _T2>
-    bool operator==(const _SZ pair<_T1, _T2>& _left, const _SZ pair<_T1, _T2>& _right) {
-        return _left.first == _right.first && _left.second == _right.second;
-    }
-    template<class _T1, class _T2>
-    bool operator!=(const _SZ pair<_T1, _T2>& _left, const _SZ pair<_T1, _T2>& _right) {
-        return !(_left == _right);
-    }
-    template<class _T1, class _T2>
-    bool operator<(const _SZ pair<_T1, _T2>& _left, const _SZ pair<_T1, _T2>& _right) {
-        return _left.first < _right.first || (!(_right.first < _left.first) && _left.second < _right.second);
-    }
-    template<class _T1, class _T2>
-    bool operator>(const _SZ pair<_T1, _T2>& _left, const _SZ pair<_T1, _T2>& _right) {
-        return _right < _left;
-    }
-    template<class _T1, class _T2>
-    bool operator<=(const _SZ pair<_T1, _T2>& _left, const _SZ pair<_T1, _T2>& _right) {
-        return !(_left > _right);
-    }
-    template<class _T1, class _T2>
-    bool operator>=(const _SZ pair<_T1, _T2>& _left, const _SZ pair<_T1, _T2>& _right) {
-        return !(_left < _right);
-    }
-
-    /*pair: swap specialization*/
-
-    template<class T1, class T2>
-    void swap(_SZ pair<T1, T2>& lhs, _SZ pair<T1, T2>& rhs) {
-        lhs.swap(rhs);
+    template<class T, class K>
+    _SZ pair<T, K> make_pair(T&& _left, K&& _right) {
+        return std::pair<T, K>(_left, _right);
     }
 
 }

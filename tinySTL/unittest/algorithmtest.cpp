@@ -1,4 +1,5 @@
 #include "algorithmtest.h"
+#include <algorithm>
 namespace sz {
     namespace algorithmTest {
         void func1() {
@@ -181,7 +182,34 @@ namespace sz {
             sz::partition(s1.begin(), s1.end(), f);
             bool ret = sz::is_partitioned(s1.begin(), s1.end(), f);
 
-            std::equal<>
+        }
+
+        void func11() {
+            std::string s1("1122233344445");
+            unitassert(_SZ binary_search(s1.begin(), s1.end(), '6'), false,
+                "bool binary_search(FwdIt first, FwdIt last, const T& val);", false);
+            unitassert(_SZ binary_search(s1.begin(), s1.end(), '5'), true,
+                "bool binary_search(FwdIt first, FwdIt last, const T& val);");
+
+            unitassert(_SZ equal_range(s1.begin(), s1.end(), '4'),
+                std::equal_range(s1.begin(), s1.end(), '4'),
+                "pair<FwdIt, FwdIt equal_range(FwdIt first, FwdIt last, const T& val);");
+
+        }
+
+        void func12() {
+            std::string s1("456"), s2("1234"), s3(10, 0);
+            _SZ set_difference(s1.begin(), s1.end(), s2.begin(), s2.end(), s3.begin());
+            s3.clear();
+            s3.resize(10);
+            _SZ set_intersection(s1.begin(), s1.end(), s2.begin(), s2.end(), s3.begin());
+            s3.clear();
+            s3.resize(10);
+            _SZ set_symmetric_difference(s1.begin(), s1.end(), s2.begin(), s2.end(), s3.begin());
+            s3.clear();
+            s3.resize(10);
+            _SZ set_union(s1.begin(), s1.end(), s2.begin(), s2.end(), s3.begin());
+            s3.clear();
         }
 
         void allTestcases() {
@@ -195,6 +223,8 @@ namespace sz {
             func8();
             func9();
             func10();
+            func11();
+            func12();
         }
     }
 }

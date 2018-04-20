@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Test">
-      <UniqueIdentifier>{6714ddd9-6b28-47e2-960c-1f033b84ed32}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Headers">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
@@ -16,23 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="tinySTL\main.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="tinySTL\unittest\stringtest.cpp">
-      <Filter>Test</Filter>
-    </ClCompile>
-    <ClCompile Include="tinySTL\unittest\vectortest.cpp">
-      <Filter>Test</Filter>
-    </ClCompile>
-    <ClCompile Include="tinySTL\unittest\listtest.cpp">
-      <Filter>Test</Filter>
-    </ClCompile>
-    <ClCompile Include="tinySTL\unittest\algorithmtest.cpp">
-      <Filter>Test</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tinySTL\type_traits.h">
@@ -50,15 +30,6 @@
     <ClInclude Include="tinySTL\string.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="tinySTL\unittest\stringtest.h">
-      <Filter>Test</Filter>
-    </ClInclude>
-    <ClInclude Include="tinySTL\unittest\testUtil.h">
-      <Filter>Test</Filter>
-    </ClInclude>
-    <ClInclude Include="tinySTL\unittest\rang.hpp">
-      <Filter>Test</Filter>
-    </ClInclude>
     <ClInclude Include="tinySTL\algorithm.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -71,23 +42,19 @@
     <ClInclude Include="tinySTL\vector.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="tinySTL\unittest\vectortest.h">
-      <Filter>Test</Filter>
-    </ClInclude>
     <ClInclude Include="tinySTL\list.h">
       <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="tinySTL\unittest\listtest.h">
-      <Filter>Test</Filter>
     </ClInclude>
     <ClInclude Include="tinySTL\functional.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="tinySTL\unittest\algorithmtest.h">
-      <Filter>Test</Filter>
-    </ClInclude>
     <ClInclude Include="tinySTL\utility.h">
       <Filter>Headers</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

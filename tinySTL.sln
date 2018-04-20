@@ -5,10 +5,9 @@ VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tinySTL", "tinySTL.vcxproj", "{E3C76990-06EE-48FD-8017-37335FE3F116}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tinySTLTest", "tinySTLTest\tinySTLTest.vcxproj", "{D85BAA63-B238-46A2-8228-0A09666C8C2C}"
+EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
@@ -24,11 +23,22 @@ Global
 		{E3C76990-06EE-48FD-8017-37335FE3F116}.Release|x64.Build.0 = Release|x64
 		{E3C76990-06EE-48FD-8017-37335FE3F116}.Release|x86.ActiveCfg = Release|Win32
 		{E3C76990-06EE-48FD-8017-37335FE3F116}.Release|x86.Build.0 = Release|Win32
+		{D85BAA63-B238-46A2-8228-0A09666C8C2C}.Debug|x64.ActiveCfg = Debug|x64
+		{D85BAA63-B238-46A2-8228-0A09666C8C2C}.Debug|x64.Build.0 = Debug|x64
+		{D85BAA63-B238-46A2-8228-0A09666C8C2C}.Debug|x86.ActiveCfg = Debug|Win32
+		{D85BAA63-B238-46A2-8228-0A09666C8C2C}.Debug|x86.Build.0 = Debug|Win32
+		{D85BAA63-B238-46A2-8228-0A09666C8C2C}.Release|x64.ActiveCfg = Release|x64
+		{D85BAA63-B238-46A2-8228-0A09666C8C2C}.Release|x64.Build.0 = Release|x64
+		{D85BAA63-B238-46A2-8228-0A09666C8C2C}.Release|x86.ActiveCfg = Release|Win32
+		{D85BAA63-B238-46A2-8228-0A09666C8C2C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1620BE95-6343-4B0C-A0AC-3DCDAED1E4B3}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

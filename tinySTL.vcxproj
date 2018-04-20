@@ -30,6 +30,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -71,6 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -78,9 +80,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <Profile>true</Profile>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -120,13 +125,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="tinySTL\main.cpp" />
-    <ClCompile Include="tinySTL\unittest\algorithmtest.cpp" />
-    <ClCompile Include="tinySTL\unittest\listtest.cpp" />
-    <ClCompile Include="tinySTL\unittest\stringtest.cpp" />
-    <ClCompile Include="tinySTL\unittest\vectortest.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="tinySTL\algorithm.h" />
     <ClInclude Include="tinySTL\alloc.h" />
     <ClInclude Include="tinySTL\allocator.h" />
@@ -137,14 +135,11 @@
     <ClInclude Include="tinySTL\memory.h" />
     <ClInclude Include="tinySTL\string.h" />
     <ClInclude Include="tinySTL\type_traits.h" />
-    <ClInclude Include="tinySTL\unittest\algorithmtest.h" />
-    <ClInclude Include="tinySTL\unittest\listtest.h" />
-    <ClInclude Include="tinySTL\unittest\rang.hpp" />
-    <ClInclude Include="tinySTL\unittest\stringtest.h" />
-    <ClInclude Include="tinySTL\unittest\testUtil.h" />
-    <ClInclude Include="tinySTL\unittest\vectortest.h" />
     <ClInclude Include="tinySTL\utility.h" />
     <ClInclude Include="tinySTL\vector.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -17,47 +17,47 @@ namespace sz {
     struct random_access_iterator_tag : public bidirectional_iterator_tag { };
     */
     typedef int ptrdiff_t;
-    typedef std::input_iterator_tag                input_iterator_tag;
-    typedef std::output_iterator_tag            output_iterator_tag;
-    typedef std::forward_iterator_tag            forward_iterator_tag;
-    typedef std::bidirectional_iterator_tag        bidirectional_iterator_tag;
-    typedef std::random_access_iterator_tag        random_access_iterator_tag;
+    typedef std::input_iterator_tag                 input_iterator_tag;
+    typedef std::output_iterator_tag                output_iterator_tag;
+    typedef std::forward_iterator_tag               forward_iterator_tag;
+    typedef std::bidirectional_iterator_tag         bidirectional_iterator_tag;
+    typedef std::random_access_iterator_tag         random_access_iterator_tag;
     
 
     template<class Iterator>
     struct iterator_traits {
-        typedef typename Iterator::iterator_category    iterator_category;
-        typedef typename Iterator::value_type            value_type;
-        typedef typename Iterator::difference_type        difference_type;
-        typedef typename Iterator::pointer                pointer;
-        typedef typename Iterator::reference            reference;
+        typedef typename Iterator::iterator_category        iterator_category;
+        typedef typename Iterator::value_type               value_type;
+        typedef typename Iterator::difference_type          difference_type;
+        typedef typename Iterator::pointer                  pointer;
+        typedef typename Iterator::reference                reference;
     };
     template<class T>
     struct iterator_traits<T*> {
-        typedef random_access_iterator_tag        iterator_category;
-        typedef T                                value_type;
-        typedef ptrdiff_t                        difference_type;
-        typedef T*                                pointer;
-        typedef T&                                reference;
+        typedef random_access_iterator_tag          iterator_category;
+        typedef T                                   value_type;
+        typedef ptrdiff_t                           difference_type;
+        typedef T*                                  pointer;
+        typedef T&                                  reference;
     };
     template<class T>
     struct iterator_traits<const T*> {
-        typedef random_access_iterator_tag        iterator_category;
-        typedef T                                value_type;
-        typedef ptrdiff_t                        difference_type;
-        typedef const T*                        pointer;
-        typedef const T&                        reference;
+        typedef random_access_iterator_tag          iterator_category;
+        typedef T                                   value_type;
+        typedef ptrdiff_t                           difference_type;
+        typedef const T*                            pointer;
+        typedef const T&                            reference;
     };
     template<class Iterator>
     class reverse_iterator_ {
     public:
-        typedef typename iterator_traits<Iterator>::value_type            value_type;
-        typedef typename iterator_traits<Iterator>::iterator_category    iterator_category;
-        typedef typename iterator_traits<Iterator>::difference_type        difference_type;
-        typedef typename iterator_traits<Iterator>::pointer                pointer;
-        typedef typename iterator_traits<Iterator>::reference            reference;
-        typedef const pointer                                            const_pointer;
-        typedef const reference                                            const_reference;
+        typedef typename iterator_traits<Iterator>::value_type              value_type;
+        typedef typename iterator_traits<Iterator>::iterator_category       iterator_category;
+        typedef typename iterator_traits<Iterator>::difference_type         difference_type;
+        typedef typename iterator_traits<Iterator>::pointer                 pointer;
+        typedef typename iterator_traits<Iterator>::reference               reference;
+        typedef const pointer                                               const_pointer;
+        typedef const reference                                             const_reference;
     private:
         Iterator _cur;
 
@@ -169,6 +169,16 @@ namespace sz {
             return lhs._cur - rhs._cur;
         }
     };
+
+    template<class Iter>
+    using _Iter_diff_t = typename _SZ iterator_traits<Iter>::difference_type;
+
+    template<class Iter>
+    using _Iter_value_t = typename _SZ iterator_traits<Iter>::difference_type;
+
+    template<class Iter>
+    using _Iter_cat_t = typename _SZ iterator_traits<Iter>::iterator_category;
+
 
     /*operations*/
 

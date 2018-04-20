@@ -33,15 +33,15 @@ namespace sz {
     }
 
     template<class InIt, class T>
-    typename _SZ iterator_traits<InIt>::difference_type
+    _SZ _Iter_diff_t<InIt>
         count(InIt first, InIt last, const T& val) {
-        typedef typename _SZ iterator_traits<InIt>::value_type value_type;
-        return _SZ count_if(first, last, [=](value_type _cur) {return _cur == val; });
+        return _SZ count_if(first, last,
+            [=](_SZ _Iter_value_t<InIt> _cur) {return _cur == val; });
     }
     template<class InIt, class UnPr>
-    typename _SZ iterator_traits<InIt>::difference_type
+    _SZ _Iter_diff_t<InIt>
         count_if(InIt first, InIt last, UnPr p) {
-        typename _SZ iterator_traits<InIt>::difference_type ret = 0;
+        _SZ _Iter_diff_t<InIt> ret = 0;
         for (; first != last; ++first)
             if (p(*first))
                 ret++;
@@ -54,8 +54,8 @@ namespace sz {
 
     template<class InIt, class T>
     InIt find(InIt first, InIt last, const T& val) {
-        typedef typename _SZ iterator_traits<InIt>::value_type value_type;
-        return _SZ find_if(first, last, [=](value_type _cur) {return _cur == val; });
+        return _SZ find_if(first, last,
+            [=](_SZ _Iter_value_t<InIt> _cur) {return _cur == val; });
     }
     template<class InIt, class UnPr>
     InIt find_if(InIt first, InIt last, UnPr p) {
@@ -73,11 +73,14 @@ namespace sz {
     }
 
     template<class FwdIt1, class FwdIt2>
-    FwdIt1 find_end(FwdIt1 first, FwdIt1 last, FwdIt2 s_first, FwdIt2 s_last) {
-        return _SZ find_end(first, last, s_first, s_last, _SZ equal_to<>());
+    FwdIt1 find_end(FwdIt1 first, FwdIt1 last,
+        FwdIt2 s_first, FwdIt2 s_last) {
+        return _SZ find_end(first, last,
+            s_first, s_last, _SZ equal_to<>());
     }
     template<class FwdIt1, class FwdIt2, class BiPr>
-    FwdIt1 find_end(FwdIt1 first, FwdIt1 last, FwdIt2 s_first, FwdIt2 s_last, BiPr p) {
+    FwdIt1 find_end(FwdIt1 first, FwdIt1 last,
+        FwdIt2 s_first, FwdIt2 s_last, BiPr p) {
         if (s_first == s_last)
             return last;
         FwdIt1 res = last;
@@ -96,10 +99,12 @@ namespace sz {
 
     template<class InIt, class FwdIt>
     InIt find_first_of(InIt first, InIt last, FwdIt s_first, FwdIt s_last) {
-        return _SZ find_first_of(first, last, s_first, s_last, _SZ equal_to<>());
+        return _SZ find_first_of(first, last,
+            s_first, s_last, _SZ equal_to<>());
     }
     template<class InIt, class FwdIt, class BiPr>
-    InIt find_first_of(InIt first, InIt last, FwdIt s_first, FwdIt s_last, BiPr p) { //potential refactoring based on KMP
+    InIt find_first_of(InIt first, InIt last,
+        FwdIt s_first, FwdIt s_last, BiPr p) { //potential refactoring based on KMP
         for (; first != last; ++first)
             for (FwdIt it = s_first; it != s_last; ++it)
                 if (p(*first, *it))
@@ -126,11 +131,13 @@ namespace sz {
     /*search*/
 
     template<class FwdIt1, class FwdIt2>
-    FwdIt1 search(FwdIt1 first, FwdIt1 last, FwdIt2 s_first, FwdIt2 s_last) {
+    FwdIt1 search(FwdIt1 first, FwdIt1 last,
+        FwdIt2 s_first, FwdIt2 s_last) {
         return _SZ search(first, last, s_first, s_last, equal_to<>());
     }
     template<class FwdIt1, class FwdIt2, class BiPr>
-    FwdIt1 search(FwdIt1 first, FwdIt1 last, FwdIt2 s_first, FwdIt2 s_last, BiPr p) {
+    FwdIt1 search(FwdIt1 first, FwdIt1 last,
+        FwdIt2 s_first, FwdIt2 s_last, BiPr p) {
         for (;; ++first) {
             FwdIt1 it = first;
             for (FwdIt2 s_it = s_first; ; ++it, ++s_it) {
@@ -153,7 +160,8 @@ namespace sz {
         return _SZ search_n(first, last, n, val, _SZ equal_to<>());
     }
     template<class FwdIt, class Size, class T, class BiPr>
-    FwdIt search_n(FwdIt first, FwdIt last, Size n, const T& val, BiPr p) {
+    FwdIt search_n(FwdIt first, FwdIt last,
+        Size n, const T& val, BiPr p) {
         for (; first != last; ++first) {
             if (!p(*first, val))
                 continue;
@@ -266,8 +274,8 @@ namespace sz {
 
     template<class FwdIt, class T>
     FwdIt remove(FwdIt first, FwdIt last, const T& val) {
-        typedef typename _SZ iterator_traits<FwdIt>::value_type value_type;
-        return _SZ remove_if(first, last, [=](value_type _cur) {return _cur == val; });
+        return _SZ remove_if(first, last,
+            [=](_SZ _Iter_value_t<FwdIt> _cur) {return _cur == val; });
     }
     template<class FwdIt, class UnPr>
     FwdIt remove_if(FwdIt first, FwdIt last, UnPr p) {
@@ -283,8 +291,8 @@ namespace sz {
 
     template<class InIt, class OutIt, class T>
     OutIt remove_copy(InIt first, InIt last, OutIt d_first, const T& val) {
-        typedef typename _SZ iterator_traits<InIt>::value_type value_type;
-        return _SZ remove_copy_if(first, last, d_first, [=](value_type _cur) {return _cur == val; });
+        return _SZ remove_copy_if(first, last, d_first,
+            [=](_SZ _Iter_value_t<InIt> _cur) {return _cur == val; });
     }
     template<class InIt, class OutIt, class UnPr>
     OutIt remove_copy_if(InIt first, InIt last, OutIt d_first, UnPr p) {
@@ -297,9 +305,11 @@ namespace sz {
     /*replace*/
 
     template<class FwdIt, class T>
-    void replace(FwdIt first, FwdIt last, const T& old_value, const T& new_value) {
-        typedef typename _SZ iterator_traits<FwdIt>::value_type value_type;
-        _SZ replace_if(first, last, [=](value_type _cur) {return _cur == old_value; }, new_value);
+    void replace(FwdIt first, FwdIt last,
+        const T& old_value, const T& new_value) {
+        _SZ replace_if(first, last,
+            [=](_SZ _Iter_value_t<FwdIt> _cur)
+        {return _cur == old_value; }, new_value);
     }
     template<class FwdIt, class UnPr, class T>
     void replace_if(FwdIt first, FwdIt last, UnPr p, const T& new_value) {
@@ -311,12 +321,15 @@ namespace sz {
     /*replace_copy*/
 
     template<class InIt, class OutIt, class T>
-    OutIt replace_copy(InIt first, InIt last, OutIt d_first, const T& old_value, const T& new_value) {
-        typedef typename _SZ iterator_traits<InIt>::value_type value_type;
-        return _SZ replace_copy_if(first, last, d_first, [=](value_type _cur) {return _cur == old_value; }, new_value);
+    OutIt replace_copy(InIt first, InIt last, OutIt d_first,
+        const T& old_value, const T& new_value) {
+        return _SZ replace_copy_if(first, last, d_first,
+            [=](_SZ _Iter_value_t<InIt> _cur)
+        {return _cur == old_value; }, new_value);
     }
     template<class InIt, class OutIt, class UnPr, class T>
-    OutIt replace_copy_if(InIt first, InIt last, OutIt d_first, UnPr p, const T& new_value) {
+    OutIt replace_copy_if(InIt first, InIt last,
+        OutIt d_first, UnPr p, const T& new_value) {
         for (; first != last; ++first)
             *d_first++ = p(*first) ? new_value : *first;
         return d_first;
@@ -384,13 +397,13 @@ namespace sz {
     template<class RanIt>
     void random_shuffle(RanIt first, RanIt last) {
         std::srand((unsigned)time(NULL));
-        typename _SZ iterator_traits<RanIt>::difference_type i = n - 1, n = last - first;
+        _SZ _Iter_diff_t<RanIt> i = n - 1, n = last - first;
         for (; i > 0; --i)
             _SZ swap(first[i], first[std::rand() % (i + 1)]);
     }
     template<class RanIt, class RandomFunc>
     void random_shuffle(RanIt first, RanIt last, RandomFunc&& r) {
-        typename _SZ iterator_traits<RanIt>::difference_type i = n - 1, n = last - first;
+        _SZ _Iter_diff_t<RanIt> i = n - 1, n = last - first;
         for (; i > 0; --i)
             _SZ swap(first[i], first[r(i + 1)]);
     }
@@ -491,7 +504,7 @@ namespace sz {
     template<class FwdIt, class T, class Compare> \
     FwdIt _name(FwdIt first, FwdIt last, const T& val, Compare comp) { \
         FwdIt it; \
-        typename _SZ iterator_traits<FwdIt>::difference_type count, step; \
+        _SZ _Iter_diff_t<FwdIt> count, step; \
         count = _SZ distance(first, last); \
         while (count > 0) { \
             it = first; \
@@ -566,9 +579,8 @@ namespace sz {
     template<class BidIt, class Compare>
     void inplace_merge(BidIt first, BidIt middle, BidIt last, Compare comp) {
         if (first != last) {
-            typedef typename _SZ iterator_traits<BidIt>::value_type T;
-            typename _SZ iterator_traits<BidIt>::difference_type
-                dist = _SZ distance(first, last);
+            typedef _SZ _Iter_value_t<BidIt> T;
+            _SZ _Iter_diff_t<BidIt> dist = _SZ distance(first, last);
             if (dist != 1) {
                 T* tmp = new T[dist];
                 _SZ merge(first, middle, middle, last, tmp);
@@ -700,6 +712,36 @@ namespace sz {
             }
         }
         return _SZ copy(first2, last2, d_first);
+    }
+
+    /*heap operations*/
+    
+    /*is_heap_until*/
+
+    template<class RanIt>
+    RanIt is_heap_until(RanIt first, RanIt last) {
+        return _SZ is_heap_until(first, last, _SZ less<>());
+    }
+
+    template<class RanIt, class Compare>
+    RanIt is_heap_until(RanIt first, RanIt last, Compare comp) {
+        const _SZ _Iter_diff_t<RanIt> size = _SZ distance(first, last);
+        for (_Iter_diff_t<RanIt> off = 1; off < size; ++off)
+            if (comp(first[(off - 1) / 2], first[off]))
+                return first + off;
+        return last;
+    }
+
+    /*is_heap*/
+
+    template<class RanIt>
+    bool is_heap(RanIt first, RanIt last) {
+        return (_SZ is_heap_until(first, last) == last);
+    }
+
+    template<class RanIt, class Compare>
+    bool is_heap(RanIt first, RanIt last, Compare comp) {
+        return (_SZ is_heap_until(first, last, comp) == last);
     }
 }
 

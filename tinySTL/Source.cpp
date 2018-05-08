@@ -1,4 +1,4 @@
 int main() {
-    //nothing to do
+    // nothing to do
     return 0;
 }

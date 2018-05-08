@@ -174,3 +174,32 @@ TEST(algorithm, modify_rotate_sort_unique) {
     v.erase(sz::unique(v.begin(), v.end()), v.end());
     CONTAINER_ITER_EQ(v, d2);
 }
+
+TEST(algorithm, heap) {
+    std::vector<int> v = { 9, 5, 4, 1, 1, 3 };
+    EXPECT_TRUE(sz::is_heap(v.begin(), v.end()));
+    EXPECT_EQ(v.end(), sz::is_heap_until(v.begin(), v.end()));
+    //EXPECT_EQ(true, sz::is_heap_until(v.begin(), v.end()));
+
+    v =  { 3, 1, 4, 1, 5, 9 };
+    EXPECT_FALSE(sz::is_heap(v.begin(), v.end()));
+    EXPECT_FALSE(sz::is_heap_until(v.begin(), v.end()) == v.end());
+
+    sz::make_heap(v.begin(), v.end());
+    EXPECT_TRUE(sz::is_heap(v.begin(), v.end()));
+
+    v.push_back(6);
+    sz::push_heap(v.begin(), v.end());
+    EXPECT_TRUE(sz::is_heap(v.begin(), v.end()));
+
+    sz::pop_heap(v.begin(), v.end());
+    EXPECT_FALSE(sz::is_heap(v.begin(), v.end()));
+    v.pop_back();
+    EXPECT_TRUE(sz::is_heap(v.begin(), v.end()));
+
+    v = { 3, 1, 4, 1, 5, 9 };
+    std::vector<int> x = { 1, 1, 3, 4, 5, 9 };
+    _SZ make_heap(v.begin(), v.end());
+    _SZ sort_heap(v.begin(), v.end());
+    CONTAINER_ITER_EQ(v, x);
+}

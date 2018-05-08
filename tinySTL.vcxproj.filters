@@ -53,7 +53,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp">
+    <ClCompile Include="tinySTL\Source.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>

@@ -743,6 +743,95 @@ namespace sz {
     bool is_heap(RanIt first, RanIt last, Compare comp) {
         return (_SZ is_heap_until(first, last, comp) == last);
     }
+
+    /*make_heap*/
+
+    template<class RanIt, class Diff, class Compare>
+    void _algorithm_heap_siftdown(RanIt start, Diff pos, Diff size, Compare comp) {
+        Diff father = pos;
+        Diff child = 2 * father + 1;
+        _SZ _Iter_value_t<RanIt> temp = *(start + pos);
+        while (child < size) {
+            if (child < size - 1 && comp(*(start + child), *(start + child + 1)))
+                child = child + 1;
+            if (comp(temp, *(start + child))) {
+                *(start + father) = *(start + child);
+                father = child;
+                child = 2 * father + 1;
+            } else {
+                break;
+            }
+        }
+        *(start + father) = temp;
+    }
+
+    template<class RanIt, class Compare>
+    void make_heap(RanIt first, RanIt last, Compare comp) {
+        _SZ _Iter_diff_t<RanIt> i, size = _SZ distance(first, last);
+        for (i = size / 2; i >= 0; --i)
+            _algorithm_heap_siftdown(first, i, size, comp);
+    }
+
+    template<class RanIt>
+    void make_heap(RanIt first, RanIt last) {
+        _SZ make_heap(first, last, _SZ less<>());
+    }
+
+    /*push_heap*/
+
+    template<class RanIt, class Compare>
+    void push_heap(RanIt first, RanIt last, Compare comp) {
+        _SZ _Iter_diff_t<RanIt> size = _SZ distance(first, last);
+        _SZ _Iter_diff_t<RanIt> child = size - 1, father = (child - 1) / 2;
+        _SZ _Iter_value_t<RanIt> temp = *(first + child);
+        while (father >= 0) {
+            if (comp(*(first + father), *(first + child))) {
+                *(first + child) = *(first + father);
+                child = father;
+                father = (child - 1) / 2;
+            } else {
+                break;
+            }
+        }
+        *(first + father) = temp;
+    }
+
+    template<class RanIt>
+    void push_heap(RanIt first, RanIt last) {
+        _SZ push_heap(first, last, _SZ less<>());
+    }
+
+    /*pop_heap*/
+
+    template<class RanIt, class Compare>
+    void pop_heap(RanIt first, RanIt last, Compare comp) {
+        _SZ _Iter_diff_t<RanIt> size = _SZ distance(first, last);
+        _SZ swap(*first, *(first + size - 1));
+        _algorithm_heap_siftdown(first, 0, size, comp);
+    }
+
+    template<class RanIt>
+    void pop_heap(RanIt first, RanIt last) {
+        _SZ pop_heap(first, last, _SZ less<>());
+    }
+
+    /*heap_sort*/
+
+    template<class RanIt, class Compare>
+    void sort_heap(RanIt first, RanIt last, Compare comp) {
+        _SZ _Iter_diff_t<RanIt> size =
+            _SZ distance(first, last), i = size - 1;
+        for (; i > 0; --i) {
+            _SZ swap(*first, *(first + i));
+            _SZ _algorithm_heap_siftdown(first, 0, i, comp);
+        }
+    }
+
+    template<class RanIt>
+    void sort_heap(RanIt first, RanIt last) {
+        _SZ sort_heap(first, last, _SZ less<>());
+    }
+
 }
 
 #endif // !_SZ_ALGORITHM_H_
